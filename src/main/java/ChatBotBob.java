@@ -9,7 +9,7 @@ public class ChatBotBob {
              Wazzup! I'm Bob. ChatBot Bob :D
              What can I do for you?""";
 
-    private static final String GOODBYE_STRING = """
+    private static final String GOODBYE_STRING = SEGMENT_SEPARATOR + """
             Buh-Bye!""" ;
 
     private static final String END_COMMAND_STRING = "bye";
@@ -20,12 +20,12 @@ public class ChatBotBob {
 
         // Read user input
         Scanner reader = new Scanner(System.in);
-        String command = "";
+        String command = reader.nextLine();
 
         while (!command.equals(END_COMMAND_STRING)) {
-            command = reader.nextLine();
             System.out.print(SEGMENT_SEPARATOR);
             echo(command);
+            command = reader.nextLine();
         }
         echo(GOODBYE_STRING);
     }
