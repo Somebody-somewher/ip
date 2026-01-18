@@ -12,15 +12,11 @@ public class ChatBotBob {
              Wazzup! I'm Bob. ChatBot Bob :D
              What can I do for you?""";
 
-    private static final String GOODBYE_STRING = SEGMENT_SEPARATOR + """
-            Buh-Bye!""" ;
-
-    private static final String END_BOT_COMMAND_STRING = "bye";
-
     private static List<String> tasks = new ArrayList<String>();
 
-    private static final List<Command> commands = List.of(new CommandList(tasks));
+    private static final List<Command> commands = List.of(new CommandList(tasks), new CommandBye());
 
+    private static boolean isFinished = false;
 
     public static void main(String[] args) {
 
@@ -34,8 +30,7 @@ public class ChatBotBob {
 
         boolean addToList = false;
 
-
-        while (!(userInputString.equalsIgnoreCase(END_BOT_COMMAND_STRING))) {
+        while (!isFinished) {
             addToList = true;
             System.out.print(SEGMENT_SEPARATOR);
 
@@ -44,6 +39,10 @@ public class ChatBotBob {
                     addToList = false;
                     break;
                 }
+            }
+
+            if (isFinished) {
+                return;
             }
 
             if (addToList && tasks.size() < 100) {
@@ -55,7 +54,7 @@ public class ChatBotBob {
             userInputString = reader.nextLine();
             userInputStringArr = userInputString.split(" ");
         }
-        echo(GOODBYE_STRING);
+
     }
 
     private static void echo(String echoString) {
@@ -65,7 +64,7 @@ public class ChatBotBob {
 
     private static class CommandList extends Command {
         List<String> tasks_list;
-        private final String cmdPhrase = "list";
+        private final static String cmdPhrase = "list";
 
         public CommandList(List<String> tasks) {
             tasks_list = tasks;
@@ -86,5 +85,26 @@ public class ChatBotBob {
         }
 
     }
+
+    private static class CommandBye extends Command {
+        private static final String GOODBYE_STRING = SEGMENT_SEPARATOR + """
+            Buh-Bye!""" ;
+
+        private final static String cmdPhrase = "bye";
+
+        @Override
+        public String getCmdPhrase() {
+            return cmdPhrase;
+        }
+
+        public boolean execute(String[] arguments) {
+            echo(GOODBYE_STRING);
+            //System.out.println(SEGMENT_SEPARATOR);
+            isFinished = true;
+            return true;
+        }
+
+    }
+
 }
 

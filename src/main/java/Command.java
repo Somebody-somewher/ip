@@ -1,3 +1,5 @@
+import java.util.function.Consumer;
+
 public abstract class Command {
     private final String cmdPhrase = "";
 
@@ -15,5 +17,9 @@ public abstract class Command {
         } else {
             return false;
         }
+    }
+
+    public void executeOnSuccess(Consumer<Boolean> onSuccess) {
+        onSuccess.accept(true);
     }
 }
