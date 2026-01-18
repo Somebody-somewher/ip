@@ -1,15 +1,17 @@
 public abstract class Command {
     private final String cmdPhrase = "";
 
-    public boolean matches(String cmdPhrase) {
-        return this.cmdPhrase.equalsIgnoreCase(cmdPhrase);
+    public abstract String getCmdPhrase();
+
+    public boolean matches(String checkCmdPhrase) {
+        return getCmdPhrase().equalsIgnoreCase(checkCmdPhrase);
     }
 
-    public abstract boolean execute(String argument);
+    public abstract boolean execute(String[] arguments);
 
-    public boolean executeOnMatch(String cmdPhrase, String argument) {
-        if (matches(cmdPhrase)) {
-            return execute(argument);
+    public boolean executeOnMatch(String[] input) {
+        if (matches(input[0])) {
+            return execute(input);
         } else {
             return false;
         }

@@ -17,8 +17,10 @@ public class ChatBotBob {
 
     private static final String END_BOT_COMMAND_STRING = "bye";
 
-
     private static List<String> tasks = new ArrayList<String>();
+
+    private static final List<Command> commands = List.of(new CommandList(tasks));
+
 
     public static void main(String[] args) {
 
@@ -26,26 +28,33 @@ public class ChatBotBob {
 
         // Read user input
         Scanner reader = new Scanner(System.in);
-        String[] user_input = reader.nextLine().split(" ");
 
-        List<Command> commands = Arrays.asList(new CommandList(tasks));
+        String userInputString = reader.nextLine();
+        String[] userInputStringArr = userInputString.split(" ");
 
-        // Task handling
+        boolean addToList = false;
 
-        //TODO: Extract first word and cmd check it
-//        while (!(user_input.length == 1 && user_input[0].equalsIgnoreCase(END_BOT_COMMAND_STRING))) {
-//            System.out.print(SEGMENT_SEPARATOR);
-//
-//            for (Command c : commands) {
-//                c.executeOnMatch()
-//            }
-//
-//            // add task
-//            tasks.add(user_input);
-//            echo("added: " + user_input);
-//
-//            user_input = reader.nextLine().split(" ");
-//        }
+
+        while (!(userInputString.equalsIgnoreCase(END_BOT_COMMAND_STRING))) {
+            addToList = true;
+            System.out.print(SEGMENT_SEPARATOR);
+
+            for (Command c : commands) {
+                if (c.executeOnMatch(userInputStringArr)) {
+                    addToList = false;
+                    break;
+                }
+            }
+
+            if (addToList && tasks.size() < 100) {
+                // add task
+                tasks.add(userInputString);
+                echo("added: " + userInputString);
+            }
+
+            userInputString = reader.nextLine();
+            userInputStringArr = userInputString.split(" ");
+        }
         echo(GOODBYE_STRING);
     }
 
@@ -56,18 +65,23 @@ public class ChatBotBob {
 
     private static class CommandList extends Command {
         List<String> tasks_list;
+        private final String cmdPhrase = "list";
 
         public CommandList(List<String> tasks) {
             tasks_list = tasks;
         }
 
-        private final String cmdPhrase = "list";
+        @Override
+        public String getCmdPhrase() {
+            return cmdPhrase;
+        }
 
-        public boolean execute(String argument) {
+        public boolean execute(String[] arguments) {
             for (int i = 1; i < tasks_list.size() + 1; i++) {
-                System.out.println(i + tasks_list.get(i));
+                System.out.println(i + " " + tasks_list.get(i - 1));
             }
 
+            System.out.println(SEGMENT_SEPARATOR);
             return true;
         }
 
