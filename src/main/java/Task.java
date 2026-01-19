@@ -1,10 +1,10 @@
 /**
- * Represents a Task that can be stored in the ChatBot.
+ * Represents an abstract Task that can be stored in the ChatBot.
  * @author James Chin
  * @version 1.3
  * @since 1.0
  */
-public class Task {
+public abstract class Task {
     private String name;
     private boolean isComplete;
     /**
@@ -41,3 +41,4 @@ public class Task {
     }
 
 }
+

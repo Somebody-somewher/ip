@@ -1,5 +1,7 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
 import java.util.Scanner;
 /**
  * Represents a Chatbot that the User interacts with
@@ -20,7 +22,8 @@ public class ChatBotBob {
     private static List<Task> tasks = new ArrayList<Task>();
 
     /** List of Commands that will be used by the ChatBot */
-    private static final List<Command> commands = List.of(new CommandList(tasks), new CommandMark(tasks), new CommandBye());
+    private static final List<Command> commands = List.of(new CommandList(tasks),
+            new CommandMark(tasks), new CommandBye(), new CommandAddToDo(tasks), new CommandAddDeadline(tasks), new CommandAddEvent(tasks));
 
     /** For the goodbye command to end the bot */
     private static boolean isFinished = false;
@@ -57,16 +60,16 @@ public class ChatBotBob {
 
             //TODO: Once add command is "added" can probably just remove this part
 
-            if (isFinished) {
-                return;
-            }
-
-            // Add task functionality
-            if (addToList && tasks.size() < 100) {
-                // add task
-                tasks.add(new Task(userInputString));
-                echo("added: " + userInputString);
-            }
+//            if (isFinished) {
+//                return;
+//            }
+//
+//            // Add task functionality
+//            if (addToList && tasks.size() < 100) {
+//                // add task
+//                tasks.add(new TodoTask(userInputString));
+//                echo("added: " + userInputString);
+//            }
 
 
         }
@@ -195,7 +198,7 @@ public class ChatBotBob {
      * @since 1.0
      */
     private static class CommandMark extends Command {
-        List<Task> tasks_list;
+        private List<Task> taskList;
         private final static String CMDPHRASEMARK = "mark";
         private final static String CMDPHRASEUNMARK = "unmark";
 
@@ -205,7 +208,7 @@ public class ChatBotBob {
          * @param tasks The task lists
          */
         public CommandMark(List<Task> tasks) {
-            tasks_list = tasks;
+            taskList = tasks;
         }
 
         /**
@@ -234,23 +237,29 @@ public class ChatBotBob {
         public boolean execute(String[] arguments) {
 
             try {
-                if (arguments.length != 2) {
-                    echo("Usage: mark <task_no>");
-                }
-
-                int task_index = Integer.parseInt(arguments[1]);
-
                 // Task completed
                 if (CMDPHRASEMARK.equalsIgnoreCase(arguments[0])) {
-                    tasks_list.get(task_index - 1).markComplete();
+                    if (arguments.length != 2) {
+                        echo("Usage: mark <task_no>");
+                    }
+
+                    int taskIndex = Integer.parseInt(arguments[1]);
+
+                    taskList.get(taskIndex - 1).markComplete();
                     System.out.println("Good job! You completed the task! :>");
-                    echo("  " + tasks_list.get(task_index - 1));
+                    echo("  " + taskList.get(taskIndex - 1));
 
                 // Task Incomplete
                 } else {
-                    tasks_list.get(task_index - 1).markIncomplete();
+                    if (arguments.length != 2) {
+                        echo("Usage: unmark <task_no>");
+                    }
+
+                    int taskIndex = Integer.parseInt(arguments[1]);
+
+                    taskList.get(taskIndex - 1).markIncomplete();
                     System.out.println("Bad job! You incompleted the task! :<");
-                    echo("  " + tasks_list.get(task_index - 1));
+                    echo("  " + taskList.get(taskIndex - 1));
                 }
 
             } catch(NumberFormatException e1) {
@@ -264,5 +273,193 @@ public class ChatBotBob {
 
     }
 
+    private static class CommandAddToDo extends Command {
+        protected List<Task> taskList;
+        private final static String CMDPHRASE = "todo";
+
+        /**
+         * Creates a AddToDoCommand with the Chatbot's Task List
+         *
+         * @param tasks The task lists
+         */
+        public CommandAddToDo(List<Task> tasks) {
+            taskList = tasks;
+        }
+
+        /**
+         * Returns the CMDPHRASE, overriden by every child class so that
+         * the CMDPHRASE is overriden in every child class.
+         *
+         * @return the CMDPHRASE
+         */
+        public String getCmdPhrase() {
+            return CMDPHRASE;
+        }
+
+        /**
+         * Returns True if the input matches a specified
+         * command phrase. False otherwise
+         *
+         * @param input Array of words that was provided as user input
+         * @return True if a match is found, False if not
+         */
+        @Override
+        public boolean matches(String[] input) {
+            if (input.length == 0) {
+                return false;
+            }
+
+            return getCmdPhrase().equalsIgnoreCase(input[0]);
+        }
+
+        /**
+         * Executes a specified functionality, then Returns
+         * True if execution was successful. False otherwise
+         *
+         * @param arguments Arguments as supplied by user input
+         * @return True if executed correctly, False otherwise
+         */
+        public boolean execute(String[] arguments) {
+            if (arguments.length != 2) {
+                echo("Invalid arguments! Usage: todo");
+                return true;
+            }
+            taskList.add(new TodoTask(arguments[1]));
+            return true;
+        }
+    }
+
+    private static class CommandAddDeadline extends CommandAddToDo {
+        private final static String CMDPHRASE = "deadline";
+
+        /**
+         * Creates a AddDeadlineCommand with the Chatbot's Task List
+         *
+         * @param tasks The task lists
+         */
+        public CommandAddDeadline(List<Task> tasks) {
+            super(tasks);
+        }
+
+        /**
+         * Returns the CMDPHRASE, overriden by every child class so that
+         * the CMDPHRASE is overriden in every child class.
+         *
+         * @return the CMDPHRASE
+         */
+        @Override
+        public String getCmdPhrase() {
+            return CMDPHRASE;
+        }
+
+        /**
+         * Executes a specified functionality, then Returns
+         * True if execution was successful. False otherwise
+         *
+         * @param arguments Arguments as supplied by user input
+         * @return True if executed correctly, False otherwise
+         */
+        public boolean execute(String[] arguments) {
+            int argumentsLength = arguments.length;
+
+            if (argumentsLength < 4) {
+                echo("Invalid arguments! Usage: deadline <task-name> \\by <datetime>");
+                return true;
+            }
+
+            int byIndex = -1;
+            for (int i = 1; i < argumentsLength - 1; i += 1) {
+                if (arguments[i].equals("/by")) {
+                    byIndex = i;
+                    break;
+                }
+            }
+
+            if (byIndex == -1 || byIndex == 1) {
+                echo("Invalid arguments! Usage: deadline <task-name> /by <datetime>");
+                return true;
+            }
+
+            String taskName = String.join(" ", Arrays.copyOfRange(arguments, 1, byIndex));
+            String taskDeadline = String.join(" ", Arrays.copyOfRange(arguments, byIndex+1, argumentsLength));
+
+            taskList.add(new DeadlineTask(taskName, taskDeadline));
+            return true;
+        }
+    }
+
+    private static class CommandAddEvent extends CommandAddToDo {
+        private final static String CMDPHRASE = "event";
+
+        /**
+         * Creates a AddDeadlineCommand with the Chatbot's Task List
+         *
+         * @param tasks The task lists
+         */
+        public CommandAddEvent(List<Task> tasks) {
+            super(tasks);
+        }
+
+        /**
+         * Returns the CMDPHRASE, overriden by every child class so that
+         * the CMDPHRASE is overriden in every child class.
+         *
+         * @return the CMDPHRASE
+         */
+        @Override
+        public String getCmdPhrase() {
+            return CMDPHRASE;
+        }
+
+        /**
+         * Executes a specified functionality, then Returns
+         * True if execution was successful. False otherwise
+         *
+         * @param arguments Arguments as supplied by user input
+         * @return True if executed correctly, False otherwise
+         */
+        public boolean execute(String[] arguments) {
+            int argumentsLength = arguments.length;
+
+            if (argumentsLength < 6) {
+                echo("Invalid arguments! Usage: event <task-name> /from <datetime> /to <datetime>");
+                return true;
+            }
+
+            int fromIndex = -1;
+            int toIndex = -1;
+            for (int i = 1; i < argumentsLength - 1; i += 1) {
+                if (arguments[i].equals("/from")) {
+                    if (i == 1) {
+                        return true;
+                    }
+                    fromIndex = i;
+                }
+
+                if (arguments[i].equals("/to")) {
+                    if (fromIndex == -1) {
+                        return true;
+                    }
+                    toIndex = i;
+                    break;
+                }
+            }
+
+            if (fromIndex == -1 || toIndex == -1) {
+                echo("Invalid arguments! Usage: deadline <task-name> /by <datetime>");
+                return true;
+            }
+
+            String taskName = String.join(" ", Arrays.copyOfRange(arguments, 1, fromIndex));
+            String taskDurationStart = String.join(" ", Arrays.copyOfRange(arguments, fromIndex+1, toIndex));
+            String taskDurationEnd = String.join(" ", Arrays.copyOfRange(arguments, toIndex+1, argumentsLength));
+
+
+            taskList.add(new EventTask(taskName, taskDurationStart, taskDurationEnd));
+            return true;
+        }
+    }
 }
+
+
 
