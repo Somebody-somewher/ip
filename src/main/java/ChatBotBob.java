@@ -15,7 +15,7 @@ public class ChatBotBob {
             """;
 
     private static final String WELCOME_STRING = SEGMENT_SEPARATOR + """
-             Wazzup! I'm Bob. ChatBot Bob :D
+             Wazzup! I'm Bob. ChatBot Bob :D    
              What can I do for you?""";
 
     /** List of Tasks that are recorded by the ChatBot */
@@ -57,21 +57,6 @@ public class ChatBotBob {
                     break;
                 }
             }
-
-            //TODO: Once add command is "added" can probably just remove this part
-
-//            if (isFinished) {
-//                return;
-//            }
-//
-//            // Add task functionality
-//            if (addToList && tasks.size() < 100) {
-//                // add task
-//                tasks.add(new TodoTask(userInputString));
-//                echo("added: " + userInputString);
-//            }
-
-
         }
 
     }
@@ -273,6 +258,12 @@ public class ChatBotBob {
 
     }
 
+    /**
+     * Represents a Command that Adds a ToDo Task
+     * @author James Chin
+     * @version 1.0
+     * @since 1.0
+     */
     private static class CommandAddToDo extends Command {
         protected List<Task> taskList;
         private final static String CMDPHRASE = "todo";
@@ -329,6 +320,12 @@ public class ChatBotBob {
         }
     }
 
+    /**
+     * Represents a Command that Adds a Deadline Task
+     * @author James Chin
+     * @version 1.0
+     * @since 1.0
+     */
     private static class CommandAddDeadline extends CommandAddToDo {
         private final static String CMDPHRASE = "deadline";
 
@@ -362,12 +359,15 @@ public class ChatBotBob {
         public boolean execute(String[] arguments) {
             int argumentsLength = arguments.length;
 
+            // Check if the whole command has fewer arguments than the minimum required.
             if (argumentsLength < 4) {
                 echo("Invalid arguments! Usage: deadline <task-name> \\by <datetime>");
                 return true;
             }
 
             int byIndex = -1;
+
+            // Find the position of /by
             for (int i = 1; i < argumentsLength - 1; i += 1) {
                 if (arguments[i].equals("/by")) {
                     byIndex = i;
@@ -375,11 +375,13 @@ public class ChatBotBob {
                 }
             }
 
+            // Check if those index found is valid
             if (byIndex == -1 || byIndex == 1) {
                 echo("Invalid arguments! Usage: deadline <task-name> /by <datetime>");
                 return true;
             }
 
+            // Extract the task name and deadline from the command
             String taskName = String.join(" ", Arrays.copyOfRange(arguments, 1, byIndex));
             String taskDeadline = String.join(" ", Arrays.copyOfRange(arguments, byIndex+1, argumentsLength));
 
@@ -388,6 +390,12 @@ public class ChatBotBob {
         }
     }
 
+    /**
+     * Represents a Command that Adds a Event Task
+     * @author James Chin
+     * @version 1.0
+     * @since 1.0
+     */
     private static class CommandAddEvent extends CommandAddToDo {
         private final static String CMDPHRASE = "event";
 
@@ -421,6 +429,7 @@ public class ChatBotBob {
         public boolean execute(String[] arguments) {
             int argumentsLength = arguments.length;
 
+            // Check if the whole command has fewer arguments than the minimum required.
             if (argumentsLength < 6) {
                 echo("Invalid arguments! Usage: event <task-name> /from <datetime> /to <datetime>");
                 return true;
@@ -429,6 +438,8 @@ public class ChatBotBob {
             int fromIndex = -1;
             int toIndex = -1;
             for (int i = 1; i < argumentsLength - 1; i += 1) {
+
+                // Find the position of /from
                 if (arguments[i].equals("/from")) {
                     if (i == 1) {
                         return true;
@@ -436,8 +447,9 @@ public class ChatBotBob {
                     fromIndex = i;
                 }
 
+                // Find the position of /to
                 if (arguments[i].equals("/to")) {
-                    if (fromIndex == -1) {
+                    if (fromIndex == -1 || fromIndex == i - 1) {
                         return true;
                     }
                     toIndex = i;
@@ -445,11 +457,13 @@ public class ChatBotBob {
                 }
             }
 
+            // Check if those indexes are valid
             if (fromIndex == -1 || toIndex == -1) {
                 echo("Invalid arguments! Usage: deadline <task-name> /by <datetime>");
                 return true;
             }
 
+            // Extract the task name, end date and start date from the command
             String taskName = String.join(" ", Arrays.copyOfRange(arguments, 1, fromIndex));
             String taskDurationStart = String.join(" ", Arrays.copyOfRange(arguments, fromIndex+1, toIndex));
             String taskDurationEnd = String.join(" ", Arrays.copyOfRange(arguments, toIndex+1, argumentsLength));
