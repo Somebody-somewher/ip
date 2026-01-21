@@ -11,11 +11,11 @@ import java.util.Scanner;
  */
 public class ChatBotBob {
     private static final String SEGMENT_SEPARATOR = """
-            – – – – – – – – – – – – – – – – – – 
+            – – – – – – – – – – – – – – – – – –
             """;
 
     private static final String WELCOME_STRING = SEGMENT_SEPARATOR + """
-             Wazzup! I'm Bob. ChatBot Bob :D    
+             Wazzup! I'm Bob. ChatBot Bob :D
              What can I do for you?""";
 
     /** List of Tasks that are recorded by the ChatBot */
@@ -23,7 +23,8 @@ public class ChatBotBob {
 
     /** List of Commands that will be used by the ChatBot */
     private static final List<Command> commands = List.of(new CommandList(tasks),
-            new CommandMark(tasks), new CommandBye(), new CommandAddToDo(tasks), new CommandAddDeadline(tasks), new CommandAddEvent(tasks));
+            new CommandMark(tasks), new CommandUnMark(tasks), new CommandBye(), new CommandAddToDo(tasks), new CommandAddDeadline(tasks), new CommandAddEvent(tasks),
+            new CommandDeleteTask(tasks));
 
     /** For the goodbye command to end the bot */
     private static boolean isFinished = false;
@@ -36,17 +37,11 @@ public class ChatBotBob {
         // Read user input
         Scanner reader = new Scanner(System.in);
 
-        // Since there's no add command (yet), using a boolean as substitute
-        boolean addToList = false;
-
         // Continuously
         while (!isFinished) {
             // Process user input
             String userInputString = reader.nextLine();
             String[] userInputStringArr = userInputString.split(" ");
-
-            // This is the add functionality, currently set to add a task whenever input is not a command
-            addToList = true;
 
             System.out.print(SEGMENT_SEPARATOR);
 
@@ -74,7 +69,7 @@ public class ChatBotBob {
     /**
      * Represents a Command that Lists out all ChatBot Tasks
      * @author James Chin
-     * @version 1.4
+     * @version 1.5
      * @since 1.0
      */
     private static class CommandList extends Command {
@@ -91,19 +86,14 @@ public class ChatBotBob {
         }
 
         /**
-         * Returns True if the input matches a specified
-         * command phrase. False otherwise
+         * Returns the CMDPHRASE, overriden by every child class so that
+         * the CMDPHRASE is overriden in every child class.
          *
-         * @param input Array of words that was provided as user input
-         * @return True if a match is found, False if not
+         * @return the CMDPHRASE
          */
         @Override
-        public boolean matches(String[] input) {
-            if (input.length == 0) {
-                return false;
-            }
-
-            return CMDPHRASE.equalsIgnoreCase(input[0]);
+        public String getCmdPhrase() {
+            return CMDPHRASE;
         }
 
         /**
@@ -133,28 +123,22 @@ public class ChatBotBob {
     /**
      * Represents a Command that Ends ChatBot input
      * @author James Chin
-     * @version 1.2
+     * @version 1.3
      * @since 1.0
      */
     private static class CommandBye extends Command {
-        private static final String GOODBYE_STRING =  "Buh-Bye!" ;
-
+        private final static String GOODBYE_STRING =  "Buh-Bye!" ;
         private final static String CMDPHRASE = "bye";
 
         /**
-         * Returns True if the input matches a specified
-         * command phrase. False otherwise
+         * Returns the CMDPHRASE, overriden by every child class so that
+         * the CMDPHRASE is overriden in every child class.
          *
-         * @param input Array of words that was provided as user input
-         * @return True if a match is found, False if not
+         * @return the CMDPHRASE
          */
         @Override
-        public boolean matches(String[] input) {
-            if (input.length == 0) {
-                return false;
-            }
-
-            return CMDPHRASE.equalsIgnoreCase(input[0]);
+        public String getCmdPhrase() {
+            return CMDPHRASE;
         }
 
         /**
@@ -180,38 +164,31 @@ public class ChatBotBob {
     /**
      * Represents a Command that Marks or UnMarks a Task
      * @author James Chin
-     * @version 1.1
+     * @version 1.2
      * @since 1.0
      */
-    private static class CommandMark extends Command {
-        private List<Task> taskList;
-        private final static String CMDPHRASEMARK = "mark";
-        private final static String CMDPHRASEUNMARK = "unmark";
-
+    private static class CommandMark extends CommandSelectTask {
+        private final static String CMDPHRASE = "mark";
         /**
          * Creates a CommandMark with the Chatbot's Task List
          *
          * @param tasks The task lists
          */
         public CommandMark(List<Task> tasks) {
-            taskList = tasks;
+            super(tasks);
         }
 
         /**
-         * Returns True if the input matches a specified
-         * command phrase. False otherwise
+         * Returns the CMDPHRASE, overriden by every child class so that
+         * the CMDPHRASE is overriden in every child class.
          *
-         * @param input Array of words that was provided as user input
-         * @return True if a match is found, False if not
+         * @return the CMDPHRASE
          */
         @Override
-        public boolean matches(String[] input) {
-            if (input.length == 0) {
-                return false;
-            }
-
-            return CMDPHRASEMARK.equalsIgnoreCase(input[0]) || CMDPHRASEUNMARK.equalsIgnoreCase(input[0]);
+        public String getCmdPhrase() {
+            return CMDPHRASE;
         }
+
 
         /**
          * Executes a specified functionality, then Returns
@@ -222,37 +199,59 @@ public class ChatBotBob {
          */
         public boolean execute(String[] arguments) throws CommandInvalidArgumentException {
 
-            try {
-                // Task completed
-                if (CMDPHRASEMARK.equalsIgnoreCase(arguments[0])) {
-                    if (arguments.length != 2) {
-                        throw new CommandInvalidArgumentException("Usage: mark <task_no>");
-                    }
-
-                    int taskIndex = Integer.parseInt(arguments[1]);
-
-                    taskList.get(taskIndex - 1).markComplete();
-                    System.out.println("Good job! You completed the task! :>");
-                    echo("  " + taskList.get(taskIndex - 1));
-
-                // Task Incomplete
-                } else {
-                    if (arguments.length != 2) {
-                        throw new CommandInvalidArgumentException("Usage: unmark <task_no>");
-                    }
-
-                    int taskIndex = Integer.parseInt(arguments[1]);
-
-                    taskList.get(taskIndex - 1).markIncomplete();
-                    System.out.println("Bad job! You incompleted the task! :<");
-                    echo("  " + taskList.get(taskIndex - 1));
-                }
-
-            } catch(NumberFormatException e1) {
-                throw new CommandInvalidArgumentException("mark/unmark requires a task number! :<");
-            } catch(IndexOutOfBoundsException e2) {
-                throw new CommandInvalidArgumentException("I don't think that task number exists.... :<");
+            if (arguments.length != 2) {
+                throw new CommandInvalidArgumentException("Usage: mark <task_no>");
             }
+
+            getSpecificTask(arguments[1]).markComplete();
+            System.out.println("Good job! You completed the task! :>");
+            echo("  " + getSpecificTask(arguments[1]));
+
+            return true;
+        }
+
+    }
+
+    private static class CommandUnMark extends CommandSelectTask {
+        private final static String CMDPHRASE = "unmark";
+
+        /**
+         * Creates a CommandMark with the Chatbot's Task List
+         *
+         * @param tasks The task lists
+         */
+        public CommandUnMark(List<Task> tasks) {
+            super(tasks);
+        }
+
+        /**
+         * Returns the CMDPHRASE, overriden by every child class so that
+         * the CMDPHRASE is overriden in every child class.
+         *
+         * @return the CMDPHRASE
+         */
+        @Override
+        public String getCmdPhrase() {
+            return CMDPHRASE;
+        }
+
+
+        /**
+         * Executes a specified functionality, then Returns
+         * True if execution was successful. False otherwise
+         *
+         * @param arguments Arguments as supplied by user input
+         * @return True if executed correctly, False otherwise
+         */
+        public boolean execute(String[] arguments) throws CommandInvalidArgumentException {
+
+            if (arguments.length != 2) {
+                throw new CommandInvalidArgumentException("Usage: unmark <task_no>");
+            }
+
+            getSpecificTask(arguments[1]).markIncomplete();
+            System.out.println("Bad job! You incompleted the task! :<");
+            echo("  " + getSpecificTask(arguments[1]));
 
             return true;
         }
@@ -262,7 +261,7 @@ public class ChatBotBob {
     /**
      * Represents a Command that Adds a ToDo Task
      * @author James Chin
-     * @version 1.0
+     * @version 1.1
      * @since 1.0
      */
     private static class CommandAddToDo extends Command {
@@ -289,22 +288,6 @@ public class ChatBotBob {
         }
 
         /**
-         * Returns True if the input matches a specified
-         * command phrase. False otherwise
-         *
-         * @param input Array of words that was provided as user input
-         * @return True if a match is found, False if not
-         */
-        @Override
-        public boolean matches(String[] input) {
-            if (input.length == 0) {
-                return false;
-            }
-
-            return getCmdPhrase().equalsIgnoreCase(input[0]);
-        }
-
-        /**
          * Executes a specified functionality, then Returns
          * True if execution was successful. False otherwise
          *
@@ -326,7 +309,7 @@ public class ChatBotBob {
     /**
      * Represents a Command that Adds a Deadline Task
      * @author James Chin
-     * @version 1.0
+     * @version 1.1
      * @since 1.0
      */
     private static class CommandAddDeadline extends CommandAddToDo {
@@ -392,9 +375,9 @@ public class ChatBotBob {
     }
 
     /**
-     * Represents a Command that Adds a Event Task
+     * Represents a Command that Adds an Event Task
      * @author James Chin
-     * @version 1.0
+     * @version 1.1
      * @since 1.0
      */
     private static class CommandAddEvent extends CommandAddToDo {
@@ -469,6 +452,57 @@ public class ChatBotBob {
 
 
             taskList.add(new EventTask(taskName, taskDurationStart, taskDurationEnd));
+            return true;
+        }
+    }
+
+    /**
+     * Represents a Command that Deletes a Task
+     * @author James Chin
+     * @version 1.0
+     * @since 1.0
+     */
+    private static class CommandDeleteTask extends CommandSelectTask {
+        private final static String CMDPHRASE = "delete";
+
+        /**
+         * Creates a AddToDoCommand with the Chatbot's Task List
+         *
+         * @param tasks The task lists
+         */
+        public CommandDeleteTask(List<Task> tasks) {
+            super(tasks);
+        }
+
+        /**
+         * Returns the CMDPHRASE, overriden by every child class so that
+         * the CMDPHRASE is overriden in every child class.
+         *
+         * @return the CMDPHRASE
+         */
+        public String getCmdPhrase() {
+            return CMDPHRASE;
+        }
+
+
+        /**
+         * Executes a specified functionality, then Returns
+         * True if execution was successful. False otherwise
+         *
+         * @param arguments Arguments as supplied by user input
+         * @return True if executed correctly, False otherwise
+         */
+        public boolean execute(String[] arguments) throws CommandInvalidArgumentException{
+            if (arguments.length < 2) {
+                throw new CommandInvalidArgumentException("Invalid arguments! Usage: delete <task-no>");
+            }
+
+            Task taskToDelete = getSpecificTask(arguments[1]);
+            taskList.remove(taskToDelete);
+            System.out.println("As you command my liege! Say goodbye to:");
+            System.out.println("  " + taskToDelete);
+            echo("You now have " + taskList.size() + " tasks remaining");
+
             return true;
         }
     }

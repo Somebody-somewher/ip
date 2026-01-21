@@ -1,10 +1,18 @@
 /**
  * Represents a Command that can be executed by the ChatBot.
  * @author James Chin
- * @version 1.5
+ * @version 1.6
  * @since 1.0
  */
 public abstract class Command {
+
+    /**
+     * Returns the CMDPHRASE, overriden by every child class so that
+     * the CMDPHRASE is overriden in every child class.
+     *
+     * @return the CMDPHRASE
+     */
+    public abstract String getCmdPhrase();
 
     /**
      * Returns True if the input matches a specified
@@ -13,8 +21,13 @@ public abstract class Command {
      * @param input Array of words that was provided as user input
      * @return True if a match is found, False if not
      */
-    public abstract boolean matches(String[] input);
+    public boolean matches(String[] input) {
+        if (input.length == 0) {
+            return false;
+        }
 
+        return getCmdPhrase().equalsIgnoreCase(input[0]);
+    }
     /**
      * Executes a specified functionality, then Returns
      * True if execution was successful. False otherwise
