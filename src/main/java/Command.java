@@ -22,7 +22,7 @@ public abstract class Command {
      * @param arguments Arguments as supplied by user input
      * @return True if executed correctly, False otherwise
      */
-    public abstract boolean execute(String[] arguments);
+    public abstract boolean execute(String[] arguments) throws CommandInvalidArgumentException;
 
     /**
      * Executes a specified functionality if the
@@ -32,11 +32,18 @@ public abstract class Command {
      * @param input Array of words that was provided as user input
      * @return True if a match is found, False if not
      */
-    public boolean executeOnMatch(String[] input) {
+    public boolean executeOnMatch(String[] input) throws CommandInvalidArgumentException {
         if (matches(input)) {
             return execute(input);
         }
 
         return false;
+    }
+
+
+    public class CommandInvalidArgumentException extends Exception {
+        public CommandInvalidArgumentException(String message) {
+            super(message);
+        }
     }
 }

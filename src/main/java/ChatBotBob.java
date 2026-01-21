@@ -11,7 +11,7 @@ import java.util.Scanner;
  */
 public class ChatBotBob {
     private static final String SEGMENT_SEPARATOR = """
-            XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+            – – – – – – – – – – – – – – – – – – 
             """;
 
     private static final String WELCOME_STRING = SEGMENT_SEPARATOR + """
@@ -52,9 +52,10 @@ public class ChatBotBob {
 
             // Go through every single command to see if any command matches
             for (Command c : commands) {
-                if (c.executeOnMatch(userInputStringArr)) {
-                    addToList = false;
-                    break;
+                try {
+                    c.executeOnMatch(userInputStringArr);
+                } catch (Command.CommandInvalidArgumentException e) {
+                    echo(e.getMessage());
                 }
             }
         }
@@ -112,11 +113,11 @@ public class ChatBotBob {
          * @param arguments Arguments as supplied by user input
          * @return True if executed correctly, False otherwise
          */
-        public boolean execute(String[] arguments) {
+        public boolean execute(String[] arguments) throws CommandInvalidArgumentException{
             if (arguments.length != 1) {
-                echo("Invalid arguments! Usage: list");
+                throw new CommandInvalidArgumentException("Invalid arguments! Usage: list");
             } else if (tasks_list.isEmpty()) {
-                echo("No tasks for you to do. Lucky you :p");
+                throw new CommandInvalidArgumentException("No tasks for you to do. Lucky you :p");
             } else {
                 for (int i = 1; i < tasks_list.size() + 1; i++) {
                     System.out.println(i + "." + tasks_list.get(i - 1));
@@ -136,8 +137,7 @@ public class ChatBotBob {
      * @since 1.0
      */
     private static class CommandBye extends Command {
-        private static final String GOODBYE_STRING = SEGMENT_SEPARATOR + """
-            Buh-Bye!""" ;
+        private static final String GOODBYE_STRING =  "Buh-Bye!" ;
 
         private final static String CMDPHRASE = "bye";
 
@@ -164,14 +164,15 @@ public class ChatBotBob {
          * @param arguments Arguments as supplied by user input
          * @return True if executed correctly, False otherwise
          */
-        public boolean execute(String[] arguments) {
+        public boolean execute(String[] arguments) throws CommandInvalidArgumentException {
             if (arguments.length != 1) {
-                echo("I won't leave until you say a proper goodbye! Usage: bye");
+                throw new CommandInvalidArgumentException("I won't leave until you say a proper goodbye! >:( Usage: bye");
             } else {
                 echo(GOODBYE_STRING);
                 isFinished = true;
             }
             return true;
+
         }
 
     }
@@ -219,13 +220,13 @@ public class ChatBotBob {
          * @param arguments Arguments as supplied by user input
          * @return True if executed correctly, False otherwise
          */
-        public boolean execute(String[] arguments) {
+        public boolean execute(String[] arguments) throws CommandInvalidArgumentException {
 
             try {
                 // Task completed
                 if (CMDPHRASEMARK.equalsIgnoreCase(arguments[0])) {
                     if (arguments.length != 2) {
-                        echo("Usage: mark <task_no>");
+                        throw new CommandInvalidArgumentException("Usage: mark <task_no>");
                     }
 
                     int taskIndex = Integer.parseInt(arguments[1]);
@@ -237,7 +238,7 @@ public class ChatBotBob {
                 // Task Incomplete
                 } else {
                     if (arguments.length != 2) {
-                        echo("Usage: unmark <task_no>");
+                        throw new CommandInvalidArgumentException("Usage: unmark <task_no>");
                     }
 
                     int taskIndex = Integer.parseInt(arguments[1]);
@@ -248,9 +249,9 @@ public class ChatBotBob {
                 }
 
             } catch(NumberFormatException e1) {
-                echo("Argument is not a number! :<");
+                throw new CommandInvalidArgumentException("mark/unmark requires a task number! :<");
             } catch(IndexOutOfBoundsException e2) {
-                echo("Task not found! :<");
+                throw new CommandInvalidArgumentException("I don't think that task number exists.... :<");
             }
 
             return true;
@@ -310,12 +311,14 @@ public class ChatBotBob {
          * @param arguments Arguments as supplied by user input
          * @return True if executed correctly, False otherwise
          */
-        public boolean execute(String[] arguments) {
-            if (arguments.length != 2) {
-                echo("Invalid arguments! Usage: todo");
-                return true;
+        public boolean execute(String[] arguments) throws CommandInvalidArgumentException{
+            if (arguments.length < 2) {
+                throw new CommandInvalidArgumentException("Invalid arguments! Usage: todo");
             }
-            taskList.add(new TodoTask(arguments[1]));
+
+            String taskName = String.join(" ", Arrays.copyOfRange(arguments, 1, arguments.length));
+
+            taskList.add(new TodoTask(taskName));
             return true;
         }
     }
@@ -356,13 +359,12 @@ public class ChatBotBob {
          * @param arguments Arguments as supplied by user input
          * @return True if executed correctly, False otherwise
          */
-        public boolean execute(String[] arguments) {
+        public boolean execute(String[] arguments) throws CommandInvalidArgumentException {
             int argumentsLength = arguments.length;
 
             // Check if the whole command has fewer arguments than the minimum required.
             if (argumentsLength < 4) {
-                echo("Invalid arguments! Usage: deadline <task-name> \\by <datetime>");
-                return true;
+                throw new CommandInvalidArgumentException("Invalid arguments! Usage: deadline <task-name> /by <datetime>");
             }
 
             int byIndex = -1;
@@ -377,8 +379,7 @@ public class ChatBotBob {
 
             // Check if those index found is valid
             if (byIndex == -1 || byIndex == 1) {
-                echo("Invalid arguments! Usage: deadline <task-name> /by <datetime>");
-                return true;
+                throw new CommandInvalidArgumentException("Invalid arguments! Usage: deadline <task-name> /by <datetime>");
             }
 
             // Extract the task name and deadline from the command
@@ -426,13 +427,12 @@ public class ChatBotBob {
          * @param arguments Arguments as supplied by user input
          * @return True if executed correctly, False otherwise
          */
-        public boolean execute(String[] arguments) {
+        public boolean execute(String[] arguments) throws CommandInvalidArgumentException {
             int argumentsLength = arguments.length;
 
             // Check if the whole command has fewer arguments than the minimum required.
             if (argumentsLength < 6) {
-                echo("Invalid arguments! Usage: event <task-name> /from <datetime> /to <datetime>");
-                return true;
+                throw new CommandInvalidArgumentException("Invalid arguments! Usage: event <task-name> /from <datetime> /to <datetime>");
             }
 
             int fromIndex = -1;
@@ -459,8 +459,7 @@ public class ChatBotBob {
 
             // Check if those indexes are valid
             if (fromIndex == -1 || toIndex == -1) {
-                echo("Invalid arguments! Usage: deadline <task-name> /by <datetime>");
-                return true;
+                throw new CommandInvalidArgumentException("Invalid arguments! Usage: event <task-name> /from <datetime> /to <datetime>");
             }
 
             // Extract the task name, end date and start date from the command
