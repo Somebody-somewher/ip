@@ -11,7 +11,7 @@ import java.util.Scanner;
  */
 public class ChatBotBob {
     private static final String SEGMENT_SEPARATOR = """
-            ════════════════════════════ ✧ ✧ ✧ ════════════════════════════
+            XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
             """;
 
     private static final String WELCOME_STRING = SEGMENT_SEPARATOR + """
@@ -121,9 +121,9 @@ public class ChatBotBob {
                 for (int i = 1; i < tasks_list.size() + 1; i++) {
                     System.out.println(i + "." + tasks_list.get(i - 1));
                 }
+                System.out.print(SEGMENT_SEPARATOR);
             }
 
-            System.out.println(SEGMENT_SEPARATOR);
             return true;
         }
 
