@@ -3,34 +3,27 @@ Wazzup! I'm Bob. ChatBot Bob :D
 What can I do for you?
 – – – – – – – – – – – – – – – – – –
 – – – – – – – – – – – – – – – – – –
+Invalid arguments! Usage: list
+– – – – – – – – – – – – – – – – – –
+– – – – – – – – – – – – – – – – – –
 No tasks for you to do. Lucky you :p
 – – – – – – – – – – – – – – – – – –
 – – – – – – – – – – – – – – – – – –
-I don't think that task number exists.... :<
+I don't have a task with that number, you're crazy :<
 – – – – – – – – – – – – – – – – – –
 – – – – – – – – – – – – – – – – – –
-I don't think that task number exists.... :<
+I don't have a task with that number, you're crazy :<
+– – – – – – – – – – – – – – – – – –
+– – – – – – – – – – – – – – – – – –
+I don't have a task with that number, you're crazy :<
 – – – – – – – – – – – – – – – – – –
 – – – – – – – – – – – – – – – – – –
 Invalid arguments! Usage: todo
 – – – – – – – – – – – – – – – – – –
 – – – – – – – – – – – – – – – – – –
-– – – – – – – – – – – – – – – – – –
-1.[T][ ] Hello I am a TODO!
-– – – – – – – – – – – – – – – – – –
-– – – – – – – – – – – – – – – – – –
-Invalid arguments! Usage: deadline <task-name> /by <datetime>
-– – – – – – – – – – – – – – – – – –
-– – – – – – – – – – – – – – – – – –
-Invalid arguments! Usage: deadline <task-name> /by <datetime>
-– – – – – – – – – – – – – – – – – –
-– – – – – – – – – – – – – – – – – –
-1.[T][ ] Hello I am a TODO!
-– – – – – – – – – – – – – – – – – –
-– – – – – – – – – – – – – – – – – –
-– – – – – – – – – – – – – – – – – –
-1.[T][ ] Hello I am a TODO!
-2.[D][ ] Hello I am a Deadline! (by: One day!)
+You will do your tasks after adding them... Right...?
+  [T][ ] Hello I am a TODO!
+You have 1 tasks remaining
 – – – – – – – – – – – – – – – – – –
 – – – – – – – – – – – – – – – – – –
 Good job! You completed the task! :>
@@ -41,34 +34,54 @@ Bad job! You incompleted the task! :<
   [T][ ] Hello I am a TODO!
 – – – – – – – – – – – – – – – – – –
 – – – – – – – – – – – – – – – – – –
+As you command my liege! Say goodbye to:
+  [T][ ] Hello I am a TODO!
+You now have 0 tasks remaining
+– – – – – – – – – – – – – – – – – –
+– – – – – – – – – – – – – – – – – –
+I don't have a task with that number, you're crazy :<
+– – – – – – – – – – – – – – – – – –
+– – – – – – – – – – – – – – – – – –
+Invalid arguments! Usage: deadline <task-name> /by <datetime>
+– – – – – – – – – – – – – – – – – –
+– – – – – – – – – – – – – – – – – –
+Invalid arguments! Usage: deadline <task-name> /by <datetime>
+– – – – – – – – – – – – – – – – – –
+– – – – – – – – – – – – – – – – – –
+You will do your tasks after adding them... Right...?
+  [D][ ] Hello I am a Deadline! (by: maybe tomorrow)
+You have 1 tasks remaining
+– – – – – – – – – – – – – – – – – –
+– – – – – – – – – – – – – – – – – –
+Invalid arguments! Usage: event <task-name> /from <datetime> /to <datetime>
+– – – – – – – – – – – – – – – – – –
+– – – – – – – – – – – – – – – – – –
+Invalid arguments! Usage: event <task-name> /from <datetime> /to <datetime>
+– – – – – – – – – – – – – – – – – –
+– – – – – – – – – – – – – – – – – –
+Invalid arguments! Usage: event <task-name> /from <datetime> /to <datetime>
+– – – – – – – – – – – – – – – – – –
+– – – – – – – – – – – – – – – – – –
+You will do your tasks after adding them... Right...?
+  [E][ ] Hello I am an Event! (from: Today mebbe to: Tomorrow mebbe)
+You have 2 tasks remaining
+– – – – – – – – – – – – – – – – – –
+– – – – – – – – – – – – – – – – – –
 Good job! You completed the task! :>
-  [D][X] Hello I am a Deadline! (by: One day!)
-– – – – – – – – – – – – – – – – – –
-– – – – – – – – – – – – – – – – – –
-1.[T][ ] Hello I am a TODO!
-2.[D][X] Hello I am a Deadline! (by: One day!)
-– – – – – – – – – – – – – – – – – –
-– – – – – – – – – – – – – – – – – –
-Invalid arguments! Usage: event <task-name> /from <datetime> /to <datetime>
-– – – – – – – – – – – – – – – – – –
-– – – – – – – – – – – – – – – – – –
-Invalid arguments! Usage: event <task-name> /from <datetime> /to <datetime>
-– – – – – – – – – – – – – – – – – –
-– – – – – – – – – – – – – – – – – –
-Invalid arguments! Usage: event <task-name> /from <datetime> /to <datetime>
-– – – – – – – – – – – – – – – – – –
-– – – – – – – – – – – – – – – – – –
-– – – – – – – – – – – – – – – – – –
-1.[T][ ] Hello I am a TODO!
-2.[D][X] Hello I am a Deadline! (by: One day!)
-3.[E][ ] I am an Event! (from: Today mebbe to: Someday Mebbe)
+  [D][X] Hello I am a Deadline! (by: maybe tomorrow)
 – – – – – – – – – – – – – – – – – –
 – – – – – – – – – – – – – – – – – –
 Good job! You completed the task! :>
-  [E][X] I am an Event! (from: Today mebbe to: Someday Mebbe)
+  [E][X] Hello I am an Event! (from: Today mebbe to: Tomorrow mebbe)
 – – – – – – – – – – – – – – – – – –
 – – – – – – – – – – – – – – – – – –
-I don't think that task number exists.... :<
+I don't have a task with that number, you're crazy :<
+– – – – – – – – – – – – – – – – – –
+– – – – – – – – – – – – – – – – – –
+That's not even a task number! :<
+– – – – – – – – – – – – – – – – – –
+– – – – – – – – – – – – – – – – – –
+That's not even a task number! :<
 – – – – – – – – – – – – – – – – – –
 – – – – – – – – – – – – – – – – – –
 I won't leave until you say a proper goodbye! >:( Usage: bye

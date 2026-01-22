@@ -261,7 +261,7 @@ public class ChatBotBob {
     /**
      * Represents a Command that Adds a ToDo Task
      * @author James Chin
-     * @version 1.1
+     * @version 1.2
      * @since 1.0
      */
     private static class CommandAddToDo extends Command {
@@ -287,6 +287,13 @@ public class ChatBotBob {
             return CMDPHRASE;
         }
 
+        protected void printAddedTask(Task taskToAdd) {
+            taskList.add(taskToAdd);
+            System.out.println("You will do your tasks after adding them... Right...?");
+            System.out.println("  " + taskToAdd);
+            echo("You have " + taskList.size() + " tasks remaining");
+        }
+
         /**
          * Executes a specified functionality, then Returns
          * True if execution was successful. False otherwise
@@ -300,16 +307,17 @@ public class ChatBotBob {
             }
 
             String taskName = String.join(" ", Arrays.copyOfRange(arguments, 1, arguments.length));
-
-            taskList.add(new TodoTask(taskName));
+            printAddedTask(new TodoTask(taskName));
             return true;
         }
+
+
     }
 
     /**
      * Represents a Command that Adds a Deadline Task
      * @author James Chin
-     * @version 1.1
+     * @version 1.2
      * @since 1.0
      */
     private static class CommandAddDeadline extends CommandAddToDo {
@@ -369,7 +377,8 @@ public class ChatBotBob {
             String taskName = String.join(" ", Arrays.copyOfRange(arguments, 1, byIndex));
             String taskDeadline = String.join(" ", Arrays.copyOfRange(arguments, byIndex+1, argumentsLength));
 
-            taskList.add(new DeadlineTask(taskName, taskDeadline));
+
+            printAddedTask(new DeadlineTask(taskName, taskDeadline));
             return true;
         }
     }
@@ -425,7 +434,7 @@ public class ChatBotBob {
                 // Find the position of /from
                 if (arguments[i].equals("/from")) {
                     if (i == 1) {
-                        return true;
+                        throw new CommandInvalidArgumentException("Invalid arguments! Usage: event <task-name> /from <datetime> /to <datetime>");
                     }
                     fromIndex = i;
                 }
@@ -433,7 +442,7 @@ public class ChatBotBob {
                 // Find the position of /to
                 if (arguments[i].equals("/to")) {
                     if (fromIndex == -1 || fromIndex == i - 1) {
-                        return true;
+                        throw new CommandInvalidArgumentException("Invalid arguments! Usage: event <task-name> /from <datetime> /to <datetime>");
                     }
                     toIndex = i;
                     break;
@@ -451,7 +460,7 @@ public class ChatBotBob {
             String taskDurationEnd = String.join(" ", Arrays.copyOfRange(arguments, toIndex+1, argumentsLength));
 
 
-            taskList.add(new EventTask(taskName, taskDurationStart, taskDurationEnd));
+            printAddedTask(new EventTask(taskName, taskDurationStart, taskDurationEnd));
             return true;
         }
     }
@@ -459,7 +468,7 @@ public class ChatBotBob {
     /**
      * Represents a Command that Deletes a Task
      * @author James Chin
-     * @version 1.0
+     * @version 1.2
      * @since 1.0
      */
     private static class CommandDeleteTask extends CommandSelectTask {

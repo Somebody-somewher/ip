@@ -1,24 +1,25 @@
-list
-mark 0
-unmark 0
-todo
-todo Hello I am a TODO!
-list
-deadline test /by
-deadline /by test
-list
-deadline Hello I am a Deadline! /by One day!
+list 123
 list
 mark 1
 unmark 1
+delete 1
+todo
+todo Hello I am a TODO!
+mark 1
+unmark 1
+delete 1
+delete 1
+deadline /by today
+deadline hello! /by
+deadline Hello I am a Deadline! /by maybe tomorrow
+event hi /from today /to
+event hi /from /to today
+event /from today /to tomorrow
+event Hello I am an Event! /from Today mebbe /to Tomorrow mebbe
+mark 1
 mark 2
-list
-event /from test /to test
-event test /from /to test
-event test /from test /to
-event I am an Event! /from Today mebbe /to Someday Mebbe
-list
-mark 3
-mark 4
-bye test
+delete 3
+delete BLEUGH
+mark BLEUGH
+bye 123
 bye
