@@ -24,14 +24,34 @@ public class EventTask extends Task{
         this.endDateTime = endDateTime;
     }
 
+    private EventTask(String name, boolean isComplete, String startDateTime, String endDateTime)  {
+        super(name, isComplete);
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
+    }
+
     /**
      * Returns the Task's name and its complete status
      *
      * @return the Task represented as a String
      */
+    @Override
     public String toString() {
         return "[E]" + super.toString() +
                 " (from: " + startDateTime + " to: " + endDateTime + ")";
+    }
+
+    @Override
+    public String serialize() {
+        return "E , " + super.serialize() + " , " + startDateTime.replace(",", "\\,")
+                + endDateTime.replace(",", "\\,");
+    }
+
+    @Override
+    public EventTask deserializeIfAble(String serializedTask) {
+        String[] fields = serializedTask.split(" , ");
+        return new EventTask(fields[2].replace("\\,", ","), fields[1].equals("1"), fields[3].replace("\\,", ","),
+                fields[4].replace("\\,", ","));
     }
 
 }

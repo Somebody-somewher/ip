@@ -13,8 +13,12 @@ public abstract class Task {
      * @param name The name of the Task
      */
     public Task(String name) {
+        this(name, false);
+    }
+
+    protected Task(String name, boolean isComplete) {
         this.name = name;
-        isComplete = false;
+        this.isComplete = isComplete;
     }
 
     /**
@@ -39,6 +43,12 @@ public abstract class Task {
     public String toString() {
         return  "[" + (isComplete ? "X" : " ") + "] " + this.name;
     }
+
+    public String serialize() {
+        return (isComplete ? "1" : "0") + " , " + this.name.replace(",", "\\,");
+    }
+
+    public abstract Task deserializeIfAble(String serializedTask);
 
 }
 

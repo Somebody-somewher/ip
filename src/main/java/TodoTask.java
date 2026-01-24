@@ -16,13 +16,28 @@ public class TodoTask extends Task{
         super(name);
     }
 
+    private TodoTask(String name, boolean isComplete) {
+        super(name, isComplete);
+    }
+
     /**
      * Returns the Task's name and its complete status
      *
      * @return the Task represented as a String
      */
+    @Override
     public String toString() {
         return "[T]" + super.toString();
+    }
+
+    @Override
+    public String serialize() {
+        return "T , " + super.serialize();
+    }
+
+    public TodoTask deserializeIfAble(String serializedTask) {
+        String[] fields = serializedTask.split(" , ");
+        return new TodoTask(fields[2].replace("\\,", ","), fields[1].equals("1") );
     }
 
 }

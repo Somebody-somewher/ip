@@ -20,13 +20,29 @@ public class DeadlineTask extends Task{
         this.endDateTime = endDateTime;
     }
 
+    private DeadlineTask(String name, boolean isComplete, String endDateTime)  {
+        super(name, isComplete);
+        this.endDateTime = endDateTime;
+    }
+
     /**
      * Returns the Task's name and its complete status
      *
      * @return the Task represented as a String
      */
+    @Override
     public String toString() {
         return "[D]" + super.toString() + " (by: " + endDateTime + ")";
     }
 
+    @Override
+    public String serialize() {
+        return "D , " + super.serialize() + " , " + endDateTime.replace(",", "\\,");
+    }
+
+    @Override
+    public DeadlineTask deserializeIfAble(String serializedTask) {
+        String[] fields = serializedTask.split(" , ");
+        return new DeadlineTask(fields[2].replace("\\,", ","), fields[1].equals("1"), fields[3].replace("\\,", ",") );
+    }
 }
