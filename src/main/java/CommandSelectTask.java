@@ -1,5 +1,3 @@
-import java.util.List;
-
 /**
  * Represents an abstract Command that selects a Task
  * @author James Chin
@@ -7,22 +5,21 @@ import java.util.List;
  * @since 1.0
  */
 public abstract class CommandSelectTask extends Command {
-    protected List<Task> taskList;
+    protected StorageInterface storage;
 
     /**
      * Creates a CommandSelectTask with the Chatbot's Task List
      *
-     * @param tasks The task lists
+     * @param storage The task lists
      */
-    public CommandSelectTask(List<Task> tasks, UiInterface ui) {
-        super(ui);
-        taskList = tasks;
+    public CommandSelectTask(StorageInterface storage) {
+        this.storage = storage;
     }
 
     protected Task getSpecificTask(String stringIndex) throws CommandInvalidArgumentException{
         try {
             int taskIndex = Integer.parseInt(stringIndex);
-            return taskList.get(taskIndex - 1);
+            return storage.getTask(taskIndex);
         } catch(NumberFormatException e1) {
             throw new CommandInvalidArgumentException("That's not even a task number! :<");
         } catch(IndexOutOfBoundsException e2) {

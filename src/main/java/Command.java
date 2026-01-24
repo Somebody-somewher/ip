@@ -5,11 +5,6 @@
  * @since 1.0
  */
 public abstract class Command {
-    protected UiInterface ui;
-
-    public Command(UiInterface ui) {
-        this.ui = ui;
-    }
 
     /**
      * Returns the CMDPHRASE, overriden by every child class so that
@@ -41,7 +36,7 @@ public abstract class Command {
      * @param arguments Arguments as supplied by user input
      * @return True if executed correctly, False otherwise
      */
-    public abstract boolean execute(String[] arguments) throws CommandInvalidArgumentException;
+    public abstract boolean execute(String[] arguments, UiInterface ui) throws CommandInvalidArgumentException;
 
     /**
      * Executes a specified functionality if the
@@ -51,9 +46,9 @@ public abstract class Command {
      * @param input Array of words that was provided as user input
      * @return True if a match is found, False if not
      */
-    public boolean executeOnMatch(String[] input) throws CommandInvalidArgumentException {
+    public boolean executeOnMatch(String[] input, UiInterface ui) throws CommandInvalidArgumentException {
         if (matches(input)) {
-            return execute(input);
+            return execute(input, ui);
         }
 
         return false;
