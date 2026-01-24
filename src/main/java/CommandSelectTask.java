@@ -14,7 +14,8 @@ public abstract class CommandSelectTask extends Command {
      *
      * @param tasks The task lists
      */
-    public CommandSelectTask(List<Task> tasks) {
+    public CommandSelectTask(List<Task> tasks, UiInterface ui) {
+        super(ui);
         taskList = tasks;
     }
 

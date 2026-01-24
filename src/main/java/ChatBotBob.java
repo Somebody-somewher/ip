@@ -10,21 +10,16 @@ import java.util.Scanner;
  * @since 1.00
  */
 public class ChatBotBob {
-    private static final String SEGMENT_SEPARATOR = """
-            – – – – – – – – – – – – – – – – – –
-            """;
 
-    private static final String WELCOME_STRING = SEGMENT_SEPARATOR + """
-             Wazzup! I'm Bob. ChatBot Bob :D
-             What can I do for you?""";
+    private static UiInterface ui = new Ui();
 
     /** List of Tasks that are recorded by the ChatBot */
     private static List<Task> tasks = new ArrayList<Task>();
 
     /** List of Commands that will be used by the ChatBot */
-    private static final List<Command> commands = List.of(new CommandList(tasks),
-            new CommandMark(tasks), new CommandUnMark(tasks), new CommandBye(), new CommandAddToDo(tasks), new CommandAddDeadline(tasks), new CommandAddEvent(tasks),
-            new CommandDeleteTask(tasks));
+    private static final List<Command> commands = List.of(new CommandList(tasks, ui),
+            new CommandMark(tasks, ui), new CommandUnMark(tasks, ui), new CommandBye(ui), new CommandAddToDo(tasks, ui), new CommandAddDeadline(tasks, ui), new CommandAddEvent(tasks, ui),
+            new CommandDeleteTask(tasks, ui));
 
     /** For the goodbye command to end the bot */
     private static boolean isFinished = false;
@@ -32,7 +27,7 @@ public class ChatBotBob {
     public static void main(String[] args) {
 
         // Greeting
-        echo(WELCOME_STRING);
+        ui.printGreeting();
 
         // Read user input
         Scanner reader = new Scanner(System.in);
@@ -42,28 +37,17 @@ public class ChatBotBob {
             // Process user input
             String userInputString = reader.nextLine();
             String[] userInputStringArr = userInputString.split(" ");
-
-            System.out.print(SEGMENT_SEPARATOR);
-
             // Go through every single command to see if any command matches
             for (Command c : commands) {
                 try {
                     c.executeOnMatch(userInputStringArr);
                 } catch (Command.CommandInvalidArgumentException e) {
-                    echo(e.getMessage());
+                    ui.printText(e.getMessage());
                 }
             }
+            ui.printSeparator();
         }
 
-    }
-    /**
-     * Prints out echoString with the Chatbot's signature separator
-     *
-     * @param echoString String to echo back
-     */
-    private static void echo(String echoString) {
-        System.out.println(echoString);
-        System.out.print(SEGMENT_SEPARATOR);
     }
 
     /**
@@ -74,6 +58,7 @@ public class ChatBotBob {
      */
     private static class CommandList extends Command {
         List<Task> tasks_list;
+
         private final static String CMDPHRASE = "list";
 
         /**
@@ -81,8 +66,10 @@ public class ChatBotBob {
          *
          * @param tasks The task lists
          */
-        public CommandList(List<Task> tasks) {
+        public CommandList(List<Task> tasks, UiInterface ui) {
+            super(ui);
             tasks_list = tasks;
+
         }
 
         /**
@@ -110,9 +97,8 @@ public class ChatBotBob {
                 throw new CommandInvalidArgumentException("No tasks for you to do. Lucky you :p");
             } else {
                 for (int i = 1; i < tasks_list.size() + 1; i++) {
-                    System.out.println(i + "." + tasks_list.get(i - 1));
+                    ui.printText(i + "." + tasks_list.get(i - 1));
                 }
-                System.out.print(SEGMENT_SEPARATOR);
             }
 
             return true;
@@ -141,6 +127,10 @@ public class ChatBotBob {
             return CMDPHRASE;
         }
 
+        public CommandBye(UiInterface ui) {
+            super(ui);
+        }
+
         /**
          * Executes a specified functionality, then Returns
          * True if execution was successful. False otherwise
@@ -152,7 +142,7 @@ public class ChatBotBob {
             if (arguments.length != 1) {
                 throw new CommandInvalidArgumentException("I won't leave until you say a proper goodbye! >:( Usage: bye");
             } else {
-                echo(GOODBYE_STRING);
+                ui.printText(GOODBYE_STRING);
                 isFinished = true;
             }
             return true;
@@ -174,8 +164,8 @@ public class ChatBotBob {
          *
          * @param tasks The task lists
          */
-        public CommandMark(List<Task> tasks) {
-            super(tasks);
+        public CommandMark(List<Task> tasks, UiInterface ui) {
+            super(tasks, ui);
         }
 
         /**
@@ -204,9 +194,8 @@ public class ChatBotBob {
             }
 
             getSpecificTask(arguments[1]).markComplete();
-            System.out.println("Good job! You completed the task! :>");
-            echo("  " + getSpecificTask(arguments[1]));
-
+            ui.printText("Good job! You completed the task! :>");
+            ui.printText("  " + getSpecificTask(arguments[1]));
             return true;
         }
 
@@ -220,8 +209,8 @@ public class ChatBotBob {
          *
          * @param tasks The task lists
          */
-        public CommandUnMark(List<Task> tasks) {
-            super(tasks);
+        public CommandUnMark(List<Task> tasks, UiInterface ui) {
+            super(tasks, ui);
         }
 
         /**
@@ -250,9 +239,8 @@ public class ChatBotBob {
             }
 
             getSpecificTask(arguments[1]).markIncomplete();
-            System.out.println("Bad job! You incompleted the task! :<");
-            echo("  " + getSpecificTask(arguments[1]));
-
+            ui.printText("Bad job! You incompleted the task! :<");
+            ui.printText("  " + getSpecificTask(arguments[1]));
             return true;
         }
 
@@ -273,7 +261,8 @@ public class ChatBotBob {
          *
          * @param tasks The task lists
          */
-        public CommandAddToDo(List<Task> tasks) {
+        public CommandAddToDo(List<Task> tasks, UiInterface ui) {
+            super(ui);
             taskList = tasks;
         }
 
@@ -289,9 +278,9 @@ public class ChatBotBob {
 
         protected void printAddedTask(Task taskToAdd) {
             taskList.add(taskToAdd);
-            System.out.println("You will do your tasks after adding them... Right...?");
-            System.out.println("  " + taskToAdd);
-            echo("You have " + taskList.size() + " tasks remaining");
+            ui.printText("You will do your tasks after adding them... Right...?");
+            ui.printText("  " + taskToAdd);
+            ui.printText("You have " + taskList.size() + " tasks remaining");
         }
 
         /**
@@ -328,8 +317,8 @@ public class ChatBotBob {
          *
          * @param tasks The task lists
          */
-        public CommandAddDeadline(List<Task> tasks) {
-            super(tasks);
+        public CommandAddDeadline(List<Task> tasks, UiInterface ui) {
+            super(tasks, ui);
         }
 
         /**
@@ -397,8 +386,8 @@ public class ChatBotBob {
          *
          * @param tasks The task lists
          */
-        public CommandAddEvent(List<Task> tasks) {
-            super(tasks);
+        public CommandAddEvent(List<Task> tasks, UiInterface ui) {
+            super(tasks, ui);
         }
 
         /**
@@ -479,8 +468,8 @@ public class ChatBotBob {
          *
          * @param tasks The task lists
          */
-        public CommandDeleteTask(List<Task> tasks) {
-            super(tasks);
+        public CommandDeleteTask(List<Task> tasks, UiInterface ui) {
+            super(tasks, ui);
         }
 
         /**
@@ -508,10 +497,9 @@ public class ChatBotBob {
 
             Task taskToDelete = getSpecificTask(arguments[1]);
             taskList.remove(taskToDelete);
-            System.out.println("As you command my liege! Say goodbye to:");
-            System.out.println("  " + taskToDelete);
-            echo("You now have " + taskList.size() + " tasks remaining");
-
+            ui.printText("As you command my liege! Say goodbye to:");
+            ui.printText("  " + taskToDelete);
+            ui.printText("You now have " + taskList.size() + " tasks remaining");
             return true;
         }
     }

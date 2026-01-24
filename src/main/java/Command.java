@@ -5,6 +5,11 @@
  * @since 1.0
  */
 public abstract class Command {
+    protected UiInterface ui;
+
+    public Command(UiInterface ui) {
+        this.ui = ui;
+    }
 
     /**
      * Returns the CMDPHRASE, overriden by every child class so that
@@ -13,6 +18,7 @@ public abstract class Command {
      * @return the CMDPHRASE
      */
     public abstract String getCmdPhrase();
+
 
     /**
      * Returns True if the input matches a specified
