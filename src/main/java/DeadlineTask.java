@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 /**
  * Represents a DeadlineTask that can be stored in the ChatBot.
  * This type task has both an end time.
@@ -6,7 +8,7 @@
  * @version 1.0
  * @since 1.0
  */
-public class DeadlineTask extends Task{
+public class DeadlineTask extends Task {
     private String endDateTime = "";
     /**
      * Creates an Incomplete DeadlineTask with the
@@ -15,14 +17,14 @@ public class DeadlineTask extends Task{
      * @param name The name of the Task
      * @param endDateTime The end DateTime of the Task
      */
-    public DeadlineTask(String name, String endDateTime)  {
+    public DeadlineTask(String name, String endDateTime) {
         super(name);
         this.endDateTime = endDateTime;
     }
 
-    private DeadlineTask(String name, boolean isComplete, String endDateTime)  {
-        super(name, isComplete);
-        this.endDateTime = endDateTime;
+    private DeadlineTask(String[] fields) {
+        super(fields);
+        this.endDateTime = fields[NUMBASESERIALIZEDPARAMS + 1];
     }
 
     /**
@@ -37,12 +39,14 @@ public class DeadlineTask extends Task{
 
     @Override
     public String serialize() {
-        return "D , " + super.serialize() + " , " + endDateTime.replace(",", "\\,");
+        ArrayList<String> serializedParams = getSerializedParams();
+        serializedParams.add(0, "D");
+        serializedParams.add(processString(endDateTime));
+        return serializeStrings(serializedParams);
     }
 
-    @Override
-    public DeadlineTask deserializeIfAble(String serializedTask) {
-        String[] fields = serializedTask.split(" , ");
-        return new DeadlineTask(fields[2].replace("\\,", ","), fields[1].equals("1"), fields[3].replace("\\,", ",") );
+    public static DeadlineTask deserialize(String serializedTask) {
+        String[] fields = deserializeTaskString(serializedTask);
+        return new DeadlineTask(fields);
     }
 }

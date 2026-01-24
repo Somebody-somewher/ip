@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 /**
  * Represents a TodoTask that can be stored in the ChatBot.
  * This type task has No Time requirement
@@ -16,8 +18,8 @@ public class TodoTask extends Task{
         super(name);
     }
 
-    private TodoTask(String name, boolean isComplete) {
-        super(name, isComplete);
+    private TodoTask(String[] fields) {
+        super(fields);
     }
 
     /**
@@ -32,12 +34,14 @@ public class TodoTask extends Task{
 
     @Override
     public String serialize() {
-        return "T , " + super.serialize();
+        ArrayList<String> serializedParams = getSerializedParams();
+        serializedParams.add(0, "T");
+        return serializeStrings(serializedParams);
     }
 
-    public TodoTask deserializeIfAble(String serializedTask) {
-        String[] fields = serializedTask.split(" , ");
-        return new TodoTask(fields[2].replace("\\,", ","), fields[1].equals("1") );
+    public static TodoTask deserialize(String serializedTask) {
+        String[] fields = deserializeTaskString(serializedTask);
+        return new TodoTask(fields);
     }
 
 }

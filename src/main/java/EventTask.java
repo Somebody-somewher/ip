@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 /**
  * Represents a EventTask that can be stored in the ChatBot.
  * This type task has both a start and end time.
@@ -24,10 +26,10 @@ public class EventTask extends Task{
         this.endDateTime = endDateTime;
     }
 
-    private EventTask(String name, boolean isComplete, String startDateTime, String endDateTime)  {
-        super(name, isComplete);
-        this.startDateTime = startDateTime;
-        this.endDateTime = endDateTime;
+    private EventTask(String[] fields)  {
+        super(fields);
+        this.startDateTime = fields[NUMBASESERIALIZEDPARAMS];
+        this.endDateTime = fields[NUMBASESERIALIZEDPARAMS + 1];
     }
 
     /**
@@ -41,17 +43,19 @@ public class EventTask extends Task{
                 " (from: " + startDateTime + " to: " + endDateTime + ")";
     }
 
-    @Override
-    public String serialize() {
-        return "E , " + super.serialize() + " , " + startDateTime.replace(",", "\\,")
-                + endDateTime.replace(",", "\\,");
-    }
 
     @Override
-    public EventTask deserializeIfAble(String serializedTask) {
-        String[] fields = serializedTask.split(" , ");
-        return new EventTask(fields[2].replace("\\,", ","), fields[1].equals("1"), fields[3].replace("\\,", ","),
-                fields[4].replace("\\,", ","));
+    public String serialize() {
+        ArrayList<String> serializedParams = getSerializedParams();
+        serializedParams.add(0, "E");
+        serializedParams.add(processString(startDateTime));
+        serializedParams.add(processString(endDateTime));
+        return serializeStrings(serializedParams);
+    }
+
+    public static EventTask deserialize(String serializedTask) {
+        String[] fields = deserializeTaskString(serializedTask);
+        return new EventTask(fields);
     }
 
 }

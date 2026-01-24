@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 /**
  * Represents an abstract Task that can be stored in the ChatBot.
  * @author James Chin
@@ -5,6 +7,10 @@
  * @since 1.0
  */
 public abstract class Task {
+    private final static String SERIALIZEDELIMIT = " | ";
+    private final static String SERIALIZEDELIMITCHAR = "|";
+    protected final static int NUMBASESERIALIZEDPARAMS = 2;
+
     private String name;
     private boolean isComplete;
     /**
@@ -16,7 +22,12 @@ public abstract class Task {
         this(name, false);
     }
 
-    protected Task(String name, boolean isComplete) {
+    protected Task(String[] serializedTask) throws ArrayIndexOutOfBoundsException {
+        this.name = cleanString(serializedTask[1]);
+        this.isComplete = serializedTask[NUMBASESERIALIZEDPARAMS].equals("1");
+    }
+
+    private Task(String name, boolean isComplete) {
         this.name = name;
         this.isComplete = isComplete;
     }
@@ -44,11 +55,30 @@ public abstract class Task {
         return  "[" + (isComplete ? "X" : " ") + "] " + this.name;
     }
 
-    public String serialize() {
-        return (isComplete ? "1" : "0") + " , " + this.name.replace(",", "\\,");
+    public abstract String serialize();
+
+    protected String serializeStrings(ArrayList<String> strings) {
+        return String.join(SERIALIZEDELIMIT, strings);
     }
 
-    public abstract Task deserializeIfAble(String serializedTask);
+    protected static String[] deserializeTaskString(String serializedTask) {
+        return serializedTask.split(SERIALIZEDELIMIT);
+    }
+
+    protected ArrayList<String> getSerializedParams() {
+        ArrayList<String> list = new ArrayList<String>();
+        list.add((isComplete ? "1" : "0"));
+        list.add(processString(this.name));
+        return list;
+    }
+
+    protected String processString(String s) {
+        return s.replace(SERIALIZEDELIMITCHAR, "\\" + SERIALIZEDELIMITCHAR);
+    }
+
+    protected String cleanString(String s) {
+        return s.replace("\\" + SERIALIZEDELIMITCHAR, SERIALIZEDELIMITCHAR);
+    }
 
 }
 
