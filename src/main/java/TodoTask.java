@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 /**
  * Represents a TodoTask that can be stored in the ChatBot.
  * This type task has No Time requirement
@@ -16,13 +18,34 @@ public class TodoTask extends Task{
         super(name);
     }
 
+    private TodoTask(String[] fields) {
+        super(fields);
+    }
+
     /**
      * Returns the Task's name and its complete status
      *
      * @return the Task represented as a String
      */
+    @Override
     public String toString() {
         return "[T]" + super.toString();
+    }
+
+    @Override
+    public String serialize() {
+        ArrayList<String> serializedParams = getSerializedParams();
+        serializedParams.add(0, "T");
+        return serializeStrings(serializedParams);
+    }
+
+    public static TodoTask deserialize(String serializedTask) {
+        String[] fields = deserializeTaskString(serializedTask);
+        return new TodoTask(fields);
+    }
+
+    public static String getTypePrefix() {
+        return "T";
     }
 
 }

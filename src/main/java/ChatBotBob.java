@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -10,21 +11,15 @@ import java.util.Scanner;
  * @since 1.00
  */
 public class ChatBotBob {
-    private static final String SEGMENT_SEPARATOR = """
-            – – – – – – – – – – – – – – – – – –
-            """;
 
-    private static final String WELCOME_STRING = SEGMENT_SEPARATOR + """
-             Wazzup! I'm Bob. ChatBot Bob :D
-             What can I do for you?""";
+    private static UiInterface ui = new Ui();
 
-    /** List of Tasks that are recorded by the ChatBot */
-    private static List<Task> tasks = new ArrayList<Task>();
+    private static StorageInterface storage = new Storage();
 
     /** List of Commands that will be used by the ChatBot */
-    private static final List<Command> commands = List.of(new CommandList(tasks),
-            new CommandMark(tasks), new CommandUnMark(tasks), new CommandBye(), new CommandAddToDo(tasks), new CommandAddDeadline(tasks), new CommandAddEvent(tasks),
-            new CommandDeleteTask(tasks));
+    private static final List<Command> commands = List.of(new CommandList(storage),
+            new CommandMark(storage), new CommandUnMark(storage), new CommandBye(), new CommandAddToDo(storage), new CommandAddDeadline(storage), new CommandAddEvent(storage),
+            new CommandDeleteTask(storage));
 
     /** For the goodbye command to end the bot */
     private static boolean isFinished = false;
@@ -32,38 +27,35 @@ public class ChatBotBob {
     public static void main(String[] args) {
 
         // Greeting
-        echo(WELCOME_STRING);
+        ui.printGreeting();
 
         // Read user input
         Scanner reader = new Scanner(System.in);
+
+        storage.readFromFile();
 
         // Continuously
         while (!isFinished) {
             // Process user input
             String userInputString = reader.nextLine();
             String[] userInputStringArr = userInputString.split(" ");
-
-            System.out.print(SEGMENT_SEPARATOR);
-
             // Go through every single command to see if any command matches
             for (Command c : commands) {
                 try {
-                    c.executeOnMatch(userInputStringArr);
+                    c.executeOnMatch(userInputStringArr, ui);
                 } catch (Command.CommandInvalidArgumentException e) {
-                    echo(e.getMessage());
+                    ui.printText(e.getMessage());
                 }
             }
+            ui.printSeparator();
         }
 
-    }
-    /**
-     * Prints out echoString with the Chatbot's signature separator
-     *
-     * @param echoString String to echo back
-     */
-    private static void echo(String echoString) {
-        System.out.println(echoString);
-        System.out.print(SEGMENT_SEPARATOR);
+        try {
+            storage.writeToFile();
+        } catch (IOException e) {
+            ui.printText(e.getMessage());
+        }
+
     }
 
     /**
@@ -73,16 +65,17 @@ public class ChatBotBob {
      * @since 1.0
      */
     private static class CommandList extends Command {
-        List<Task> tasks_list;
+        private StorageInterface storage;
+
         private final static String CMDPHRASE = "list";
 
         /**
          * Creates a ListCommand with the Chatbot's Task List
          *
-         * @param tasks The task lists
+         * @param storage The task lists
          */
-        public CommandList(List<Task> tasks) {
-            tasks_list = tasks;
+        public CommandList(StorageInterface storage) {
+            this.storage = storage;
         }
 
         /**
@@ -103,16 +96,13 @@ public class ChatBotBob {
          * @param arguments Arguments as supplied by user input
          * @return True if executed correctly, False otherwise
          */
-        public boolean execute(String[] arguments) throws CommandInvalidArgumentException{
+        public boolean execute(String[] arguments, UiInterface ui) throws CommandInvalidArgumentException{
             if (arguments.length != 1) {
                 throw new CommandInvalidArgumentException("Invalid arguments! Usage: list");
-            } else if (tasks_list.isEmpty()) {
+            } else if (storage.isEmpty()) {
                 throw new CommandInvalidArgumentException("No tasks for you to do. Lucky you :p");
             } else {
-                for (int i = 1; i < tasks_list.size() + 1; i++) {
-                    System.out.println(i + "." + tasks_list.get(i - 1));
-                }
-                System.out.print(SEGMENT_SEPARATOR);
+                storage.printAllTasks(ui);
             }
 
             return true;
@@ -148,11 +138,11 @@ public class ChatBotBob {
          * @param arguments Arguments as supplied by user input
          * @return True if executed correctly, False otherwise
          */
-        public boolean execute(String[] arguments) throws CommandInvalidArgumentException {
+        public boolean execute(String[] arguments, UiInterface ui) throws CommandInvalidArgumentException {
             if (arguments.length != 1) {
                 throw new CommandInvalidArgumentException("I won't leave until you say a proper goodbye! >:( Usage: bye");
             } else {
-                echo(GOODBYE_STRING);
+                ui.printText(GOODBYE_STRING);
                 isFinished = true;
             }
             return true;
@@ -172,10 +162,10 @@ public class ChatBotBob {
         /**
          * Creates a CommandMark with the Chatbot's Task List
          *
-         * @param tasks The task lists
+         * @param storage The task lists
          */
-        public CommandMark(List<Task> tasks) {
-            super(tasks);
+        public CommandMark(StorageInterface storage) {
+            super(storage);
         }
 
         /**
@@ -197,16 +187,15 @@ public class ChatBotBob {
          * @param arguments Arguments as supplied by user input
          * @return True if executed correctly, False otherwise
          */
-        public boolean execute(String[] arguments) throws CommandInvalidArgumentException {
+        public boolean execute(String[] arguments, UiInterface ui) throws CommandInvalidArgumentException {
 
             if (arguments.length != 2) {
                 throw new CommandInvalidArgumentException("Usage: mark <task_no>");
             }
 
             getSpecificTask(arguments[1]).markComplete();
-            System.out.println("Good job! You completed the task! :>");
-            echo("  " + getSpecificTask(arguments[1]));
-
+            ui.printText("Good job! You completed the task! :>");
+            ui.printText("  " + getSpecificTask(arguments[1]));
             return true;
         }
 
@@ -218,10 +207,10 @@ public class ChatBotBob {
         /**
          * Creates a CommandMark with the Chatbot's Task List
          *
-         * @param tasks The task lists
+         * @param storage The task lists
          */
-        public CommandUnMark(List<Task> tasks) {
-            super(tasks);
+        public CommandUnMark(StorageInterface storage) {
+            super(storage);
         }
 
         /**
@@ -243,16 +232,15 @@ public class ChatBotBob {
          * @param arguments Arguments as supplied by user input
          * @return True if executed correctly, False otherwise
          */
-        public boolean execute(String[] arguments) throws CommandInvalidArgumentException {
+        public boolean execute(String[] arguments, UiInterface ui) throws CommandInvalidArgumentException {
 
             if (arguments.length != 2) {
                 throw new CommandInvalidArgumentException("Usage: unmark <task_no>");
             }
 
             getSpecificTask(arguments[1]).markIncomplete();
-            System.out.println("Bad job! You incompleted the task! :<");
-            echo("  " + getSpecificTask(arguments[1]));
-
+            ui.printText("Bad job! You incompleted the task! :<");
+            ui.printText("  " + getSpecificTask(arguments[1]));
             return true;
         }
 
@@ -265,16 +253,16 @@ public class ChatBotBob {
      * @since 1.0
      */
     private static class CommandAddToDo extends Command {
-        protected List<Task> taskList;
+        protected StorageInterface storage;
         private final static String CMDPHRASE = "todo";
 
         /**
          * Creates a AddToDoCommand with the Chatbot's Task List
          *
-         * @param tasks The task lists
+         * @param storage The task lists
          */
-        public CommandAddToDo(List<Task> tasks) {
-            taskList = tasks;
+        public CommandAddToDo(StorageInterface storage) {
+            this.storage = storage;
         }
 
         /**
@@ -287,11 +275,11 @@ public class ChatBotBob {
             return CMDPHRASE;
         }
 
-        protected void printAddedTask(Task taskToAdd) {
-            taskList.add(taskToAdd);
-            System.out.println("You will do your tasks after adding them... Right...?");
-            System.out.println("  " + taskToAdd);
-            echo("You have " + taskList.size() + " tasks remaining");
+        protected void printAddedTask(Task taskToAdd, UiInterface ui) {
+            storage.addTask(taskToAdd);
+            ui.printText("You will do your tasks after adding them... Right...?");
+            ui.printText("  " + taskToAdd);
+            ui.printText("You have " + storage.size() + " tasks remaining");
         }
 
         /**
@@ -301,13 +289,13 @@ public class ChatBotBob {
          * @param arguments Arguments as supplied by user input
          * @return True if executed correctly, False otherwise
          */
-        public boolean execute(String[] arguments) throws CommandInvalidArgumentException{
+        public boolean execute(String[] arguments, UiInterface ui) throws CommandInvalidArgumentException{
             if (arguments.length < 2) {
                 throw new CommandInvalidArgumentException("Invalid arguments! Usage: todo");
             }
 
             String taskName = String.join(" ", Arrays.copyOfRange(arguments, 1, arguments.length));
-            printAddedTask(new TodoTask(taskName));
+            printAddedTask(new TodoTask(taskName), ui);
             return true;
         }
 
@@ -326,10 +314,10 @@ public class ChatBotBob {
         /**
          * Creates a AddDeadlineCommand with the Chatbot's Task List
          *
-         * @param tasks The task lists
+         * @param storage The task lists
          */
-        public CommandAddDeadline(List<Task> tasks) {
-            super(tasks);
+        public CommandAddDeadline(StorageInterface storage) {
+            super(storage);
         }
 
         /**
@@ -350,7 +338,7 @@ public class ChatBotBob {
          * @param arguments Arguments as supplied by user input
          * @return True if executed correctly, False otherwise
          */
-        public boolean execute(String[] arguments) throws CommandInvalidArgumentException {
+        public boolean execute(String[] arguments, UiInterface ui) throws CommandInvalidArgumentException {
             int argumentsLength = arguments.length;
 
             // Check if the whole command has fewer arguments than the minimum required.
@@ -378,7 +366,7 @@ public class ChatBotBob {
             String taskDeadline = String.join(" ", Arrays.copyOfRange(arguments, byIndex+1, argumentsLength));
 
 
-            printAddedTask(new DeadlineTask(taskName, taskDeadline));
+            printAddedTask(new DeadlineTask(taskName, taskDeadline), ui);
             return true;
         }
     }
@@ -395,10 +383,10 @@ public class ChatBotBob {
         /**
          * Creates a AddDeadlineCommand with the Chatbot's Task List
          *
-         * @param tasks The task lists
+         * @param storage The task lists
          */
-        public CommandAddEvent(List<Task> tasks) {
-            super(tasks);
+        public CommandAddEvent(StorageInterface storage) {
+            super(storage);
         }
 
         /**
@@ -419,7 +407,7 @@ public class ChatBotBob {
          * @param arguments Arguments as supplied by user input
          * @return True if executed correctly, False otherwise
          */
-        public boolean execute(String[] arguments) throws CommandInvalidArgumentException {
+        public boolean execute(String[] arguments, UiInterface ui) throws CommandInvalidArgumentException {
             int argumentsLength = arguments.length;
 
             // Check if the whole command has fewer arguments than the minimum required.
@@ -460,7 +448,7 @@ public class ChatBotBob {
             String taskDurationEnd = String.join(" ", Arrays.copyOfRange(arguments, toIndex+1, argumentsLength));
 
 
-            printAddedTask(new EventTask(taskName, taskDurationStart, taskDurationEnd));
+            printAddedTask(new EventTask(taskName, taskDurationStart, taskDurationEnd), ui);
             return true;
         }
     }
@@ -477,10 +465,10 @@ public class ChatBotBob {
         /**
          * Creates a AddToDoCommand with the Chatbot's Task List
          *
-         * @param tasks The task lists
+         * @param storage The task lists
          */
-        public CommandDeleteTask(List<Task> tasks) {
-            super(tasks);
+        public CommandDeleteTask(StorageInterface storage) {
+            super(storage);
         }
 
         /**
@@ -501,17 +489,21 @@ public class ChatBotBob {
          * @param arguments Arguments as supplied by user input
          * @return True if executed correctly, False otherwise
          */
-        public boolean execute(String[] arguments) throws CommandInvalidArgumentException{
-            if (arguments.length < 2) {
-                throw new CommandInvalidArgumentException("Invalid arguments! Usage: delete <task-no>");
+        public boolean execute(String[] arguments, UiInterface ui) throws CommandInvalidArgumentException{
+
+            try {
+                if (arguments.length < 2) {
+                    throw new CommandInvalidArgumentException("Invalid arguments! Usage: delete <task-no>");
+                }
+
+                Task taskToDelete = storage.popTask(Integer.parseInt(arguments[1]));
+
+                ui.printText("As you command my liege! Say goodbye to:");
+                ui.printText("  " + taskToDelete);
+                ui.printText("You now have " + storage.size() + " tasks remaining");
+            } catch(NumberFormatException e) {
+                throw new CommandInvalidArgumentException("That ain't even a valid number :<");
             }
-
-            Task taskToDelete = getSpecificTask(arguments[1]);
-            taskList.remove(taskToDelete);
-            System.out.println("As you command my liege! Say goodbye to:");
-            System.out.println("  " + taskToDelete);
-            echo("You now have " + taskList.size() + " tasks remaining");
-
             return true;
         }
     }

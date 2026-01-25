@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
  * Represents an abstract Task that can be stored in the ChatBot.
  * @author James Chin
@@ -5,6 +8,11 @@
  * @since 1.0
  */
 public abstract class Task {
+    private final static String SERIALIZEDELIMIT = " | ";
+    private final static String SERIALIZEDELIMITREGEX = " \\| ";
+    private final static String SERIALIZEDELIMITCHAR = "|";
+    protected final static int NUMBASESERIALIZEDPARAMS = 2;
+
     private String name;
     private boolean isComplete;
     /**
@@ -13,8 +21,18 @@ public abstract class Task {
      * @param name The name of the Task
      */
     public Task(String name) {
+        this(name, false);
+    }
+
+    protected Task(String[] serializedTask) throws ArrayIndexOutOfBoundsException {
+        System.out.println(Arrays.toString(serializedTask));
+        this.name = cleanString(serializedTask[NUMBASESERIALIZEDPARAMS]);
+        this.isComplete = serializedTask[1].equals("1");
+    }
+
+    private Task(String name, boolean isComplete) {
         this.name = name;
-        isComplete = false;
+        this.isComplete = isComplete;
     }
 
     /**
@@ -38,6 +56,35 @@ public abstract class Task {
      */
     public String toString() {
         return  "[" + (isComplete ? "X" : " ") + "] " + this.name;
+    }
+
+    public abstract String serialize();
+
+    protected String serializeStrings(ArrayList<String> strings) {
+        return String.join(SERIALIZEDELIMIT, strings);
+    }
+
+    protected static String[] deserializeTaskString(String serializedTask) {
+        return serializedTask.split(SERIALIZEDELIMITREGEX);
+    }
+
+    protected ArrayList<String> getSerializedParams() {
+        ArrayList<String> list = new ArrayList<String>();
+        list.add((isComplete ? "1" : "0"));
+        list.add(processString(this.name));
+        return list;
+    }
+
+    protected String processString(String s) {
+        return s.replace(SERIALIZEDELIMITCHAR, "\\" + SERIALIZEDELIMITCHAR);
+    }
+
+    protected String cleanString(String s) {
+        return s.replace("\\" + SERIALIZEDELIMITCHAR, SERIALIZEDELIMITCHAR);
+    }
+
+    public static String extractSerializedTypePrefix(String s) {
+        return "" + s.charAt(0);
     }
 
 }

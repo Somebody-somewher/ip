@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 /**
  * Represents a DeadlineTask that can be stored in the ChatBot.
  * This type task has both an end time.
@@ -6,7 +8,7 @@
  * @version 1.0
  * @since 1.0
  */
-public class DeadlineTask extends Task{
+public class DeadlineTask extends Task {
     private String endDateTime = "";
     /**
      * Creates an Incomplete DeadlineTask with the
@@ -15,9 +17,14 @@ public class DeadlineTask extends Task{
      * @param name The name of the Task
      * @param endDateTime The end DateTime of the Task
      */
-    public DeadlineTask(String name, String endDateTime)  {
+    public DeadlineTask(String name, String endDateTime) {
         super(name);
         this.endDateTime = endDateTime;
+    }
+
+    private DeadlineTask(String[] fields) {
+        super(fields);
+        this.endDateTime = cleanString(fields[NUMBASESERIALIZEDPARAMS + 1]);
     }
 
     /**
@@ -25,8 +32,25 @@ public class DeadlineTask extends Task{
      *
      * @return the Task represented as a String
      */
+    @Override
     public String toString() {
         return "[D]" + super.toString() + " (by: " + endDateTime + ")";
     }
 
+    @Override
+    public String serialize() {
+        ArrayList<String> serializedParams = getSerializedParams();
+        serializedParams.add(0, "D");
+        serializedParams.add(processString(endDateTime));
+        return serializeStrings(serializedParams);
+    }
+
+    public static DeadlineTask deserialize(String serializedTask) {
+        String[] fields = deserializeTaskString(serializedTask);
+        return new DeadlineTask(fields);
+    }
+
+    public static String getTypePrefix() {
+        return "D";
+    }
 }
