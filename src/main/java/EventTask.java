@@ -1,4 +1,7 @@
+import java.time.DateTimeException;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.time.LocalDate;
 
 /**
  * Represents a EventTask that can be stored in the ChatBot.
@@ -9,8 +12,8 @@ import java.util.ArrayList;
  * @since 1.0
  */
 public class EventTask extends Task{
-    private String startDateTime = "";
-    private String endDateTime = "";
+    private LocalDate startDateTime;
+    private LocalDate endDateTime;
 
     /**
      * Creates an Incomplete EventTask with the
@@ -20,16 +23,24 @@ public class EventTask extends Task{
      * @param startDateTime The start DateTime of the Task
      * @param endDateTime The end DateTime of the Task
      */
-    public EventTask(String name, String startDateTime, String endDateTime)  {
+    public EventTask(String name, String startDateTime, String endDateTime) throws DateTimeException, InvalidDateOrderException {
         super(name);
-        this.startDateTime = startDateTime;
-        this.endDateTime = endDateTime;
+        this.startDateTime = LocalDate.parse(startDateTime);
+        this.endDateTime = LocalDate.parse(endDateTime);
+
+        if (this.endDateTime.isBefore(this.startDateTime)) {
+            throw new InvalidDateOrderException("The Start Date is after the End Date!");
+        }
     }
 
-    private EventTask(String[] fields)  {
+    private EventTask(String[] fields) throws DateTimeException, InvalidDateOrderException {
         super(fields);
-        this.startDateTime = cleanString(fields[NUMBASESERIALIZEDPARAMS + 1]);
-        this.endDateTime = cleanString(fields[NUMBASESERIALIZEDPARAMS + 2]);
+        this.startDateTime = LocalDate.parse(fields[NUMBASESERIALIZEDPARAMS + 1]);
+        this.endDateTime = LocalDate.parse(fields[NUMBASESERIALIZEDPARAMS + 2]);
+
+        if (this.endDateTime.isBefore(this.startDateTime)) {
+            throw new InvalidDateOrderException("The Start Date is after the End Date!");
+        }
     }
 
     /**
@@ -40,7 +51,8 @@ public class EventTask extends Task{
     @Override
     public String toString() {
         return "[E]" + super.toString() +
-                " (from: " + startDateTime + " to: " + endDateTime + ")";
+                " (from: " + startDateTime.format(DateTimeFormatter.ofPattern("MMM d yyyy")) +
+                " to: " + endDateTime.format(DateTimeFormatter.ofPattern("MMM d yyyy")) + ")";
     }
 
 
@@ -48,12 +60,12 @@ public class EventTask extends Task{
     public String serialize() {
         ArrayList<String> serializedParams = getSerializedParams();
         serializedParams.add(0, "E");
-        serializedParams.add(processString(startDateTime));
-        serializedParams.add(processString(endDateTime));
+        serializedParams.add(this.startDateTime.toString());
+        serializedParams.add(this.endDateTime.toString());
         return serializeStrings(serializedParams);
     }
 
-    public static EventTask deserialize(String serializedTask) {
+    public static EventTask deserialize(String serializedTask) throws DateTimeException, InvalidDateOrderException {
         String[] fields = deserializeTaskString(serializedTask);
         return new EventTask(fields);
     }
@@ -61,4 +73,10 @@ public class EventTask extends Task{
         return "E";
     }
 
+
+    public static class InvalidDateOrderException extends RuntimeException {
+        public InvalidDateOrderException(String message) {
+            super(message);
+        }
+    }
 }
