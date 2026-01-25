@@ -44,4 +44,8 @@ public class TodoTask extends Task{
         return new TodoTask(fields);
     }
 
+    public static String getTypePrefix() {
+        return "T";
+    }
+
 }

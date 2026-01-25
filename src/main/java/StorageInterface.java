@@ -1,3 +1,6 @@
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 public interface StorageInterface {
 
     public Task getTask(int index) throws IndexOutOfBoundsException;
@@ -11,4 +14,8 @@ public interface StorageInterface {
     public boolean isEmpty();
 
     public int size();
+
+    public void writeToFile() throws IOException;
+
+    public void readFromFile();
 }

@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -31,6 +32,8 @@ public class ChatBotBob {
         // Read user input
         Scanner reader = new Scanner(System.in);
 
+        storage.readFromFile();
+
         // Continuously
         while (!isFinished) {
             // Process user input
@@ -45,6 +48,12 @@ public class ChatBotBob {
                 }
             }
             ui.printSeparator();
+        }
+
+        try {
+            storage.writeToFile();
+        } catch (IOException e) {
+            ui.printText(e.getMessage());
         }
 
     }

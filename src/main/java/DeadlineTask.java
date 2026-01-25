@@ -24,7 +24,7 @@ public class DeadlineTask extends Task {
 
     private DeadlineTask(String[] fields) {
         super(fields);
-        this.endDateTime = fields[NUMBASESERIALIZEDPARAMS + 1];
+        this.endDateTime = cleanString(fields[NUMBASESERIALIZEDPARAMS + 1]);
     }
 
     /**
@@ -48,5 +48,9 @@ public class DeadlineTask extends Task {
     public static DeadlineTask deserialize(String serializedTask) {
         String[] fields = deserializeTaskString(serializedTask);
         return new DeadlineTask(fields);
+    }
+
+    public static String getTypePrefix() {
+        return "D";
     }
 }

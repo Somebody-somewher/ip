@@ -28,8 +28,8 @@ public class EventTask extends Task{
 
     private EventTask(String[] fields)  {
         super(fields);
-        this.startDateTime = fields[NUMBASESERIALIZEDPARAMS];
-        this.endDateTime = fields[NUMBASESERIALIZEDPARAMS + 1];
+        this.startDateTime = cleanString(fields[NUMBASESERIALIZEDPARAMS + 1]);
+        this.endDateTime = cleanString(fields[NUMBASESERIALIZEDPARAMS + 2]);
     }
 
     /**
@@ -56,6 +56,9 @@ public class EventTask extends Task{
     public static EventTask deserialize(String serializedTask) {
         String[] fields = deserializeTaskString(serializedTask);
         return new EventTask(fields);
+    }
+    public static String getTypePrefix() {
+        return "E";
     }
 
 }

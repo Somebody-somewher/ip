@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Represents an abstract Task that can be stored in the ChatBot.
@@ -8,6 +9,7 @@ import java.util.ArrayList;
  */
 public abstract class Task {
     private final static String SERIALIZEDELIMIT = " | ";
+    private final static String SERIALIZEDELIMITREGEX = " \\| ";
     private final static String SERIALIZEDELIMITCHAR = "|";
     protected final static int NUMBASESERIALIZEDPARAMS = 2;
 
@@ -23,8 +25,9 @@ public abstract class Task {
     }
 
     protected Task(String[] serializedTask) throws ArrayIndexOutOfBoundsException {
-        this.name = cleanString(serializedTask[1]);
-        this.isComplete = serializedTask[NUMBASESERIALIZEDPARAMS].equals("1");
+        System.out.println(Arrays.toString(serializedTask));
+        this.name = cleanString(serializedTask[NUMBASESERIALIZEDPARAMS]);
+        this.isComplete = serializedTask[1].equals("1");
     }
 
     private Task(String name, boolean isComplete) {
@@ -62,7 +65,7 @@ public abstract class Task {
     }
 
     protected static String[] deserializeTaskString(String serializedTask) {
-        return serializedTask.split(SERIALIZEDELIMIT);
+        return serializedTask.split(SERIALIZEDELIMITREGEX);
     }
 
     protected ArrayList<String> getSerializedParams() {
@@ -78,6 +81,10 @@ public abstract class Task {
 
     protected String cleanString(String s) {
         return s.replace("\\" + SERIALIZEDELIMITCHAR, SERIALIZEDELIMITCHAR);
+    }
+
+    public static String extractSerializedTypePrefix(String s) {
+        return "" + s.charAt(0);
     }
 
 }
