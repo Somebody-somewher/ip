@@ -13,10 +13,10 @@ import java.io.IOException;
 import java.util.function.Function;
 
 public class Storage implements StorageInterface {
-    private List<Task> taskList;
     private static final String FILEPATH = "./data/tasks.txt";
-
     private static final Map<String, Function<String, Task>> TYPE_MAP = new HashMap<>();
+
+    private TaskListInterface taskList;
 
     static {
         TYPE_MAP.put(TodoTask.getTypePrefix(), TodoTask::deserialize);
@@ -24,55 +24,15 @@ public class Storage implements StorageInterface {
         TYPE_MAP.put(EventTask.getTypePrefix(), EventTask::deserialize);
     }
 
-    public Storage() {
-        this.taskList = new ArrayList<>();
-    }
-
-    public Storage(List<Task> taskList) {
+    public Storage(TaskListInterface taskList) {
         this.taskList = taskList;
-    }
-
-    @Override
-    public Task getTask(int taskIndex) throws IndexOutOfBoundsException {
-        return taskList.get(taskIndex - 1);
-    }
-
-    @Override
-    public Task popTask(int taskIndex) throws IndexOutOfBoundsException {
-        Task taskPopped = getTask(taskIndex);
-        taskList.remove(taskPopped);
-        return taskPopped;
-    }
-
-    @Override
-    public void addTask(Task task) {
-        taskList.add(task);
-    }
-
-    @Override
-    public void printAllTasks(UiInterface ui) {
-        for (int i = 1; i < taskList.size() + 1; i++) {
-            ui.printText(i + ". " + taskList.get(i - 1));
-        }
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return taskList.isEmpty();
-    }
-
-    @Override
-    public int size() {
-        return taskList.size();
     }
 
     @Override
     public void writeToFile() throws IOException {
         ArrayList<String> stringArray = new ArrayList<>();
 
-        for (Task t : taskList) {
-            stringArray.add(t.serialize());
-        }
+        taskList.forEach(t -> stringArray.add(t.serialize()));
 
         FileWriter fw = new FileWriter(FILEPATH);
         fw.write(String.join("\n", stringArray));
@@ -87,7 +47,7 @@ public class Storage implements StorageInterface {
             while (s.hasNext()) {
                 String serializedTask = s.nextLine();
                 Task task = TYPE_MAP.get(Task.extractSerializedTypePrefix(serializedTask)).apply(serializedTask);
-                taskList.add(task);
+                taskList.addTask(task);
             }
         } catch(FileNotFoundException ignored) {
 
