@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.time.DateTimeException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -276,7 +277,6 @@ public class ChatBotBob {
         }
 
         protected void printAddedTask(Task taskToAdd, UiInterface ui) {
-            storage.addTask(taskToAdd);
             ui.printText("You will do your tasks after adding them... Right...?");
             ui.printText("  " + taskToAdd);
             ui.printText("You have " + storage.size() + " tasks remaining");
@@ -295,7 +295,9 @@ public class ChatBotBob {
             }
 
             String taskName = String.join(" ", Arrays.copyOfRange(arguments, 1, arguments.length));
-            printAddedTask(new TodoTask(taskName), ui);
+            Task taskToAdd = new TodoTask(taskName);
+            storage.addTask(taskToAdd);
+            printAddedTask(taskToAdd, ui);
             return true;
         }
 
@@ -365,8 +367,14 @@ public class ChatBotBob {
             String taskName = String.join(" ", Arrays.copyOfRange(arguments, 1, byIndex));
             String taskDeadline = String.join(" ", Arrays.copyOfRange(arguments, byIndex+1, argumentsLength));
 
+            try {
+                Task taskToAdd = new DeadlineTask(taskName, taskDeadline);
+                storage.addTask(taskToAdd);
+                printAddedTask(taskToAdd, ui);
+            } catch (DateTimeException e) {
+                throw new CommandInvalidArgumentException("That ain't a date I understand :<, try YYYY-MM-DD");
+            }
 
-            printAddedTask(new DeadlineTask(taskName, taskDeadline), ui);
             return true;
         }
     }
@@ -448,8 +456,17 @@ public class ChatBotBob {
             String taskDurationEnd = String.join(" ", Arrays.copyOfRange(arguments, toIndex+1, argumentsLength));
 
 
-            printAddedTask(new EventTask(taskName, taskDurationStart, taskDurationEnd), ui);
-            return true;
+            try {
+                Task taskToAdd = new EventTask(taskName, taskDurationStart, taskDurationEnd);
+                storage.addTask(taskToAdd);
+                printAddedTask(taskToAdd, ui);
+                return true;
+            } catch (DateTimeException e) {
+                throw new CommandInvalidArgumentException("That ain't a date I understand :<, try YYYY-MM-DD");
+            } catch (EventTask.InvalidDateOrderException e3) {
+                throw new CommandInvalidArgumentException("Not Allowed! (>.<) : " + e3.getMessage());
+            }
+
         }
     }
 
@@ -501,7 +518,7 @@ public class ChatBotBob {
                 ui.printText("As you command my liege! Say goodbye to:");
                 ui.printText("  " + taskToDelete);
                 ui.printText("You now have " + storage.size() + " tasks remaining");
-            } catch(NumberFormatException e) {
+            } catch (NumberFormatException e) {
                 throw new CommandInvalidArgumentException("That ain't even a valid number :<");
             }
             return true;
