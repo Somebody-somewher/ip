@@ -32,6 +32,7 @@ public class TaskManager implements TaskManagerInterface {
         commands.add(new CommandDeleteTask(taskList));
         commands.add(new CommandMark(taskList));
         commands.add(new CommandUnMark(taskList));
+        commands.add(new CommandFind(taskList));
         commands.addAll(storage.getRelevantCommands(taskList));
 
         return commands;
