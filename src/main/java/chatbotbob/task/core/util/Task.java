@@ -27,7 +27,6 @@ public abstract class Task {
     }
 
     protected Task(String[] serializedTask) throws ArrayIndexOutOfBoundsException {
-        System.out.println(Arrays.toString(serializedTask));
         this.name = cleanString(serializedTask[NUMBASESERIALIZEDPARAMS]);
         this.isComplete = serializedTask[1].equals("1");
     }
@@ -91,6 +90,10 @@ public abstract class Task {
 
     public boolean equals(Task t) {
         return this.name.equals(t.name) && (this.isComplete == t.isComplete);
+    }
+
+    public boolean partialMatch(String s) {
+        return name.contains(s);
     }
 
 }
