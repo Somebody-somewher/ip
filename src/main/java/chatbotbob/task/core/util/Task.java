@@ -89,5 +89,9 @@ public abstract class Task {
         return "" + s.charAt(0);
     }
 
+    public boolean equals(Task t) {
+        return this.name.equals(t.name) && (this.isComplete == t.isComplete);
+    }
+
 }
 
