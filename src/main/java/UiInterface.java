@@ -5,4 +5,6 @@ public interface UiInterface {
     public void printSeparator();
 
     public void printText(String text);
+
+    public String receiveInput();
 }

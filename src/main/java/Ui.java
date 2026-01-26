@@ -1,4 +1,8 @@
+import java.util.Scanner;
+
 public class Ui implements UiInterface{
+    private Scanner reader;
+
     private static final String SEGMENT_SEPARATOR = """
             – – – – – – – – – – – – – – – – – –""";
 
@@ -7,6 +11,11 @@ public class Ui implements UiInterface{
              Wazzup! I'm Bob. ChatBot Bob :D
              What can I do for you?
              """ + SEGMENT_SEPARATOR;
+
+    public Ui() {
+        // Read user input
+        reader = new Scanner(System.in);
+    }
 
     public void printGreeting() {
         System.out.println(WELCOME_STRING);
@@ -18,5 +27,9 @@ public class Ui implements UiInterface{
 
     public void printText(String text) {
         System.out.println(text);
+    }
+
+    public String receiveInput() {
+        return reader.nextLine();
     }
 }
