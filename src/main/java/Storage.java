@@ -14,6 +14,7 @@ import java.util.function.Function;
 
 public class Storage implements StorageInterface {
     private static final String FILEPATH = "./data/tasks.txt";
+    private static final List<Function<TaskListInterface, Command>> COMMAND_LIST = new ArrayList<>();
     private static final Map<String, Function<String, Task>> TYPE_MAP = new HashMap<>();
 
     private TaskListInterface taskList;
@@ -22,14 +23,15 @@ public class Storage implements StorageInterface {
         TYPE_MAP.put(TodoTask.getTypePrefix(), TodoTask::deserialize);
         TYPE_MAP.put(DeadlineTask.getTypePrefix(), DeadlineTask::deserialize);
         TYPE_MAP.put(EventTask.getTypePrefix(), EventTask::deserialize);
+
+        COMMAND_LIST.add(CommandAddToDo::new);
+        COMMAND_LIST.add(CommandAddDeadline::new);
+        COMMAND_LIST.add(CommandAddEvent::new);
     }
 
-    public Storage(TaskListInterface taskList) {
-        this.taskList = taskList;
-    }
 
     @Override
-    public void writeToFile() throws IOException {
+    public void writeToFile(TaskListInterface taskList) throws IOException {
         ArrayList<String> stringArray = new ArrayList<>();
 
         taskList.forEach(t -> stringArray.add(t.serialize()));
@@ -40,7 +42,7 @@ public class Storage implements StorageInterface {
     }
 
     @Override
-    public void readFromFile() {
+    public void readFromFile(TaskListInterface taskList) {
         try {
             File taskFile = new File(FILEPATH);
             Scanner s = new Scanner(taskFile); // create a Scanner using the File as the source
@@ -53,5 +55,9 @@ public class Storage implements StorageInterface {
 
         }
 
+    }
+    @Override
+    public List<Command> getRelevantCommands(TaskListInterface taskList) {
+        return COMMAND_LIST.stream().map(c -> c.apply(taskList)).toList();
     }
 }

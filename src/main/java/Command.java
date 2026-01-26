@@ -54,7 +54,6 @@ public abstract class Command {
         return false;
     }
 
-
     public static class CommandInvalidArgumentException extends Exception {
         public CommandInvalidArgumentException(String message) {
             super(message);
