@@ -81,4 +81,9 @@ public class EventTask extends Task{
             super(message);
         }
     }
+
+    public boolean equals(EventTask et) {
+        return this.startDateTime.equals(et.startDateTime) && this.endDateTime.equals(et.endDateTime) &&
+                super.equals(et);
+    }
 }
