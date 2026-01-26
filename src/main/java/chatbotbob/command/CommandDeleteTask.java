@@ -9,7 +9,7 @@ import chatbotbob.task.service.TaskListInterface;
  * @author James Chin
  */
 public class CommandDeleteTask extends CommandSelectTask {
-    private final static String CMDPHRASE = "delete";
+    private static final String CMDPHRASE = "delete";
 
     /**
      * Creates a AddToDoCommand with the Chatbot's chatbotbob.task.core.util.Task List
@@ -38,7 +38,7 @@ public class CommandDeleteTask extends CommandSelectTask {
      * @param arguments Arguments as supplied by user input
      * @return True if executed correctly, False otherwise
      */
-    public boolean execute(String[] arguments, UiInterface ui) throws CommandInvalidArgumentException{
+    public boolean execute(String[] arguments, UiInterface ui) throws CommandInvalidArgumentException {
 
         try {
             if (arguments.length < 2) {

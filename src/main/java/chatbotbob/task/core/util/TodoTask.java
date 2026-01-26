@@ -10,13 +10,13 @@ import java.util.ArrayList;
  * @version 1.0
  * @since 1.0
  */
-public class TodoTask extends Task{
+public class TodoTask extends Task {
     /**
      * Creates an Incomplete chatbotbob.task.core.util.Task with the specified name
      *
      * @param name The name of the chatbotbob.task.core.util.Task
      */
-    public TodoTask(String name)  {
+    public TodoTask(String name) {
         super(name);
     }
 

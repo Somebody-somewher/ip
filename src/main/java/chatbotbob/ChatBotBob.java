@@ -1,4 +1,6 @@
 package chatbotbob;
+import java.io.IOException;
+import java.util.ArrayList;
 
 import chatbotbob.command.Command;
 import chatbotbob.service.Parser;
@@ -7,10 +9,6 @@ import chatbotbob.service.Ui;
 import chatbotbob.service.UiInterface;
 import chatbotbob.task.service.TaskManager;
 import chatbotbob.task.service.TaskManagerInterface;
-
-import java.io.IOException;
-import java.util.ArrayList;
-
 
 /**
  * Represents a Chatbot that the User interacts with
@@ -57,8 +55,8 @@ public class ChatBotBob {
      * @author James Chin
      */
     private static class CommandBye extends Command {
-        private final static String GOODBYE_STRING =  "Buh-Bye!" ;
-        private final static String CMDPHRASE = "bye";
+        private static final String GOODBYE_STRING = "Buh-Bye!";
+        private static final String CMDPHRASE = "bye";
 
         /**
          * Returns the CMDPHRASE, overriden by every child class so that
@@ -80,7 +78,8 @@ public class ChatBotBob {
          */
         public boolean execute(String[] arguments, UiInterface ui) throws CommandInvalidArgumentException {
             if (arguments.length != 1) {
-                throw new CommandInvalidArgumentException("I won't leave until you say a proper goodbye! >:( Usage: bye");
+                throw new CommandInvalidArgumentException("""
+                        I won't leave until you say a proper goodbye! >:( Usage: bye""");
             } else {
                 ui.printText(GOODBYE_STRING);
                 isFinished = true;
