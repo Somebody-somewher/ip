@@ -1,9 +1,9 @@
 package chatbotbob.task.service;
 
-import chatbotbob.task.core.util.Task;
-import chatbotbob.service.UiInterface;
-
 import java.util.function.Consumer;
+
+import chatbotbob.service.UiInterface;
+import chatbotbob.task.core.util.Task;
 
 public interface TaskListInterface {
     public Task getTask(int index) throws IndexOutOfBoundsException;

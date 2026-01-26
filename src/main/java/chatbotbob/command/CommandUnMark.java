@@ -4,7 +4,7 @@ import chatbotbob.service.UiInterface;
 import chatbotbob.task.service.TaskListInterface;
 
 public class CommandUnMark extends CommandSelectTask {
-    private final static String CMDPHRASE = "unmark";
+    private static final String CMDPHRASE = "unmark";
 
     /**
      * Creates a chatbotbob.command.CommandMark with the Chatbot's chatbotbob.task.core.util.Task List
@@ -45,5 +45,4 @@ public class CommandUnMark extends CommandSelectTask {
         ui.printText("  " + getSpecificTask(arguments[1]));
         return true;
     }
-
 }

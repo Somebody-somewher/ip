@@ -19,13 +19,13 @@ public abstract class CommandSelectTask extends Command {
         this.taskList = storage;
     }
 
-    protected Task getSpecificTask(String stringIndex) throws CommandInvalidArgumentException{
+    protected Task getSpecificTask(String stringIndex) throws CommandInvalidArgumentException {
         try {
             int taskIndex = Integer.parseInt(stringIndex);
             return taskList.getTask(taskIndex);
-        } catch(NumberFormatException e1) {
+        } catch (NumberFormatException e1) {
             throw new CommandInvalidArgumentException("That's not even a task number! :<");
-        } catch(IndexOutOfBoundsException e2) {
+        } catch (IndexOutOfBoundsException e2) {
             throw new CommandInvalidArgumentException("I don't have a task with that number, you're crazy :<");
         }
     }

@@ -1,4 +1,14 @@
 package chatbotbob.task.service;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.function.Function;
 
 import chatbotbob.command.Command;
 import chatbotbob.command.CommandAddDeadline;
@@ -9,19 +19,6 @@ import chatbotbob.task.core.util.EventTask;
 import chatbotbob.task.core.util.Task;
 import chatbotbob.task.core.util.TodoTask;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.List;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
-
-import java.io.FileWriter;
-import java.io.IOException;
-
-import java.util.function.Function;
 
 public class Storage implements StorageInterface {
     private static final String FILEPATH = "./data/tasks.txt";
@@ -62,7 +59,7 @@ public class Storage implements StorageInterface {
                 Task task = TYPE_MAP.get(Task.extractSerializedTypePrefix(serializedTask)).apply(serializedTask);
                 taskList.addTask(task);
             }
-        } catch(FileNotFoundException ignored) {
+        } catch (FileNotFoundException ignored) {
             taskList.clearTasks();
         }
 

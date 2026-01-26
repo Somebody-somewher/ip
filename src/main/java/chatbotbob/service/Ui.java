@@ -2,17 +2,16 @@ package chatbotbob.service;
 
 import java.util.Scanner;
 
-public class Ui implements UiInterface{
-    private Scanner reader;
-
+public class Ui implements UiInterface {
     private static final String SEGMENT_SEPARATOR = """
             – – – – – – – – – – – – – – – – – –""";
 
     private static final String WELCOME_STRING = SEGMENT_SEPARATOR + """
-             
-             Wazzup! I'm Bob. ChatBot Bob :D
+             \nWazzup! I'm Bob. ChatBot Bob :D
              What can I do for you?
              """ + SEGMENT_SEPARATOR;
+
+    private Scanner reader;
 
     public Ui() {
         // Read user input

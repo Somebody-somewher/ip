@@ -1,19 +1,19 @@
 package chatbotbob.command;
+import java.util.Arrays;
 
 import chatbotbob.service.UiInterface;
 import chatbotbob.task.core.util.Task;
 import chatbotbob.task.core.util.TodoTask;
 import chatbotbob.task.service.TaskListInterface;
 
-import java.util.Arrays;
 
 /**
  * Represents a chatbotbob.command.Command that Adds a ToDo chatbotbob.task.core.util.Task
  * @author James Chin
  */
 public class CommandAddToDo extends Command {
+    private static final String CMDPHRASE = "todo";
     protected TaskListInterface taskList;
-    private final static String CMDPHRASE = "todo";
 
     /**
      * Creates a AddToDoCommand with the Chatbot's chatbotbob.task.core.util.Task List
@@ -47,7 +47,7 @@ public class CommandAddToDo extends Command {
      * @param arguments Arguments as supplied by user input
      * @return True if executed correctly, False otherwise
      */
-    public boolean execute(String[] arguments, UiInterface ui) throws CommandInvalidArgumentException{
+    public boolean execute(String[] arguments, UiInterface ui) throws CommandInvalidArgumentException {
         if (arguments.length < 2) {
             throw new CommandInvalidArgumentException("Invalid arguments! Usage: todo");
         }

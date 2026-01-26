@@ -1,19 +1,18 @@
 package chatbotbob.command;
+import java.time.DateTimeException;
+import java.util.Arrays;
 
 import chatbotbob.service.UiInterface;
 import chatbotbob.task.core.util.EventTask;
 import chatbotbob.task.core.util.Task;
 import chatbotbob.task.service.TaskListInterface;
 
-import java.time.DateTimeException;
-import java.util.Arrays;
-
 /**
  * Represents a chatbotbob.command.Command that Adds an Event chatbotbob.task.core.util.Task
  * @author James Chin
  */
 public class CommandAddEvent extends CommandAddToDo {
-    private final static String CMDPHRASE = "event";
+    private static final String CMDPHRASE = "event";
 
     /**
      * Creates a AddDeadlineCommand with the Chatbot's chatbotbob.task.core.util.Task List
@@ -47,7 +46,8 @@ public class CommandAddEvent extends CommandAddToDo {
 
         // Check if the whole command has fewer arguments than the minimum required.
         if (argumentsLength < 6) {
-            throw new CommandInvalidArgumentException("Invalid arguments! Usage: event <task-name> /from <datetime> /to <datetime>");
+            throw new CommandInvalidArgumentException("""
+                    Invalid arguments! Usage: event <task-name> /from <datetime> /to <datetime>""");
         }
 
         int fromIndex = -1;
@@ -57,7 +57,8 @@ public class CommandAddEvent extends CommandAddToDo {
             // Find the position of /from
             if (arguments[i].equals("/from")) {
                 if (i == 1) {
-                    throw new CommandInvalidArgumentException("Invalid arguments! Usage: event <task-name> /from <datetime> /to <datetime>");
+                    throw new CommandInvalidArgumentException("""
+                            Invalid arguments! Usage: event <task-name> /from <datetime> /to <datetime>""");
                 }
                 fromIndex = i;
             }
@@ -65,7 +66,8 @@ public class CommandAddEvent extends CommandAddToDo {
             // Find the position of /to
             if (arguments[i].equals("/to")) {
                 if (fromIndex == -1 || fromIndex == i - 1) {
-                    throw new CommandInvalidArgumentException("Invalid arguments! Usage: event <task-name> /from <datetime> /to <datetime>");
+                    throw new CommandInvalidArgumentException("""
+                            Invalid arguments! Usage: event <task-name> /from <datetime> /to <datetime>""");
                 }
                 toIndex = i;
                 break;
@@ -74,13 +76,14 @@ public class CommandAddEvent extends CommandAddToDo {
 
         // Check if those indexes are valid
         if (fromIndex == -1 || toIndex == -1) {
-            throw new CommandInvalidArgumentException("Invalid arguments! Usage: event <task-name> /from <datetime> /to <datetime>");
+            throw new CommandInvalidArgumentException("""
+                    Invalid arguments! Usage: event <task-name> /from <datetime> /to <datetime>""");
         }
 
         // Extract the task name, end date and start date from the command
         String taskName = String.join(" ", Arrays.copyOfRange(arguments, 1, fromIndex));
-        String taskDurationStart = String.join(" ", Arrays.copyOfRange(arguments, fromIndex+1, toIndex));
-        String taskDurationEnd = String.join(" ", Arrays.copyOfRange(arguments, toIndex+1, argumentsLength));
+        String taskDurationStart = String.join(" ", Arrays.copyOfRange(arguments, fromIndex + 1, toIndex));
+        String taskDurationEnd = String.join(" ", Arrays.copyOfRange(arguments, toIndex + 1, argumentsLength));
 
 
         try {

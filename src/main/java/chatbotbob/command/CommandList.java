@@ -8,9 +8,8 @@ import chatbotbob.task.service.TaskListInterface;
  * @author James Chin
  */
 public class CommandList extends Command {
+    private static final String CMDPHRASE = "list";
     private TaskListInterface taskList;
-
-    private final static String CMDPHRASE = "list";
 
     /**
      * Creates a ListCommand with the Chatbot's chatbotbob.task.core.util.Task List
@@ -39,7 +38,7 @@ public class CommandList extends Command {
      * @param arguments Arguments as supplied by user input
      * @return True if executed correctly, False otherwise
      */
-    public boolean execute(String[] arguments, UiInterface ui) throws CommandInvalidArgumentException{
+    public boolean execute(String[] arguments, UiInterface ui) throws CommandInvalidArgumentException {
         if (arguments.length != 1) {
             throw new CommandInvalidArgumentException("Invalid arguments! Usage: list");
         } else if (taskList.isEmpty()) {
@@ -50,5 +49,4 @@ public class CommandList extends Command {
 
         return true;
     }
-
 }

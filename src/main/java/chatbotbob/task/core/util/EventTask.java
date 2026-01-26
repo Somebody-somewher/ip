@@ -1,9 +1,9 @@
 package chatbotbob.task.core.util;
 
 import java.time.DateTimeException;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.time.LocalDate;
 
 /**
  * Represents a chatbotbob.task.core.util.EventTask that can be stored in the ChatBot.
@@ -13,7 +13,7 @@ import java.time.LocalDate;
  * @version 1.0
  * @since 1.0
  */
-public class EventTask extends Task{
+public class EventTask extends Task {
     private LocalDate startDateTime;
     private LocalDate endDateTime;
 
@@ -25,7 +25,8 @@ public class EventTask extends Task{
      * @param startDateTime The start DateTime of the chatbotbob.task.core.util.Task
      * @param endDateTime The end DateTime of the chatbotbob.task.core.util.Task
      */
-    public EventTask(String name, String startDateTime, String endDateTime) throws DateTimeException, InvalidDateOrderException {
+    public EventTask(String name, String startDateTime, String endDateTime)
+            throws DateTimeException, InvalidDateOrderException {
         super(name);
         this.startDateTime = LocalDate.parse(startDateTime);
         this.endDateTime = LocalDate.parse(endDateTime);
@@ -52,9 +53,9 @@ public class EventTask extends Task{
      */
     @Override
     public String toString() {
-        return "[E]" + super.toString() +
-                " (from: " + startDateTime.format(DateTimeFormatter.ofPattern("MMM d yyyy")) +
-                " to: " + endDateTime.format(DateTimeFormatter.ofPattern("MMM d yyyy")) + ")";
+        return "[E]" + super.toString()
+                + " (from: " + startDateTime.format(DateTimeFormatter.ofPattern("MMM d yyyy"))
+                + " to: " + endDateTime.format(DateTimeFormatter.ofPattern("MMM d yyyy")) + ")";
     }
 
     /**
@@ -93,7 +94,7 @@ public class EventTask extends Task{
     }
 
     public boolean equals(EventTask et) {
-        return this.startDateTime.equals(et.startDateTime) && this.endDateTime.equals(et.endDateTime) &&
-                super.equals(et);
+        return this.startDateTime.equals(et.startDateTime) && this.endDateTime.equals(et.endDateTime)
+                && super.equals(et);
     }
 }

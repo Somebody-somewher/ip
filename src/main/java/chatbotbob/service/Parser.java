@@ -1,8 +1,7 @@
 package chatbotbob.service;
+import java.util.List;
 
 import chatbotbob.command.Command;
-
-import java.util.List;
 
 public class Parser implements ParserInterface {
     /** List of Commands that will be used by the ChatBot */

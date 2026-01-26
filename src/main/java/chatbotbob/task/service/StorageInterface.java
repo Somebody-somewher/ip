@@ -1,9 +1,8 @@
 package chatbotbob.task.service;
-
-import chatbotbob.command.Command;
-
 import java.io.IOException;
 import java.util.List;
+
+import chatbotbob.command.Command;
 
 public interface StorageInterface {
 

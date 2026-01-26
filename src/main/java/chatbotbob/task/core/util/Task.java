@@ -8,10 +8,11 @@ import java.util.List;
  * Represents an abstract Task that can be stored in the ChatBot.
  */
 public abstract class Task {
-    private final static String SERIALIZEDELIMIT = " | ";
-    private final static String SERIALIZEDELIMITREGEX = " \\| ";
-    private final static String SERIALIZEDELIMITCHAR = "|";
-    protected final static int NUMBASESERIALIZEDPARAMS = 2;
+    protected static final int NUMBASESERIALIZEDPARAMS = 2;
+    private static final String SERIALIZEDELIMIT = " | ";
+    private static final String SERIALIZEDELIMITREGEX = " \\| ";
+    private static final String SERIALIZEDELIMITCHAR = "|";
+
 
     private String name;
     private boolean isComplete;
@@ -55,7 +56,7 @@ public abstract class Task {
      * @return the Task represented as a String
      */
     public String toString() {
-        return  "[" + (isComplete ? "X" : " ") + "] " + this.name;
+        return "[" + (isComplete ? "X" : " ") + "] " + this.name;
     }
 
     /**

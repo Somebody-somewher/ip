@@ -8,7 +8,7 @@ import chatbotbob.task.service.TaskListInterface;
  * @author James Chin
  */
 public class CommandMark extends CommandSelectTask {
-    private final static String CMDPHRASE = "mark";
+    private static final String CMDPHRASE = "mark";
     /**
      * Creates a chatbotbob.command.CommandMark with the Chatbot's chatbotbob.task.core.util.Task List
      *
@@ -48,5 +48,4 @@ public class CommandMark extends CommandSelectTask {
         ui.printText("  " + getSpecificTask(arguments[1]));
         return true;
     }
-
 }
