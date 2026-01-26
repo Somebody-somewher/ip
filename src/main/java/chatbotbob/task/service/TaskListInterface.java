@@ -1,3 +1,8 @@
+package chatbotbob.task.service;
+
+import chatbotbob.task.core.util.Task;
+import chatbotbob.service.UiInterface;
+
 import java.util.function.Consumer;
 
 public interface TaskListInterface {

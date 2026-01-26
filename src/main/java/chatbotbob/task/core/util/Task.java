@@ -1,8 +1,10 @@
+package chatbotbob.task.core.util;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * Represents an abstract Task that can be stored in the ChatBot.
+ * Represents an abstract chatbotbob.task.core.util.Task that can be stored in the ChatBot.
  * @author James Chin
  * @version 1.3
  * @since 1.0
@@ -16,9 +18,9 @@ public abstract class Task {
     private String name;
     private boolean isComplete;
     /**
-     * Creates an Incomplete Task with the specified name
+     * Creates an Incomplete chatbotbob.task.core.util.Task with the specified name
      *
-     * @param name The name of the Task
+     * @param name The name of the chatbotbob.task.core.util.Task
      */
     public Task(String name) {
         this(name, false);
@@ -50,9 +52,9 @@ public abstract class Task {
     }
 
     /**
-     * Returns the Task's name and its complete status
+     * Returns the chatbotbob.task.core.util.Task's name and its complete status
      *
-     * @return the Task represented as a String
+     * @return the chatbotbob.task.core.util.Task represented as a String
      */
     public String toString() {
         return  "[" + (isComplete ? "X" : " ") + "] " + this.name;

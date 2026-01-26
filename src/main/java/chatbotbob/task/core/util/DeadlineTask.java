@@ -1,3 +1,5 @@
+package chatbotbob.task.core.util;
+
 import java.time.DateTimeException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -5,7 +7,7 @@ import java.util.ArrayList;
 import java.time.LocalDate;
 
 /**
- * Represents a DeadlineTask that can be stored in the ChatBot.
+ * Represents a chatbotbob.task.core.util.DeadlineTask that can be stored in the ChatBot.
  * This type task has both an end time.
  *
  * @author James Chin
@@ -15,11 +17,11 @@ import java.time.LocalDate;
 public class DeadlineTask extends Task {
     private LocalDate endDateTime;
     /**
-     * Creates an Incomplete DeadlineTask with the
+     * Creates an Incomplete chatbotbob.task.core.util.DeadlineTask with the
      * specified name and endDateTime
      *
-     * @param name The name of the Task
-     * @param endDateTime The end DateTime of the Task
+     * @param name The name of the chatbotbob.task.core.util.Task
+     * @param endDateTime The end DateTime of the chatbotbob.task.core.util.Task
      */
     public DeadlineTask(String name, String endDateTime) throws DateTimeException {
         super(name);
@@ -32,9 +34,9 @@ public class DeadlineTask extends Task {
     }
 
     /**
-     * Returns the Task's name and its complete status
+     * Returns the chatbotbob.task.core.util.Task's name and its complete status
      *
-     * @return the Task represented as a String
+     * @return the chatbotbob.task.core.util.Task represented as a String
      */
     @Override
     public String toString() {

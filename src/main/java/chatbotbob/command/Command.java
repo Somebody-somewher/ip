@@ -1,5 +1,9 @@
+package chatbotbob.command;
+
+import chatbotbob.service.UiInterface;
+
 /**
- * Represents a Command that can be executed by the ChatBot.
+ * Represents a chatbotbob.command.Command that can be executed by the ChatBot.
  * @author James Chin
  * @version 1.6
  * @since 1.0

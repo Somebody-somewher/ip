@@ -1,3 +1,5 @@
+package chatbotbob.service;
+
 public interface UiInterface {
 
     public void printGreeting();

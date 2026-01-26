@@ -1,12 +1,18 @@
+package chatbotbob.command;
+
+import chatbotbob.service.UiInterface;
+import chatbotbob.task.core.util.Task;
+import chatbotbob.task.service.TaskListInterface;
+
 /**
- * Represents a Command that Deletes a Task
+ * Represents a chatbotbob.command.Command that Deletes a chatbotbob.task.core.util.Task
  * @author James Chin
  */
 public class CommandDeleteTask extends CommandSelectTask {
     private final static String CMDPHRASE = "delete";
 
     /**
-     * Creates a AddToDoCommand with the Chatbot's Task List
+     * Creates a AddToDoCommand with the Chatbot's chatbotbob.task.core.util.Task List
      *
      * @param taskList The task lists
      */

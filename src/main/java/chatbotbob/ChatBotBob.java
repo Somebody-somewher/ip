@@ -1,3 +1,13 @@
+package chatbotbob;
+
+import chatbotbob.command.Command;
+import chatbotbob.service.Parser;
+import chatbotbob.service.ParserInterface;
+import chatbotbob.service.Ui;
+import chatbotbob.service.UiInterface;
+import chatbotbob.task.service.TaskManager;
+import chatbotbob.task.service.TaskManagerInterface;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -9,10 +19,6 @@ import java.util.ArrayList;
 public class ChatBotBob {
 
     private static UiInterface ui;
-
-    //private static TaskList taskList = new TaskList();
-    //private static StorageInterface storage = new Storage();
-
     private static TaskManagerInterface tm = new TaskManager();
     private static ParserInterface parser;
 
@@ -47,7 +53,7 @@ public class ChatBotBob {
     }
 
     /**
-     * Represents a Command that Ends ChatBot input
+     * Represents a chatbotbob.command.Command that Ends ChatBot input
      * @author James Chin
      */
     private static class CommandBye extends Command {

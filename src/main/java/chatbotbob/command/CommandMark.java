@@ -1,11 +1,16 @@
+package chatbotbob.command;
+
+import chatbotbob.service.UiInterface;
+import chatbotbob.task.service.TaskListInterface;
+
 /**
- * Represents a Command that Marks or UnMarks a Task
+ * Represents a chatbotbob.command.Command that Marks or UnMarks a chatbotbob.task.core.util.Task
  * @author James Chin
  */
 public class CommandMark extends CommandSelectTask {
     private final static String CMDPHRASE = "mark";
     /**
-     * Creates a CommandMark with the Chatbot's Task List
+     * Creates a chatbotbob.command.CommandMark with the Chatbot's chatbotbob.task.core.util.Task List
      *
      * @param taskList The task lists
      */

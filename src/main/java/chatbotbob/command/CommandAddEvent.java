@@ -1,15 +1,22 @@
+package chatbotbob.command;
+
+import chatbotbob.service.UiInterface;
+import chatbotbob.task.core.util.EventTask;
+import chatbotbob.task.core.util.Task;
+import chatbotbob.task.service.TaskListInterface;
+
 import java.time.DateTimeException;
 import java.util.Arrays;
 
 /**
- * Represents a Command that Adds an Event Task
+ * Represents a chatbotbob.command.Command that Adds an Event chatbotbob.task.core.util.Task
  * @author James Chin
  */
 public class CommandAddEvent extends CommandAddToDo {
     private final static String CMDPHRASE = "event";
 
     /**
-     * Creates a AddDeadlineCommand with the Chatbot's Task List
+     * Creates a AddDeadlineCommand with the Chatbot's chatbotbob.task.core.util.Task List
      *
      * @param taskList The task lists
      */

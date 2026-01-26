@@ -1,10 +1,12 @@
+package chatbotbob.task.core.util;
+
 import java.time.DateTimeException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.time.LocalDate;
 
 /**
- * Represents a EventTask that can be stored in the ChatBot.
+ * Represents a chatbotbob.task.core.util.EventTask that can be stored in the ChatBot.
  * This type task has both a start and end time.
  *
  * @author James Chin
@@ -16,12 +18,12 @@ public class EventTask extends Task{
     private LocalDate endDateTime;
 
     /**
-     * Creates an Incomplete EventTask with the
+     * Creates an Incomplete chatbotbob.task.core.util.EventTask with the
      * specified name, startDateTime and endDateTime
      *
-     * @param name The name of the Task
-     * @param startDateTime The start DateTime of the Task
-     * @param endDateTime The end DateTime of the Task
+     * @param name The name of the chatbotbob.task.core.util.Task
+     * @param startDateTime The start DateTime of the chatbotbob.task.core.util.Task
+     * @param endDateTime The end DateTime of the chatbotbob.task.core.util.Task
      */
     public EventTask(String name, String startDateTime, String endDateTime) throws DateTimeException, InvalidDateOrderException {
         super(name);
@@ -44,9 +46,9 @@ public class EventTask extends Task{
     }
 
     /**
-     * Returns the Task's name and its complete status
+     * Returns the chatbotbob.task.core.util.Task's name and its complete status
      *
-     * @return the Task represented as a String
+     * @return the chatbotbob.task.core.util.Task represented as a String
      */
     @Override
     public String toString() {

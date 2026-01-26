@@ -1,3 +1,5 @@
+package chatbotbob.service;
+
 import java.util.Scanner;
 
 public class Ui implements UiInterface{

@@ -1,3 +1,7 @@
+package chatbotbob.service;
+
+import chatbotbob.command.Command;
+
 import java.util.List;
 
 public class Parser implements ParserInterface {

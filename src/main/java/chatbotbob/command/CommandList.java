@@ -1,5 +1,10 @@
+package chatbotbob.command;
+
+import chatbotbob.service.UiInterface;
+import chatbotbob.task.service.TaskListInterface;
+
 /**
- * Represents a Command that Lists out all ChatBot Tasks
+ * Represents a chatbotbob.command.Command that Lists out all ChatBot Tasks
  * @author James Chin
  */
 public class CommandList extends Command {
@@ -8,7 +13,7 @@ public class CommandList extends Command {
     private final static String CMDPHRASE = "list";
 
     /**
-     * Creates a ListCommand with the Chatbot's Task List
+     * Creates a ListCommand with the Chatbot's chatbotbob.task.core.util.Task List
      *
      * @param taskList The task lists
      */

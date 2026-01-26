@@ -1,14 +1,17 @@
+package chatbotbob.command;
+
+import chatbotbob.task.core.util.Task;
+import chatbotbob.task.service.TaskListInterface;
+
 /**
- * Represents an abstract Command that selects a Task
+ * Represents an abstract chatbotbob.command.Command that selects a chatbotbob.task.core.util.Task
  * @author James Chin
- * @version 1.0
- * @since 1.0
  */
 public abstract class CommandSelectTask extends Command {
     protected TaskListInterface taskList;
 
     /**
-     * Creates a CommandSelectTask with the Chatbot's Task List
+     * Creates a chatbotbob.command.CommandSelectTask with the Chatbot's chatbotbob.task.core.util.Task List
      *
      * @param storage The task lists
      */

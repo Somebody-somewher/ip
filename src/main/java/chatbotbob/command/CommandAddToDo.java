@@ -1,7 +1,14 @@
+package chatbotbob.command;
+
+import chatbotbob.service.UiInterface;
+import chatbotbob.task.core.util.Task;
+import chatbotbob.task.core.util.TodoTask;
+import chatbotbob.task.service.TaskListInterface;
+
 import java.util.Arrays;
 
 /**
- * Represents a Command that Adds a ToDo Task
+ * Represents a chatbotbob.command.Command that Adds a ToDo chatbotbob.task.core.util.Task
  * @author James Chin
  */
 public class CommandAddToDo extends Command {
@@ -9,7 +16,7 @@ public class CommandAddToDo extends Command {
     private final static String CMDPHRASE = "todo";
 
     /**
-     * Creates a AddToDoCommand with the Chatbot's Task List
+     * Creates a AddToDoCommand with the Chatbot's chatbotbob.task.core.util.Task List
      *
      * @param taskList The task lists
      */
