@@ -3,7 +3,7 @@ package chatbotbob.task.core.util;
 import java.util.ArrayList;
 
 /**
- * Represents a chatbotbob.task.core.util.TodoTask that can be stored in the ChatBot.
+ * Represents a TodoTask that can be stored in the ChatBot.
  * This type task has No Time requirement
  *
  * @author James Chin
@@ -12,9 +12,9 @@ import java.util.ArrayList;
  */
 public class TodoTask extends Task{
     /**
-     * Creates an Incomplete chatbotbob.task.core.util.Task with the specified name
+     * Creates an Incomplete Task with the specified name
      *
-     * @param name The name of the chatbotbob.task.core.util.Task
+     * @param name The name of the Task
      */
     public TodoTask(String name)  {
         super(name);
@@ -25,15 +25,20 @@ public class TodoTask extends Task{
     }
 
     /**
-     * Returns the chatbotbob.task.core.util.Task's name and its complete status
+     * Returns the Task's name and its complete status
      *
-     * @return the chatbotbob.task.core.util.Task represented as a String
+     * @return the Task represented as a String
      */
     @Override
     public String toString() {
         return "[T]" + super.toString();
     }
 
+    /**
+     * Encodes the Task into a String to be written into a file
+     *
+     * @return the Task as an encoded String
+     */
     @Override
     public String serialize() {
         ArrayList<String> serializedParams = getSerializedParams();
