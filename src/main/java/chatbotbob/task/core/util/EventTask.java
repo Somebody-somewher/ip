@@ -57,7 +57,11 @@ public class EventTask extends Task{
                 " to: " + endDateTime.format(DateTimeFormatter.ofPattern("MMM d yyyy")) + ")";
     }
 
-
+    /**
+     * Encodes the Task into a String to be written into a file
+     *
+     * @return the Task as an encoded String
+     */
     @Override
     public String serialize() {
         ArrayList<String> serializedParams = getSerializedParams();
@@ -71,10 +75,16 @@ public class EventTask extends Task{
         String[] fields = deserializeTaskString(serializedTask);
         return new EventTask(fields);
     }
+
+    /**
+     * Gets the Prefix of this Task Type
+     * Helps Identify what kind of Task is being decoded
+     *
+     * @return the Prefix as a String
+     */
     public static String getTypePrefix() {
         return "E";
     }
-
 
     public static class InvalidDateOrderException extends RuntimeException {
         public InvalidDateOrderException(String message) {
