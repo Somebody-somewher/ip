@@ -52,7 +52,7 @@ public class Storage implements StorageInterface {
                 taskList.addTask(task);
             }
         } catch(FileNotFoundException ignored) {
-
+            taskList.clearTasks();
         }
 
     }

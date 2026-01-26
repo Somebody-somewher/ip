@@ -14,4 +14,6 @@ public interface TaskListInterface {
     public int size();
 
     public void forEach(Consumer<Task> c);
+
+    public void clearTasks();
 }

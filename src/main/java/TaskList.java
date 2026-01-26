@@ -47,10 +47,16 @@ public class TaskList implements TaskListInterface {
         return taskList.size();
     }
 
+    @Override
     public void forEach(Consumer<Task> c) {
         for (Task t : taskList) {
             c.accept(t);
         }
+    }
+
+    @Override
+    public void clearTasks() {
+        taskList.clear();
     }
 
 }
