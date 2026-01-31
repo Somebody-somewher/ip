@@ -1,7 +1,6 @@
 package chatbotbob.task.core.util;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -25,9 +24,9 @@ public abstract class Task {
         this(name, false);
     }
 
-    protected Task(String[] serializedTask) throws ArrayIndexOutOfBoundsException {
-        this.name = cleanString(serializedTask[NUMBASESERIALIZEDPARAMS]);
-        this.isComplete = serializedTask[1].equals("1");
+    protected Task(String[] encodedAttributes) throws ArrayIndexOutOfBoundsException {
+        this.name = decodeAttribute(encodedAttributes[NUMBASESERIALIZEDPARAMS]);
+        this.isComplete = encodedAttributes[1].equals("1");
     }
 
     private Task(String name, boolean isComplete) {
@@ -63,44 +62,44 @@ public abstract class Task {
      *
      * @return the Task as an encoded String
      */
-    public abstract String serialize();
+    public abstract String encodeTask();
 
     /**
-     * Joins the encoded parameters of a Task together to form an Encoded String, ready
+     * Joins the encoded attributes of a Task together to form an Encoded String, ready
      * to be written to a file.
-     * This function exists as a wrapper for String.join, abstracting the behaviour of
+     * This function exists as a wrapper for String.join(), abstracting the behaviour of
      * how the Encoding works away from the subclasses
      *
-     * @param strings The List of parameters to encode together
+     * @param strings The List of attributes to encode together
      * @return the Task as an encoded String
      */
-    protected String serializeStrings(List<String> strings) {
+    protected String joinEncodedAttributes(List<String> strings) {
         return String.join(SERIALIZEDELIMIT, strings);
     }
 
     /**
-     * Decodes a String into different attributes
-     * This function exists as a wrapper for String split, abstracting the behaviour of
+     * Decodes an Encoded Task into different attributes
+     * This function exists as a wrapper for String.split(), abstracting the behaviour of
      * how the Decoding works away from the subclasses
      *
-     * @param serializedTask The encoded String that represents a Task
+     * @param encodedTask The encoded String that represents a Task
      * @return the attributes of the decoded Task
      */
-    protected static String[] deserializeTaskString(String serializedTask) {
-        return serializedTask.split(SERIALIZEDELIMITREGEX);
+    protected static String[] splitAttributesFromEncodedTask(String encodedTask) {
+        return encodedTask.split(SERIALIZEDELIMITREGEX);
     }
 
     /**
-     * Get the Base Encoded attributes of the Task.
-     * This abstracts the behaviour of how the base attributes are prepared from
-     * the subclasses
+     * Get the Base Encoded attributes of the superclass Task.
+     * This abstracts the behaviour of how the base attributes are prepared
+     * (in the superclass) from the subclasses
      *
      * @return the attributes of the decoded Task
      */
-    protected ArrayList<String> getSerializedParams() {
+    protected ArrayList<String> getBaseEncodedAttributes() {
         ArrayList<String> list = new ArrayList<String>();
         list.add((isComplete ? "1" : "0"));
-        list.add(processString(this.name));
+        list.add(encodeAttribute(this.name));
         return list;
     }
 
@@ -110,7 +109,7 @@ public abstract class Task {
      * @param s the encoded attribute as a String
      * @return the encoded attribute
      */
-    protected String processString(String s) {
+    protected String encodeAttribute(String s) {
         return s.replace(SERIALIZEDELIMITCHAR, "\\" + SERIALIZEDELIMITCHAR);
     }
 
@@ -120,18 +119,18 @@ public abstract class Task {
      * @param s the attribute to be decoded as a String
      * @return the attribute decoded
      */
-    protected String cleanString(String s) {
+    protected String decodeAttribute(String s) {
         return s.replace("\\" + SERIALIZEDELIMITCHAR, SERIALIZEDELIMITCHAR);
     }
 
     /**
      * Extracts the Prefix of any Encoded Task
-     * The Prefix identifies what kind of Task is being decoded
+     * The Prefix identifies what kind of Task is being decoded, used by Storage class
      *
      * @param s the Encoded Task String
      * @return the Prefix as a String
      */
-    public static String extractSerializedTypePrefix(String s) {
+    public static String extractEncodedTypePrefix(String s) {
         return "" + s.charAt(0);
     }
 
@@ -144,6 +143,7 @@ public abstract class Task {
     public boolean equals(Task t) {
         return this.name.equals(t.name) && (this.isComplete == t.isComplete);
     }
+
 
     public boolean partialMatch(String s) {
         return name.contains(s);

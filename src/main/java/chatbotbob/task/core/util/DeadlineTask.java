@@ -23,9 +23,10 @@ public class DeadlineTask extends Task {
         this.endDateTime = LocalDate.parse(endDateTime);
     }
 
-    private DeadlineTask(String[] fields) throws DateTimeException {
-        super(fields);
-        this.endDateTime = LocalDate.parse(fields[NUMBASESERIALIZEDPARAMS + 1]);
+    private DeadlineTask(String[] encodedAttributes) throws DateTimeException {
+        super(encodedAttributes);
+        this.endDateTime = LocalDate.parse(
+                decodeAttribute(encodedAttributes[NUMBASESERIALIZEDPARAMS + 1]));
     }
 
     /**
@@ -45,11 +46,11 @@ public class DeadlineTask extends Task {
      * @return the Task as an encoded String
      */
     @Override
-    public String serialize() throws DateTimeException {
-        ArrayList<String> serializedParams = getSerializedParams();
+    public String encodeTask() throws DateTimeException {
+        ArrayList<String> serializedParams = getBaseEncodedAttributes();
         serializedParams.add(0, "D");
-        serializedParams.add(this.endDateTime.toString());
-        return serializeStrings(serializedParams);
+        serializedParams.add(encodeAttribute(this.endDateTime.toString()));
+        return joinEncodedAttributes(serializedParams);
     }
 
     /**
@@ -57,8 +58,8 @@ public class DeadlineTask extends Task {
      *
      * @return the Decoded DeadlineTask
      */
-    public static DeadlineTask deserialize(String serializedTask) {
-        String[] fields = deserializeTaskString(serializedTask);
+    public static DeadlineTask decodeTask(String serializedTask) {
+        String[] fields = splitAttributesFromEncodedTask(serializedTask);
         return new DeadlineTask(fields);
     }
 

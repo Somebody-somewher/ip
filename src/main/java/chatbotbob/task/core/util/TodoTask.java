@@ -20,8 +20,8 @@ public class TodoTask extends Task {
         super(name);
     }
 
-    private TodoTask(String[] fields) {
-        super(fields);
+    private TodoTask(String[] encodedAttributes) {
+        super(encodedAttributes);
     }
 
     /**
@@ -40,14 +40,14 @@ public class TodoTask extends Task {
      * @return the Task as an encoded String
      */
     @Override
-    public String serialize() {
-        ArrayList<String> serializedParams = getSerializedParams();
+    public String encodeTask() {
+        ArrayList<String> serializedParams = getBaseEncodedAttributes();
         serializedParams.add(0, "T");
-        return serializeStrings(serializedParams);
+        return joinEncodedAttributes(serializedParams);
     }
 
-    public static TodoTask deserialize(String serializedTask) {
-        String[] fields = deserializeTaskString(serializedTask);
+    public static TodoTask decodeTask(String encodedTask) {
+        String[] fields = splitAttributesFromEncodedTask(encodedTask);
         return new TodoTask(fields);
     }
 

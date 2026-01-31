@@ -1,43 +1,45 @@
 package chatbotbob.task.core.util;
-import java.time.DateTimeException;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.time.DateTimeException;
+
+import org.junit.jupiter.api.Test;
+
 
 public class EventTaskTest {
     @Test
-    public void EventConstructorTest(){
+    public void eventConstructorTest() {
 
         boolean[] checks = new boolean[7];
 
         try {
             new EventTask("stringAsDate1", "AAAA", "2024-02-10");
-        } catch(DateTimeException e) {
+        } catch (DateTimeException e) {
             checks[1] = true;
         }
 
         try {
             new EventTask("stringAsDate2", "2024-02-10", "AAAA");
-        } catch(DateTimeException e) {
+        } catch (DateTimeException e) {
             checks[2] = true;
         }
 
         try {
             new EventTask("OutofOrderDate", "2024-02-10", "2024-01-10");
-        } catch(EventTask.InvalidDateOrderException e) {
+        } catch (EventTask.InvalidDateOrderException e) {
             checks[3] = true;
         }
 
         try {
             new EventTask("NonexistentDay1", "2024-02-10", "2024-02-31");
-        } catch(DateTimeException e) {
+        } catch (DateTimeException e) {
             checks[4] = true;
         }
 
         try {
             new EventTask("NonexistentDay2", "2024-02-31", "2024-03-01");
-        } catch(DateTimeException e) {
+        } catch (DateTimeException e) {
             checks[5] = true;
         }
 
@@ -57,12 +59,12 @@ public class EventTaskTest {
     }
 
     @Test
-    public void SerializationDeserializationTest() {
-        EventTask toSerialize = new EventTask("CorrectEvent", "2027-02-27", "2028-02-29");
-        String serializedTask = toSerialize.serialize();
-        System.out.println(serializedTask);
-        EventTask deserializedTask = EventTask.deserialize(serializedTask);
-        assertTrue(toSerialize.equals(deserializedTask));
+    public void encodeDecodeTest() {
+        EventTask toEncode = new EventTask("CorrectEvent", "2027-02-27", "2028-02-29");
+        String encodedTask = toEncode.encodeTask();
+        System.out.println(encodedTask);
+        EventTask decodedTask = EventTask.decodeTask(encodedTask);
+        assertTrue(toEncode.equals(decodedTask));
     }
 
 }

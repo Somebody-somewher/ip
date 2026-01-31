@@ -36,10 +36,10 @@ public class EventTask extends Task {
         }
     }
 
-    private EventTask(String[] fields) throws DateTimeException, InvalidDateOrderException {
-        super(fields);
-        this.startDateTime = LocalDate.parse(fields[NUMBASESERIALIZEDPARAMS + 1]);
-        this.endDateTime = LocalDate.parse(fields[NUMBASESERIALIZEDPARAMS + 2]);
+    private EventTask(String[] attributes) throws DateTimeException, InvalidDateOrderException {
+        super(attributes);
+        this.startDateTime = LocalDate.parse(decodeAttribute(attributes[NUMBASESERIALIZEDPARAMS + 1]));
+        this.endDateTime = LocalDate.parse(decodeAttribute(attributes[NUMBASESERIALIZEDPARAMS + 2]));
 
         if (this.endDateTime.isBefore(this.startDateTime)) {
             throw new InvalidDateOrderException("The Start Date is after the End Date!");
@@ -64,16 +64,16 @@ public class EventTask extends Task {
      * @return the Task as an encoded String
      */
     @Override
-    public String serialize() {
-        ArrayList<String> serializedParams = getSerializedParams();
-        serializedParams.add(0, "E");
-        serializedParams.add(this.startDateTime.toString());
-        serializedParams.add(this.endDateTime.toString());
-        return serializeStrings(serializedParams);
+    public String encodeTask() {
+        ArrayList<String> encodedAttributes = getBaseEncodedAttributes();
+        encodedAttributes.add(0, "E");
+        encodedAttributes.add(encodeAttribute(this.startDateTime.toString()));
+        encodedAttributes.add(encodeAttribute(this.endDateTime.toString()));
+        return joinEncodedAttributes(encodedAttributes);
     }
 
-    public static EventTask deserialize(String serializedTask) throws DateTimeException, InvalidDateOrderException {
-        String[] fields = deserializeTaskString(serializedTask);
+    public static EventTask decodeTask(String serializedTask) throws DateTimeException, InvalidDateOrderException {
+        String[] fields = splitAttributesFromEncodedTask(serializedTask);
         return new EventTask(fields);
     }
 

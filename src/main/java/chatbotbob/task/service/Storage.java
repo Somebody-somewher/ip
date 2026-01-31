@@ -28,9 +28,9 @@ public class Storage implements StorageInterface {
     private TaskListInterface taskList;
 
     static {
-        TYPE_MAP.put(TodoTask.getTypePrefix(), TodoTask::deserialize);
-        TYPE_MAP.put(DeadlineTask.getTypePrefix(), DeadlineTask::deserialize);
-        TYPE_MAP.put(EventTask.getTypePrefix(), EventTask::deserialize);
+        TYPE_MAP.put(TodoTask.getTypePrefix(), TodoTask::decodeTask);
+        TYPE_MAP.put(DeadlineTask.getTypePrefix(), DeadlineTask::decodeTask);
+        TYPE_MAP.put(EventTask.getTypePrefix(), EventTask::decodeTask);
 
         COMMAND_LIST.add(CommandAddToDo::new);
         COMMAND_LIST.add(CommandAddDeadline::new);
@@ -42,7 +42,7 @@ public class Storage implements StorageInterface {
     public void writeToFile(TaskListInterface taskList) throws IOException {
         ArrayList<String> stringArray = new ArrayList<>();
 
-        taskList.forEach(t -> stringArray.add(t.serialize()));
+        taskList.forEach(t -> stringArray.add(t.encodeTask()));
 
         FileWriter fw = new FileWriter(FILEPATH);
         fw.write(String.join("\n", stringArray));
@@ -55,8 +55,8 @@ public class Storage implements StorageInterface {
             File taskFile = new File(FILEPATH);
             Scanner s = new Scanner(taskFile); // create a Scanner using the File as the source
             while (s.hasNext()) {
-                String serializedTask = s.nextLine();
-                Task task = TYPE_MAP.get(Task.extractSerializedTypePrefix(serializedTask)).apply(serializedTask);
+                String encodedTask = s.nextLine();
+                Task task = TYPE_MAP.get(Task.extractEncodedTypePrefix(encodedTask)).apply(encodedTask);
                 taskList.addTask(task);
             }
         } catch (FileNotFoundException ignored) {
