@@ -40,19 +40,17 @@ public class CommandDeleteTask extends CommandSelectTask {
      */
     public boolean execute(String[] arguments, UiInterface ui) throws CommandInvalidArgumentException {
 
-        try {
-            if (arguments.length < 2) {
-                throw new CommandInvalidArgumentException("Invalid arguments! Usage: delete <task-no>");
-            }
-
-            Task taskToDelete = taskList.popTask(Integer.parseInt(arguments[1]));
-
-            ui.printText("As you command my liege! Say goodbye to:");
-            ui.printText("  " + taskToDelete);
-            ui.printText("You now have " + taskList.size() + " tasks remaining");
-        } catch (NumberFormatException e) {
-            throw new CommandInvalidArgumentException("That ain't even a valid number :<");
+        if (arguments.length != 2) {
+            throw new CommandInvalidArgumentException("Invalid arguments! Usage: delete <task-no>");
         }
+
+        getSpecificTask(arguments[1]);
+        Task taskToDelete = taskList.popTask(Integer.parseInt(arguments[1]));
+
+        ui.printText("As you command my liege! Say goodbye to:");
+        ui.printText("  " + taskToDelete);
+        ui.printText("You now have " + taskList.size() + " tasks remaining");
+
         return true;
     }
 }
