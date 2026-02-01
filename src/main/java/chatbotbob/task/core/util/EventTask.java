@@ -6,24 +6,20 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 /**
- * Represents a chatbotbob.task.core.util.EventTask that can be stored in the ChatBot.
+ * Represents a EventTask that can be stored in the ChatBot.
  * This type task has both a start and end time.
- *
- * @author James Chin
- * @version 1.0
- * @since 1.0
  */
 public class EventTask extends Task {
     private LocalDate startDateTime;
     private LocalDate endDateTime;
 
     /**
-     * Creates an Incomplete chatbotbob.task.core.util.EventTask with the
+     * Creates an Incomplete EventTask with the
      * specified name, startDateTime and endDateTime
      *
-     * @param name The name of the chatbotbob.task.core.util.Task
-     * @param startDateTime The start DateTime of the chatbotbob.task.core.util.Task
-     * @param endDateTime The end DateTime of the chatbotbob.task.core.util.Task
+     * @param name The name of the Task
+     * @param startDateTime The start DateTime of the Task
+     * @param endDateTime The end DateTime of the Task
      */
     public EventTask(String name, String startDateTime, String endDateTime)
             throws DateTimeException, InvalidDateOrderException {
@@ -36,10 +32,16 @@ public class EventTask extends Task {
         }
     }
 
-    private EventTask(String[] attributes) throws DateTimeException, InvalidDateOrderException {
-        super(attributes);
-        this.startDateTime = LocalDate.parse(decodeAttribute(attributes[NUMBASESERIALIZEDPARAMS + 1]));
-        this.endDateTime = LocalDate.parse(decodeAttribute(attributes[NUMBASESERIALIZEDPARAMS + 2]));
+    /**
+     * Creates an Incomplete EventTask with an array of encoded Attributes
+     * Only used by the decodeTask function when decoding a Task stored on file
+     *
+     * @param encodedAttributes The encoded Attributes of an EventTask
+     */
+    private EventTask(String[] encodedAttributes) throws DateTimeException, InvalidDateOrderException {
+        super(encodedAttributes);
+        this.startDateTime = LocalDate.parse(decodeAttribute(encodedAttributes[NUMBASESERIALIZEDPARAMS + 1]));
+        this.endDateTime = LocalDate.parse(decodeAttribute(encodedAttributes[NUMBASESERIALIZEDPARAMS + 2]));
 
         if (this.endDateTime.isBefore(this.startDateTime)) {
             throw new InvalidDateOrderException("The Start Date is after the End Date!");
@@ -47,9 +49,9 @@ public class EventTask extends Task {
     }
 
     /**
-     * Returns the chatbotbob.task.core.util.Task's name and its complete status
+     * Returns the Task's name and its complete status
      *
-     * @return the chatbotbob.task.core.util.Task represented as a String
+     * @return the Task represented as a String
      */
     @Override
     public String toString() {
@@ -72,14 +74,20 @@ public class EventTask extends Task {
         return joinEncodedAttributes(encodedAttributes);
     }
 
-    public static EventTask decodeTask(String serializedTask) throws DateTimeException, InvalidDateOrderException {
-        String[] fields = splitAttributesFromEncodedTask(serializedTask);
-        return new EventTask(fields);
+    /**
+     * Decodes and Returns an EventTask instance from an encoded EventTask (a String)
+     *
+     * @param encodedTask the encoded Task
+     * @return An EventTask instance.
+     */
+    public static EventTask decodeTask(String encodedTask) throws DateTimeException, InvalidDateOrderException {
+        String[] attributes = splitAttributesFromEncodedTask(encodedTask);
+        return new EventTask(attributes);
     }
 
     /**
-     * Gets the Prefix of this Task Type
-     * Helps Identify what kind of Task is being decoded
+     * Gets the Prefix of an EventTask Type
+     * For Identifying which Task Type an Encoded Task is
      *
      * @return the Prefix as a String
      */
@@ -87,14 +95,23 @@ public class EventTask extends Task {
         return "E";
     }
 
+    /**
+     * Checks if two Tasks are equal
+     *
+     * @param et the Task to be compared with
+     * @return True if their attributes are the same, else False
+     */
+    public boolean equals(EventTask et) {
+        return this.startDateTime.equals(et.startDateTime) && this.endDateTime.equals(et.endDateTime)
+                && super.equals(et);
+    }
+
+    /**
+     * Represents an Exception for EventClass when the start date is set to be after the end date
+     */
     public static class InvalidDateOrderException extends RuntimeException {
         public InvalidDateOrderException(String message) {
             super(message);
         }
-    }
-
-    public boolean equals(EventTask et) {
-        return this.startDateTime.equals(et.startDateTime) && this.endDateTime.equals(et.endDateTime)
-                && super.equals(et);
     }
 }

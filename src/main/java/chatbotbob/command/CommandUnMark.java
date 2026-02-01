@@ -3,11 +3,14 @@ package chatbotbob.command;
 import chatbotbob.service.UiInterface;
 import chatbotbob.task.service.TaskListInterface;
 
+/**
+ * Represents a Command that Unmarks a Task
+ */
 public class CommandUnMark extends CommandSelectTask {
     private static final String CMDPHRASE = "unmark";
 
     /**
-     * Creates a chatbotbob.command.CommandMark with the Chatbot's chatbotbob.task.core.util.Task List
+     * Creates a CommandMark with the Chatbot's Task List
      *
      * @param taskList The task lists
      */

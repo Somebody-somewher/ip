@@ -8,15 +8,14 @@ import chatbotbob.task.service.TaskListInterface;
 
 
 /**
- * Represents a chatbotbob.command.Command that Adds a ToDo chatbotbob.task.core.util.Task
- * @author James Chin
+ * Represents a Command that Adds a ToDo Task
  */
 public class CommandAddToDo extends Command {
     private static final String CMDPHRASE = "todo";
     protected TaskListInterface taskList;
 
     /**
-     * Creates a AddToDoCommand with the Chatbot's chatbotbob.task.core.util.Task List
+     * Creates a CommandAddToDo with the Chatbot's Task List
      *
      * @param taskList The task lists
      */
@@ -30,6 +29,7 @@ public class CommandAddToDo extends Command {
      *
      * @return the CMDPHRASE
      */
+    @Override
     public String getCmdPhrase() {
         return CMDPHRASE;
     }

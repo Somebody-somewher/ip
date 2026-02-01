@@ -6,6 +6,10 @@ import java.util.function.Consumer;
 import chatbotbob.service.UiInterface;
 import chatbotbob.task.core.util.Task;
 
+/**
+ * Represents an abstraction class that handles a List of Tasks
+ * and relevant actions (adding, deleting, etc)
+ */
 public class TaskList implements TaskListInterface {
     private List<Task> taskList;
 

@@ -9,14 +9,13 @@ import chatbotbob.task.service.TaskListInterface;
 
 
 /**
- * Represents a chatbotbob.command.Command that Adds a Deadline chatbotbob.task.core.util.Task
- * @author James Chin
+ * Represents a Command that Adds a Deadline Task
  */
 public class CommandAddDeadline extends CommandAddToDo {
     private static final String CMDPHRASE = "deadline";
 
     /**
-     * Creates a AddDeadlineCommand with the Chatbot's chatbotbob.task.core.util.Task List
+     * Creates a CommandAddDeadline with the Chatbot's Task List
      *
      * @param taskList The task lists
      */

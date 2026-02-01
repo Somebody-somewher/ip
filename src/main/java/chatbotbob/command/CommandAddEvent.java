@@ -8,14 +8,13 @@ import chatbotbob.task.core.util.Task;
 import chatbotbob.task.service.TaskListInterface;
 
 /**
- * Represents a chatbotbob.command.Command that Adds an Event chatbotbob.task.core.util.Task
- * @author James Chin
+ * Represents a Command that Adds an Event Task
  */
 public class CommandAddEvent extends CommandAddToDo {
     private static final String CMDPHRASE = "event";
 
     /**
-     * Creates a AddDeadlineCommand with the Chatbot's chatbotbob.task.core.util.Task List
+     * Creates a CommandAddEvent with the Chatbot's Task List
      *
      * @param taskList The task lists
      */

@@ -10,16 +10,27 @@ import chatbotbob.command.CommandList;
 import chatbotbob.command.CommandMark;
 import chatbotbob.command.CommandUnMark;
 
+/**
+ * Represents an abstraction class that handles all Task related
+ * functionality
+ */
 public class TaskManager implements TaskManagerInterface {
 
     private StorageInterface storage;
     private TaskListInterface taskList;
 
+    /**
+     * Creates a TaskManager with a default Storage and a default TaskList
+     */
     public TaskManager() {
         this.storage = new Storage();
         this.taskList = new TaskList();
     }
 
+    /**
+     * Creates a TaskManager with a provided Storage and TaskList
+     * For debugging
+     */
     public TaskManager(StorageInterface storage, TaskListInterface taskList) {
         this.storage = storage;
         this.taskList = taskList;

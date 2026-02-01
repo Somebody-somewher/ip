@@ -3,10 +3,7 @@ package chatbotbob.command;
 import chatbotbob.service.UiInterface;
 
 /**
- * Represents a chatbotbob.command.Command that can be executed by the ChatBot.
- * @author James Chin
- * @version 1.6
- * @since 1.0
+ * Represents a Command that can be executed by the ChatBot.
  */
 public abstract class Command {
 
@@ -14,14 +11,14 @@ public abstract class Command {
      * Returns the CMDPHRASE, overriden by every child class so that
      * the CMDPHRASE is overriden in every child class.
      *
-     * @return the CMDPHRASE
+     * @return the CMDPHRASE of that Command
      */
     public abstract String getCmdPhrase();
 
 
     /**
-     * Returns True if the input matches a specified
-     * command phrase. False otherwise
+     * Checks if CMDPHRASE was found in user input. Returns True if so,
+     * False otherwise
      *
      * @param input Array of words that was provided as user input
      * @return True if a match is found, False if not
@@ -58,6 +55,10 @@ public abstract class Command {
         return false;
     }
 
+    /**
+     * Represents an Exception caused by giving the command invalid arguments
+     * (e.g. expecting an int but received a string)
+     */
     public static class CommandInvalidArgumentException extends Exception {
         public CommandInvalidArgumentException(String message) {
             super(message);

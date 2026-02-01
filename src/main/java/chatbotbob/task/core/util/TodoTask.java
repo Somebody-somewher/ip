@@ -46,11 +46,23 @@ public class TodoTask extends Task {
         return joinEncodedAttributes(serializedParams);
     }
 
+    /**
+     * Decodes and Returns a TodoTask from an encoded TodoTask (a String)
+     *
+     * @param encodedTask the encoded Task
+     * @return A TodoTask instance
+     */
     public static TodoTask decodeTask(String encodedTask) {
-        String[] fields = splitAttributesFromEncodedTask(encodedTask);
-        return new TodoTask(fields);
+        String[] attributes = splitAttributesFromEncodedTask(encodedTask);
+        return new TodoTask(attributes);
     }
 
+    /**
+     * Gets the Prefix of an TodoTask Type
+     * For Identifying which Task Type an Encoded Task is
+     *
+     * @return the Prefix as a String
+     */
     public static String getTypePrefix() {
         return "T";
     }

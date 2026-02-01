@@ -4,13 +4,12 @@ import chatbotbob.service.UiInterface;
 import chatbotbob.task.service.TaskListInterface;
 
 /**
- * Represents a chatbotbob.command.Command that Marks or UnMarks a chatbotbob.task.core.util.Task
- * @author James Chin
+ * Represents a Command that Marks a Task
  */
 public class CommandMark extends CommandSelectTask {
     private static final String CMDPHRASE = "mark";
     /**
-     * Creates a chatbotbob.command.CommandMark with the Chatbot's chatbotbob.task.core.util.Task List
+     * Creates a CommandMark with the Chatbot's Task List
      *
      * @param taskList The task lists
      */

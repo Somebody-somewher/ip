@@ -1,24 +1,21 @@
 package chatbotbob.command;
 
+import java.util.Arrays;
+
 import chatbotbob.service.UiInterface;
 import chatbotbob.task.service.TaskListInterface;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 /**
- * Represents a chatbotbob.command.Command that Lists out all ChatBot Tasks
- * @author James Chin
+ * Represents a Command that Lists out all ChatBot Tasks
  */
 public class CommandFind extends Command {
+    private static final String CMDPHRASE = "find";
     private TaskListInterface taskList;
 
-    private final static String CMDPHRASE = "find";
 
     /**
-     * Creates a ListCommand with the Chatbot's chatbotbob.task.core.util.Task List
+     * Creates a CommandFind with the Chatbot's Task List
      *
      * @param taskList The task lists
      */
@@ -44,7 +41,7 @@ public class CommandFind extends Command {
      * @param arguments Arguments as supplied by user input
      * @return True if executed correctly, False otherwise
      */
-    public boolean execute(String[] arguments, UiInterface ui) throws CommandInvalidArgumentException{
+    public boolean execute(String[] arguments, UiInterface ui) throws CommandInvalidArgumentException {
 
         if (arguments.length < 2) {
             throw new CommandInvalidArgumentException("Invalid arguments! Usage: find <partial-task-name>");

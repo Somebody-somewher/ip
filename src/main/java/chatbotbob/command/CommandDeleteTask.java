@@ -5,14 +5,13 @@ import chatbotbob.task.core.util.Task;
 import chatbotbob.task.service.TaskListInterface;
 
 /**
- * Represents a chatbotbob.command.Command that Deletes a chatbotbob.task.core.util.Task
- * @author James Chin
+ * Represents a Command that Deletes a Task
  */
 public class CommandDeleteTask extends CommandSelectTask {
     private static final String CMDPHRASE = "delete";
 
     /**
-     * Creates a AddToDoCommand with the Chatbot's chatbotbob.task.core.util.Task List
+     * Creates a CommandDeleteTask with the Chatbot's Task List
      *
      * @param taskList The task lists
      */
@@ -26,6 +25,7 @@ public class CommandDeleteTask extends CommandSelectTask {
      *
      * @return the CMDPHRASE
      */
+    @Override
     public String getCmdPhrase() {
         return CMDPHRASE;
     }

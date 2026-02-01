@@ -4,14 +4,13 @@ import chatbotbob.task.core.util.Task;
 import chatbotbob.task.service.TaskListInterface;
 
 /**
- * Represents an abstract chatbotbob.command.Command that selects a chatbotbob.task.core.util.Task
- * @author James Chin
+ * Represents an abstract Command that selects a Task
  */
 public abstract class CommandSelectTask extends Command {
     protected TaskListInterface taskList;
 
     /**
-     * Creates a chatbotbob.command.CommandSelectTask with the Chatbot's chatbotbob.task.core.util.Task List
+     * Creates a CommandSelectTask with the Chatbot's Task List
      *
      * @param storage The task lists
      */

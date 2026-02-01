@@ -54,18 +54,19 @@ public class DeadlineTask extends Task {
     }
 
     /**
-     * Decodes the Encoded DeadlineTask String to be Task
+     * Decodes and Returns a DeadlineTask instance from an encoded DeadlineTask (a String)
      *
-     * @return the Decoded DeadlineTask
+     * @param encodedTask the encoded Task
+     * @return A DeadlineTask instance.
      */
-    public static DeadlineTask decodeTask(String serializedTask) {
-        String[] fields = splitAttributesFromEncodedTask(serializedTask);
-        return new DeadlineTask(fields);
+    public static DeadlineTask decodeTask(String encodedTask) {
+        String[] attributes = splitAttributesFromEncodedTask(encodedTask);
+        return new DeadlineTask(attributes);
     }
 
     /**
-     * Gets the Prefix of this Task Type
-     * Helps Identify what kind of Task is being decoded
+     * Gets the Prefix of a Deadline Task Type
+     * For Identifying which Task Type an Encoded Task is
      *
      * @return the Prefix as a String
      */
