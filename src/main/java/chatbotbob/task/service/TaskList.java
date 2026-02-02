@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-import chatbotbob.service.UiInterface;
+import chatbotbob.ui.UiInterface;
 import chatbotbob.task.core.util.Task;
 
 /**

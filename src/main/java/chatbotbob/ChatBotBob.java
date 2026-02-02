@@ -5,14 +5,13 @@ import java.util.ArrayList;
 import chatbotbob.command.Command;
 import chatbotbob.service.Parser;
 import chatbotbob.service.ParserInterface;
-import chatbotbob.service.Ui;
-import chatbotbob.service.UiInterface;
 import chatbotbob.task.service.TaskManager;
 import chatbotbob.task.service.TaskManagerInterface;
+import chatbotbob.ui.Ui;
+import chatbotbob.ui.UiInterface;
 
 /**
  * Represents a Chatbot that the User interacts with
- * @author James Chin
  */
 public class ChatBotBob {
 
@@ -20,27 +19,26 @@ public class ChatBotBob {
     private static TaskManagerInterface tm = new TaskManager();
     private static ParserInterface parser;
 
-
     /** For the goodbye command to end the bot */
     private static boolean isFinished = false;
+
+    public ChatBotBob(UiInterface ui) {
+
+        tm.loadTasks();
+
+        ArrayList<Command> commands = new ArrayList<>();
+        commands.add(new CommandBye());
+        commands.addAll(tm.getCommands());
+
+        parser = new Parser(commands, ui);
+
+        this.ui = ui;
+    }
 
     public static void main(String[] args) {
         // Greeting
         ui = new Ui();
         ui.printGreeting();
-
-        tm.loadTasks();
-        ArrayList<Command> commands = new ArrayList<>();
-        commands.add(new CommandBye());
-        commands.addAll(tm.getCommands());
-        parser = new Parser(commands);
-
-        // Continuously
-        while (!isFinished) {
-            // Process user input
-            parser.processCommand(ui);
-
-        }
 
         try {
             tm.saveTasks();
@@ -86,6 +84,10 @@ public class ChatBotBob {
             }
             return true;
         }
+    }
+
+    public static void configureUI(UiInterface ui) {
+
     }
 
 }

@@ -1,6 +1,6 @@
 package chatbotbob.command;
 
-import chatbotbob.service.UiInterface;
+import chatbotbob.ui.UiInterface;
 
 /**
  * Represents a Command that can be executed by the ChatBot.

@@ -1,6 +1,6 @@
 package chatbotbob.command;
 
-import chatbotbob.service.UiInterface;
+import chatbotbob.ui.UiInterface;
 import chatbotbob.task.core.util.Task;
 import chatbotbob.task.service.TaskListInterface;
 

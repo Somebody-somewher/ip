@@ -1,6 +1,7 @@
-package chatbotbob.service;
+package chatbotbob.ui;
 
 import java.util.Scanner;
+import java.util.function.Consumer;
 
 /**
  * Represents an abstraction class that handles User Input
@@ -29,6 +30,7 @@ public class Ui implements UiInterface {
      * Prints a greeting that appears immediately upon turning on
      * the Chatbot
      */
+    @Override
     public void printGreeting() {
         System.out.println(WELCOME_STRING);
     }
@@ -36,6 +38,7 @@ public class Ui implements UiInterface {
     /**
      * Prints a separator, to be used after every command
      */
+    @Override
     public void printSeparator() {
         System.out.println(SEGMENT_SEPARATOR);
     }
@@ -45,16 +48,19 @@ public class Ui implements UiInterface {
      *
      * @param text text to be echoed
      */
+    @Override
     public void printText(String text) {
         System.out.println(text);
     }
 
     /**
      * Retrieves (mostly command) input from user
+     * and sends the input to a Consumer for processing
      *
-     * @return the text input received from user
+     * @param c the consumer to handle the input
      */
-    public String receiveInput() {
-        return reader.nextLine();
+    @Override
+    public void parseInput(Consumer<String> c) {
+        c.accept(reader.nextLine());
     }
 }
