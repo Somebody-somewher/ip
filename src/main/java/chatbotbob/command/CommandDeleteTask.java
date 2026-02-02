@@ -47,9 +47,10 @@ public class CommandDeleteTask extends CommandSelectTask {
         getSpecificTask(arguments[1]);
         Task taskToDelete = taskList.popTask(Integer.parseInt(arguments[1]));
 
-        ui.printText("As you command my liege! Say goodbye to:");
-        ui.printText("  " + taskToDelete);
-        ui.printText("You now have " + taskList.size() + " tasks remaining");
+        ui.printText(new StringBuilder().append("As you command my liege! Say goodbye to: \n ")
+                .append(taskToDelete).append("\nYou now have ")
+                .append(taskList.size()).append(" tasks remaining").toString());
+
 
         return true;
     }

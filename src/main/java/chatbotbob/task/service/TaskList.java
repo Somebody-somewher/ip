@@ -39,13 +39,6 @@ public class TaskList implements TaskListInterface {
     }
 
     @Override
-    public void printAllTasks(UiInterface ui) {
-        for (int i = 1; i < taskList.size() + 1; i++) {
-            ui.printText(i + ". " + taskList.get(i - 1));
-        }
-    }
-
-    @Override
     public boolean isEmpty() {
         return taskList.isEmpty();
     }

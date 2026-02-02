@@ -43,8 +43,7 @@ public class CommandMark extends CommandSelectTask {
         }
 
         getSpecificTask(arguments[1]).markComplete();
-        ui.printText("Good job! You completed the task! :>");
-        ui.printText("  " + getSpecificTask(arguments[1]));
+        ui.printText("Good job! You completed the task! :>\n " + getSpecificTask(arguments[1]));
         return true;
     }
 }

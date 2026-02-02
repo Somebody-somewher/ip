@@ -17,8 +17,6 @@ public interface TaskListInterface {
 
     public void addTask(Task task);
 
-    public void printAllTasks(UiInterface ui);
-
     public boolean isEmpty();
 
     public int size();

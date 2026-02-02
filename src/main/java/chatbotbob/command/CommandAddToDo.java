@@ -35,9 +35,9 @@ public class CommandAddToDo extends Command {
     }
 
     protected void printAddedTask(Task taskToAdd, UiInterface ui) {
-        ui.printText("You will do your tasks after adding them... Right...?");
-        ui.printText("  " + taskToAdd);
-        ui.printText("You have " + taskList.size() + " tasks remaining");
+        ui.printText(new StringBuilder().append("You will do your tasks after adding them... Right...?\n ")
+                .append(taskToAdd).append("You have ").append(taskList.size())
+                .append(" tasks remaining").toString());
     }
 
     /**

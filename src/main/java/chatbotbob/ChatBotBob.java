@@ -18,11 +18,12 @@ public class ChatBotBob {
     private static UiInterface ui;
     private static TaskManagerInterface tm = new TaskManager();
     private static ParserInterface parser;
+    private static Runnable onBye;
 
     /** For the goodbye command to end the bot */
     private static boolean isFinished = false;
 
-    public ChatBotBob(UiInterface ui) {
+    public ChatBotBob(UiInterface ui, Runnable onBye) {
 
         tm.loadTasks();
 
@@ -31,23 +32,25 @@ public class ChatBotBob {
         commands.addAll(tm.getCommands());
 
         parser = new Parser(commands, ui);
-
+        ui.printGreeting();
         this.ui = ui;
+        this.onBye = onBye;
     }
 
-    public static void main(String[] args) {
-        // Greeting
-        ui = new Ui();
-        ui.printGreeting();
-
+    public static boolean cleanUp() {
         try {
             tm.saveTasks();
+            isFinished = true;
+            return true;
         } catch (IOException e) {
             ui.printText(e.getMessage());
+            return false;
         }
-
     }
 
+    public static boolean isBotDone() {
+        return isFinished;
+    }
     /**
      * Represents a chatbotbob.command.Command that Ends ChatBot input
      * @author James Chin
@@ -80,14 +83,13 @@ public class ChatBotBob {
                         I won't leave until you say a proper goodbye! >:( Usage: bye""");
             } else {
                 ui.printText(GOODBYE_STRING);
-                isFinished = true;
+
+                if (cleanUp()) {
+                    onBye.run();
+                }
             }
             return true;
         }
-    }
-
-    public static void configureUI(UiInterface ui) {
-
     }
 
 }

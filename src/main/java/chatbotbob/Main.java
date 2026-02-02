@@ -14,9 +14,10 @@ public class Main extends Application {
         try {
             GraphicalUI ui = new GraphicalUI();
             Scene scene = new Scene(ui.getMainWindow());
-            ChatBotBob bob = new ChatBotBob(ui);
+            ChatBotBob bob = new ChatBotBob(ui, stage::close);
             stage.setScene(scene);
             stage.show();
+            stage.setOnCloseRequest(e -> ChatBotBob.cleanUp());
         } catch (IOException e) {
             e.printStackTrace();
         }

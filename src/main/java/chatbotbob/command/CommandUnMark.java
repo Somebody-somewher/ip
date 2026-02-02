@@ -44,8 +44,7 @@ public class CommandUnMark extends CommandSelectTask {
         }
 
         getSpecificTask(arguments[1]).markIncomplete();
-        ui.printText("Bad job! You incompleted the task! :<");
-        ui.printText("  " + getSpecificTask(arguments[1]));
+        ui.printText("Bad job! You incompleted the task! :<\n " + getSpecificTask(arguments[1]));
         return true;
     }
 }
