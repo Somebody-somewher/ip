@@ -32,7 +32,7 @@ public class GraphicalUI implements UiInterface {
 
     @Override
     public void printGreeting() {
-
+        fxmlLoader.<MainWindow>getController().showText(WELCOME_STRING);
     }
 
     @Override
@@ -43,7 +43,6 @@ public class GraphicalUI implements UiInterface {
     @Override
     public void printText(String text) {
         fxmlLoader.<MainWindow>getController().showText(text);
-        //System.out.println("CHECK" + text);
     }
 
     /**

@@ -51,7 +51,7 @@ public class CommandFind extends Command {
         String nameToCheck = String.join(" ", Arrays.copyOfRange(arguments, 1, arguments.length));
 
         StringBuilder sb = new StringBuilder();
-        sb.append("Let's see what matches...");
+        sb.append("Let's see what matches...\n");
 
         taskList.forEach(t -> {
             if (t.partialMatch(nameToCheck)) {

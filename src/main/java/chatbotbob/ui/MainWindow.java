@@ -26,7 +26,7 @@ public class MainWindow extends AnchorPane {
     private Consumer<String> commandParser;
 
     private Image userImage = new Image(this.getClass().getResourceAsStream("/images/DaUser.png"));
-    private Image dukeImage = new Image(this.getClass().getResourceAsStream("/images/DaDuke.png"));
+    private Image bobImage = new Image(this.getClass().getResourceAsStream("/images/DaBob.png"));
 
     @FXML
     public void initialize() {
@@ -39,7 +39,7 @@ public class MainWindow extends AnchorPane {
     }
 
     public void showText(String text) {
-        dialogContainer.getChildren().add(DialogBox.getBotDialog(text, userImage));
+        dialogContainer.getChildren().add(DialogBox.getBotDialog(text, bobImage));
     }
 
     /**
@@ -49,7 +49,7 @@ public class MainWindow extends AnchorPane {
     @FXML
     private void handleUserInput() {
         String userInput = userInputField.getText();
-        dialogContainer.getChildren().add(DialogBox.getUserDialog(userInput, dukeImage));
+        dialogContainer.getChildren().add(DialogBox.getUserDialog(userInput, userImage));
         commandParser.accept(userInput);
         userInputField.clear();
     }
