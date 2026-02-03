@@ -1,4 +1,6 @@
-package chatbotbob.service;
+package chatbotbob.ui;
+
+import java.util.function.Consumer;
 
 /**
  * Represents an abstraction interface that handles User Input
@@ -26,8 +28,9 @@ public interface UiInterface {
 
     /**
      * Retrieves (mostly command) input from user
+     * and sends the input to a Consumer for processing
      *
-     * @return the text input received from user
+     * @param c the consumer to handle the input
      */
-    public String receiveInput();
+    public void parseInput(Consumer<String> c);
 }

@@ -1,7 +1,7 @@
 package chatbotbob.command;
 
-import chatbotbob.service.UiInterface;
 import chatbotbob.task.service.TaskListInterface;
+import chatbotbob.ui.UiInterface;
 
 /**
  * Represents a Command that Lists out all ChatBot Tasks
@@ -38,14 +38,20 @@ public class CommandList extends Command {
      * @return True if executed correctly, False otherwise
      */
     public boolean execute(String[] arguments, UiInterface ui) throws CommandInvalidArgumentException {
+        StringBuilder output = new StringBuilder();
+        int taskListSize = taskList.size();
+
         if (arguments.length != 1) {
             throw new CommandInvalidArgumentException("Invalid arguments! Usage: list");
-        } else if (taskList.isEmpty()) {
+        } else if (taskListSize == 0) {
             throw new CommandInvalidArgumentException("No tasks for you to do. Lucky you :p");
         } else {
-            taskList.printAllTasks(ui);
+            for (int i = 1; i < taskListSize; i += 1) {
+                output.append(i).append(". ").append(taskList.getTask(i)).append("\n");
+            }
+            output.append(taskListSize).append(". ").append(taskList.getTask(taskListSize));
         }
-
+        ui.printText(output.toString());
         return true;
     }
 }

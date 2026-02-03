@@ -1,7 +1,7 @@
 package chatbotbob.command;
 
-import chatbotbob.service.UiInterface;
 import chatbotbob.task.service.TaskListInterface;
+import chatbotbob.ui.UiInterface;
 
 /**
  * Represents a Command that Marks a Task
@@ -43,8 +43,7 @@ public class CommandMark extends CommandSelectTask {
         }
 
         getSpecificTask(arguments[1]).markComplete();
-        ui.printText("Good job! You completed the task! :>");
-        ui.printText("  " + getSpecificTask(arguments[1]));
+        ui.printText("Good job! You completed the task! :>\n " + getSpecificTask(arguments[1]));
         return true;
     }
 }

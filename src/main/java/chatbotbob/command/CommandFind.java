@@ -2,8 +2,8 @@ package chatbotbob.command;
 
 import java.util.Arrays;
 
-import chatbotbob.service.UiInterface;
 import chatbotbob.task.service.TaskListInterface;
+import chatbotbob.ui.UiInterface;
 
 
 /**
@@ -50,14 +50,16 @@ public class CommandFind extends Command {
 
         String nameToCheck = String.join(" ", Arrays.copyOfRange(arguments, 1, arguments.length));
 
-        ui.printText("Let's see what matches...");
+        StringBuilder sb = new StringBuilder();
+        sb.append("Let's see what matches...\n");
 
         taskList.forEach(t -> {
             if (t.partialMatch(nameToCheck)) {
-                ui.printText(t.toString());
+                sb.append(t.toString()).append("\n");
             }
         });
 
+        ui.printText(sb.toString());
         return true;
     }
 

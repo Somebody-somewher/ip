@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import chatbotbob.command.Command;
+import chatbotbob.ui.UiInterface;
 
 
 /**
@@ -13,6 +14,8 @@ import chatbotbob.command.Command;
  * then executes ChatBot functionality accordingly.
  */
 public class Parser implements ParserInterface {
+    private UiInterface ui;
+
     /** List of Commands that will be used by the ChatBot */
     private Map<String, Command> commandMapping;
 
@@ -23,21 +26,24 @@ public class Parser implements ParserInterface {
      *
      * @param commands List of commands for Parser to accept
      */
-    public Parser(List<Command> commands) {
+    public Parser(List<Command> commands, UiInterface ui) {
         commandMapping = new HashMap<>();
         for (Command c : commands) {
             commandMapping.put(c.getCmdPhrase(), c);
         }
+
+        ui.parseInput(this::processCommand);
+        this.ui = ui;
     }
 
     /**
      * Queries for User Input, then checks if the input matches any known
      * Commands. If there is a match, the command is executed.
      *
-     * @param ui the Ui to get input from
+     * @param userInputString the user input provided as a String
      */
-    public void processCommand(UiInterface ui) {
-        String userInputString = ui.receiveInput();
+    @Override
+    public void processCommand(String userInputString) {
         String[] userInputStringArr = userInputString.split(" ");
 
         // Go through every single command to see if any command matches

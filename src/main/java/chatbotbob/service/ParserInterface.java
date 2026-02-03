@@ -6,10 +6,10 @@ package chatbotbob.service;
  */
 public interface ParserInterface {
     /**
-     * Queries for User Input, then checks if the input matches any known
+     * Takes in User Input, then checks if the input matches any known
      * Commands. If there is a match, the command is executed.
      *
-     * @param ui the Ui to get input from
+     * @param s User Input as a String
      */
-    public void processCommand(UiInterface ui);
+    public void processCommand(String s);
 }

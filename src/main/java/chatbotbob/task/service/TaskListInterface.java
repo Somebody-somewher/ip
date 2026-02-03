@@ -2,7 +2,6 @@ package chatbotbob.task.service;
 
 import java.util.function.Consumer;
 
-import chatbotbob.service.UiInterface;
 import chatbotbob.task.core.util.Task;
 
 /**
@@ -16,8 +15,6 @@ public interface TaskListInterface {
     public Task popTask(int index) throws IndexOutOfBoundsException;
 
     public void addTask(Task task);
-
-    public void printAllTasks(UiInterface ui);
 
     public boolean isEmpty();
 

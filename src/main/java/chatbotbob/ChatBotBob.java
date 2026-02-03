@@ -5,51 +5,65 @@ import java.util.ArrayList;
 import chatbotbob.command.Command;
 import chatbotbob.service.Parser;
 import chatbotbob.service.ParserInterface;
-import chatbotbob.service.Ui;
-import chatbotbob.service.UiInterface;
 import chatbotbob.task.service.TaskManager;
 import chatbotbob.task.service.TaskManagerInterface;
+import chatbotbob.ui.UiInterface;
 
 /**
  * Represents a Chatbot that the User interacts with
- * @author James Chin
  */
 public class ChatBotBob {
 
     private static UiInterface ui;
     private static TaskManagerInterface tm = new TaskManager();
     private static ParserInterface parser;
-
+    private static Runnable onBye;
 
     /** For the goodbye command to end the bot */
     private static boolean isFinished = false;
 
-    public static void main(String[] args) {
-        // Greeting
-        ui = new Ui();
-        ui.printGreeting();
+    /**
+     * Links the ui to the ChatBot functionality
+     * as well as accepts an OnBye Runnable Function that
+     * executes on the GoodBye command.
+     *
+     * @param ui The Ui as provided by the Main Class
+     * @param onBye Function to run when Bye Command executed
+     */
+    public ChatBotBob(UiInterface ui, Runnable onBye) {
 
         tm.loadTasks();
+
         ArrayList<Command> commands = new ArrayList<>();
         commands.add(new CommandBye());
         commands.addAll(tm.getCommands());
-        parser = new Parser(commands);
 
-        // Continuously
-        while (!isFinished) {
-            // Process user input
-            parser.processCommand(ui);
-
-        }
-
-        try {
-            tm.saveTasks();
-        } catch (IOException e) {
-            ui.printText(e.getMessage());
-        }
-
+        parser = new Parser(commands, ui);
+        ui.printGreeting();
+        this.ui = ui;
+        this.onBye = onBye;
     }
 
+
+    /**
+     * Cleans up and Saves Takes when ChatBot has finished executing
+     *
+     * @return True if Task Saving and clean up successful. False otherwise
+     */
+    public static boolean cleanUp() {
+        try {
+            tm.saveTasks();
+            isFinished = true;
+            return true;
+        } catch (IOException e) {
+            ui.printText(e.getMessage());
+            return false;
+        }
+    }
+
+    public static boolean isBotDone() {
+        return isFinished;
+    }
     /**
      * Represents a chatbotbob.command.Command that Ends ChatBot input
      * @author James Chin
@@ -82,7 +96,10 @@ public class ChatBotBob {
                         I won't leave until you say a proper goodbye! >:( Usage: bye""");
             } else {
                 ui.printText(GOODBYE_STRING);
-                isFinished = true;
+
+                if (cleanUp()) {
+                    onBye.run();
+                }
             }
             return true;
         }

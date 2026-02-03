@@ -1,11 +1,10 @@
 package chatbotbob.command;
 import java.util.Arrays;
 
-import chatbotbob.service.UiInterface;
 import chatbotbob.task.core.util.Task;
 import chatbotbob.task.core.util.TodoTask;
 import chatbotbob.task.service.TaskListInterface;
-
+import chatbotbob.ui.UiInterface;
 
 /**
  * Represents a Command that Adds a ToDo Task
@@ -35,9 +34,9 @@ public class CommandAddToDo extends Command {
     }
 
     protected void printAddedTask(Task taskToAdd, UiInterface ui) {
-        ui.printText("You will do your tasks after adding them... Right...?");
-        ui.printText("  " + taskToAdd);
-        ui.printText("You have " + taskList.size() + " tasks remaining");
+        ui.printText(new StringBuilder().append("You will do your tasks after adding them... Right...?\n ")
+                .append(taskToAdd).append("You have ").append(taskList.size())
+                .append(" tasks remaining").toString());
     }
 
     /**

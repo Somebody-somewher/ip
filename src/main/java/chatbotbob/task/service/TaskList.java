@@ -3,7 +3,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-import chatbotbob.service.UiInterface;
 import chatbotbob.task.core.util.Task;
 
 /**
@@ -36,13 +35,6 @@ public class TaskList implements TaskListInterface {
     @Override
     public void addTask(Task task) {
         taskList.add(task);
-    }
-
-    @Override
-    public void printAllTasks(UiInterface ui) {
-        for (int i = 1; i < taskList.size() + 1; i++) {
-            ui.printText(i + ". " + taskList.get(i - 1));
-        }
     }
 
     @Override
