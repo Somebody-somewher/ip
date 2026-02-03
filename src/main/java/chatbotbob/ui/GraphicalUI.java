@@ -3,12 +3,14 @@ import java.io.IOException;
 import java.util.function.Consumer;
 
 import chatbotbob.Main;
-import chatbotbob.service.ParserInterface;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 
-
+/**
+ * Represents a central module to handle a Graphical User Interface
+ * specifically for the JavaFX requirement
+ */
 public class GraphicalUI implements UiInterface {
     private static final String WELCOME_STRING = """
              Wazzup! I'm Bob. ChatBot Bob :D
@@ -18,12 +20,14 @@ public class GraphicalUI implements UiInterface {
     private FXMLLoader fxmlLoader;
     private AnchorPane mainWindow;
 
+    /**
+     * Creates a GraphicalUI instance and loads the fxmlLoader
+     */
     public GraphicalUI() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/view/MainWindow.fxml"));
 
         this.mainWindow = fxmlLoader.load();
         this.fxmlLoader = fxmlLoader;
-        //(parser);
     }
 
     @Override

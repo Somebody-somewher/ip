@@ -1,12 +1,14 @@
 package chatbotbob;
+import java.io.IOException;
 
 import chatbotbob.ui.GraphicalUI;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-
+/**
+ * A Main Class that coordinates the GUI and the ChatBot functionality
+ */
 public class Main extends Application {
 
     @Override

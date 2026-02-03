@@ -1,6 +1,6 @@
 package chatbotbob.ui;
+import java.util.function.Consumer;
 
-import chatbotbob.service.ParserInterface;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -9,7 +9,6 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
-import java.util.function.Consumer;
 
 /**
  * Controller for the main GUI.

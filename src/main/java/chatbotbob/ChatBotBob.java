@@ -7,7 +7,6 @@ import chatbotbob.service.Parser;
 import chatbotbob.service.ParserInterface;
 import chatbotbob.task.service.TaskManager;
 import chatbotbob.task.service.TaskManagerInterface;
-import chatbotbob.ui.Ui;
 import chatbotbob.ui.UiInterface;
 
 /**
@@ -23,6 +22,14 @@ public class ChatBotBob {
     /** For the goodbye command to end the bot */
     private static boolean isFinished = false;
 
+    /**
+     * Links the ui to the ChatBot functionality
+     * as well as accepts an OnBye Runnable Function that
+     * executes on the GoodBye command.
+     *
+     * @param ui The Ui as provided by the Main Class
+     * @param onBye Function to run when Bye Command executed
+     */
     public ChatBotBob(UiInterface ui, Runnable onBye) {
 
         tm.loadTasks();
@@ -37,6 +44,12 @@ public class ChatBotBob {
         this.onBye = onBye;
     }
 
+
+    /**
+     * Cleans up and Saves Takes when ChatBot has finished executing
+     *
+     * @return True if Task Saving and clean up successful. False otherwise
+     */
     public static boolean cleanUp() {
         try {
             tm.saveTasks();

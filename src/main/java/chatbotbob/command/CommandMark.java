@@ -1,7 +1,7 @@
 package chatbotbob.command;
 
-import chatbotbob.ui.UiInterface;
 import chatbotbob.task.service.TaskListInterface;
+import chatbotbob.ui.UiInterface;
 
 /**
  * Represents a Command that Marks a Task

@@ -1,8 +1,8 @@
 package chatbotbob.command;
 
-import chatbotbob.ui.UiInterface;
 import chatbotbob.task.core.util.Task;
 import chatbotbob.task.service.TaskListInterface;
+import chatbotbob.ui.UiInterface;
 
 /**
  * Represents a Command that Deletes a Task

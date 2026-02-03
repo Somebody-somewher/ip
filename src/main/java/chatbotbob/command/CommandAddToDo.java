@@ -1,11 +1,10 @@
 package chatbotbob.command;
 import java.util.Arrays;
 
-import chatbotbob.ui.UiInterface;
 import chatbotbob.task.core.util.Task;
 import chatbotbob.task.core.util.TodoTask;
 import chatbotbob.task.service.TaskListInterface;
-
+import chatbotbob.ui.UiInterface;
 
 /**
  * Represents a Command that Adds a ToDo Task

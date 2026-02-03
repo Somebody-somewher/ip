@@ -2,7 +2,6 @@ package chatbotbob.task.service;
 
 import java.util.function.Consumer;
 
-import chatbotbob.ui.UiInterface;
 import chatbotbob.task.core.util.Task;
 
 /**

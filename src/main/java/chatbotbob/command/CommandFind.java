@@ -2,8 +2,8 @@ package chatbotbob.command;
 
 import java.util.Arrays;
 
-import chatbotbob.ui.UiInterface;
 import chatbotbob.task.service.TaskListInterface;
+import chatbotbob.ui.UiInterface;
 
 
 /**

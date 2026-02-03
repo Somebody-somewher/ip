@@ -1,7 +1,5 @@
 package chatbotbob.service;
 
-import chatbotbob.ui.UiInterface;
-
 /**
  * Represents an abstraction that takes in User Input, processes it,
  * then executes ChatBot functionality accordingly.
