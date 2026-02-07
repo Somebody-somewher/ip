@@ -46,7 +46,6 @@ public class Parser implements ParserInterface {
     public void processCommand(String userInputString) {
         String[] userInputStringArr = userInputString.split(" ");
 
-        // Go through every single command to see if any command matches
         try {
             Command c = commandMapping.get(userInputStringArr[0]);
             if (!Objects.isNull(c)) {

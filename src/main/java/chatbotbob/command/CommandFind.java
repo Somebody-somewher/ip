@@ -10,7 +10,7 @@ import chatbotbob.ui.UiInterface;
  * Represents a Command that Lists out all ChatBot Tasks
  */
 public class CommandFind extends Command {
-    private static final String CMDPHRASE = "find";
+    private static final String CMD_PHRASE = "find";
     private TaskListInterface taskList;
 
 
@@ -31,7 +31,7 @@ public class CommandFind extends Command {
      */
     @Override
     public String getCmdPhrase() {
-        return CMDPHRASE;
+        return CMD_PHRASE;
     }
 
     /**
@@ -53,9 +53,9 @@ public class CommandFind extends Command {
         StringBuilder sb = new StringBuilder();
         sb.append("Let's see what matches...\n");
 
-        taskList.forEach(t -> {
-            if (t.partialMatch(nameToCheck)) {
-                sb.append(t.toString()).append("\n");
+        taskList.forEach(task -> {
+            if (task.partialMatch(nameToCheck)) {
+                sb.append(task.toString()).append("\n");
             }
         });
 

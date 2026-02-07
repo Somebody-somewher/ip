@@ -15,7 +15,7 @@ import chatbotbob.ui.UiInterface;
 public class ChatBotBob {
 
     private static UiInterface ui;
-    private static TaskManagerInterface tm = new TaskManager();
+    private static TaskManagerInterface taskManager = new TaskManager();
     private static ParserInterface parser;
     private static Runnable onBye;
 
@@ -32,13 +32,13 @@ public class ChatBotBob {
      */
     public ChatBotBob(UiInterface ui, Runnable onBye) {
 
-        tm.loadTasks();
+        taskManager.loadTasks();
 
         ArrayList<Command> commands = new ArrayList<>();
         commands.add(new CommandBye());
-        commands.addAll(tm.getCommands());
+        commands.addAll(taskManager.getCommands());
 
-        parser = new Parser(commands, ui);
+        this.parser = new Parser(commands, ui);
         ui.printGreeting();
         this.ui = ui;
         this.onBye = onBye;
@@ -52,7 +52,7 @@ public class ChatBotBob {
      */
     public static boolean cleanUp() {
         try {
-            tm.saveTasks();
+            taskManager.saveTasks();
             isFinished = true;
             return true;
         } catch (IOException e) {

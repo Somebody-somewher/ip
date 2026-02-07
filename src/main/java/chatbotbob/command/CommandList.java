@@ -7,7 +7,7 @@ import chatbotbob.ui.UiInterface;
  * Represents a Command that Lists out all ChatBot Tasks
  */
 public class CommandList extends Command {
-    private static final String CMDPHRASE = "list";
+    private static final String CMD_PHRASE = "list";
     private TaskListInterface taskList;
 
     /**
@@ -27,7 +27,7 @@ public class CommandList extends Command {
      */
     @Override
     public String getCmdPhrase() {
-        return CMDPHRASE;
+        return CMD_PHRASE;
     }
 
     /**

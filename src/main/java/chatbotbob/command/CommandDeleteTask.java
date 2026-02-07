@@ -8,7 +8,7 @@ import chatbotbob.ui.UiInterface;
  * Represents a Command that Deletes a Task
  */
 public class CommandDeleteTask extends CommandSelectTask {
-    private static final String CMDPHRASE = "delete";
+    private static final String CMD_PHRASE = "delete";
 
     /**
      * Creates a CommandDeleteTask with the Chatbot's Task List
@@ -27,7 +27,7 @@ public class CommandDeleteTask extends CommandSelectTask {
      */
     @Override
     public String getCmdPhrase() {
-        return CMDPHRASE;
+        return CMD_PHRASE;
     }
 
 

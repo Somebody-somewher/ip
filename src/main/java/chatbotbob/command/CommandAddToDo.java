@@ -10,7 +10,7 @@ import chatbotbob.ui.UiInterface;
  * Represents a Command that Adds a ToDo Task
  */
 public class CommandAddToDo extends Command {
-    private static final String CMDPHRASE = "todo";
+    private static final String CMD_PHRASE = "todo";
     protected TaskListInterface taskList;
 
     /**
@@ -30,7 +30,7 @@ public class CommandAddToDo extends Command {
      */
     @Override
     public String getCmdPhrase() {
-        return CMDPHRASE;
+        return CMD_PHRASE;
     }
 
     protected void printAddedTask(Task taskToAdd, UiInterface ui) {
