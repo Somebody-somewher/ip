@@ -48,6 +48,14 @@ public class MainWindow extends AnchorPane {
      */
     @FXML
     private void handleUserInput() {
+
+        // Check the images actually exist
+        assert(userImage != null);
+        assert(bobImage != null);
+
+        // Check if this Main Window was initialized properly to read data
+        assert(commandParser != null);
+
         String userInput = userInputField.getText();
         dialogContainer.getChildren().add(DialogBox.getUserDialog(userInput, userImage));
         commandParser.accept(userInput);
