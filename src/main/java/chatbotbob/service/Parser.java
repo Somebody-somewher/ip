@@ -28,6 +28,11 @@ public class Parser implements ParserInterface {
      */
     public Parser(List<Command> commands, UiInterface ui) {
         commandMapping = new HashMap<>();
+
+        // Ensure command list exists and is not empty
+        assert(commands != null);
+        assert(commands.isEmpty());
+
         for (Command c : commands) {
             commandMapping.put(c.getCmdPhrase(), c);
         }
