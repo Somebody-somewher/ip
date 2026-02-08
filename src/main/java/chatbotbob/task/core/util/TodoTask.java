@@ -1,14 +1,12 @@
 package chatbotbob.task.core.util;
 
+import chatbotbob.task.service.TaskEncoderInterface;
+
 import java.util.ArrayList;
 
 /**
  * Represents a TodoTask that can be stored in the ChatBot.
  * This type task has No Time requirement
- *
- * @author James Chin
- * @version 1.0
- * @since 1.0
  */
 public class TodoTask extends Task {
     /**
@@ -20,7 +18,7 @@ public class TodoTask extends Task {
         super(name);
     }
 
-    private TodoTask(String[] encodedAttributes) {
+    private TodoTask(String[] encodedAttributes) throws IndexOutOfBoundsException {
         super(encodedAttributes);
     }
 
@@ -40,20 +38,22 @@ public class TodoTask extends Task {
      * @return the Task as an encoded String
      */
     @Override
-    public String encodeTask() {
-        ArrayList<String> serializedParams = getBaseEncodedAttributes();
-        serializedParams.add(0, "T");
-        return joinEncodedAttributes(serializedParams);
+    public String encodeTask(TaskEncoderInterface taskEncoder) {
+        ArrayList<String> attributes = getBaseAttributes();
+        attributes.add(0, "T");
+        return taskEncoder.encodeAttributesOfTask(attributes);
     }
 
     /**
      * Decodes and Returns a TodoTask from an encoded TodoTask (a String)
      *
      * @param encodedTask the encoded Task
+     * @param taskEncoder the encoder used for encoding / decoding Tasks
      * @return A TodoTask instance
      */
-    public static TodoTask decodeTask(String encodedTask) {
-        String[] attributes = splitAttributesFromEncodedTask(encodedTask);
+    public static TodoTask decodeTask(String encodedTask, TaskEncoderInterface taskEncoder)
+            throws IndexOutOfBoundsException {
+        String[] attributes = taskEncoder.decodeEncodedTaskIntoAttributes(encodedTask);
         return new TodoTask(attributes);
     }
 

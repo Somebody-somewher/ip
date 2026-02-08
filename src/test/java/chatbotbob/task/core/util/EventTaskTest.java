@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.DateTimeException;
 
+import chatbotbob.task.service.TaskEncoder;
 import org.junit.jupiter.api.Test;
 
 
@@ -60,10 +61,11 @@ public class EventTaskTest {
 
     @Test
     public void encodeDecodeTest() {
+        TaskEncoder te = new TaskEncoder();
         EventTask toEncode = new EventTask("CorrectEvent", "2027-02-27", "2028-02-29");
-        String encodedTask = toEncode.encodeTask();
+        String encodedTask = toEncode.encodeTask(te);
         System.out.println(encodedTask);
-        EventTask decodedTask = EventTask.decodeTask(encodedTask);
+        EventTask decodedTask = EventTask.decodeTask(encodedTask, te);
         assertTrue(toEncode.equals(decodedTask));
     }
 
