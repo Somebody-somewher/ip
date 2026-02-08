@@ -40,8 +40,8 @@ public class EventTask extends Task {
      */
     private EventTask(String[] encodedAttributes) throws DateTimeException, InvalidDateOrderException {
         super(encodedAttributes);
-        this.startDateTime = LocalDate.parse(decodeAttribute(encodedAttributes[NUMBASESERIALIZEDPARAMS + 1]));
-        this.endDateTime = LocalDate.parse(decodeAttribute(encodedAttributes[NUMBASESERIALIZEDPARAMS + 2]));
+        this.startDateTime = LocalDate.parse(decodeAttribute(encodedAttributes[NUMBER_OF_BASE_TASK_ATTRIBUTES + 1]));
+        this.endDateTime = LocalDate.parse(decodeAttribute(encodedAttributes[NUMBER_OF_BASE_TASK_ATTRIBUTES + 2]));
 
         if (this.endDateTime.isBefore(this.startDateTime)) {
             throw new InvalidDateOrderException("The Start Date is after the End Date!");

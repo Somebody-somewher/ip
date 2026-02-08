@@ -7,10 +7,10 @@ import java.util.List;
  * Represents an abstract Task that can be stored in the ChatBot.
  */
 public abstract class Task {
-    protected static final int NUMBASESERIALIZEDPARAMS = 2;
-    private static final String SERIALIZEDELIMIT = " | ";
-    private static final String SERIALIZEDELIMITREGEX = " \\| ";
-    private static final String SERIALIZEDELIMITCHAR = "|";
+    protected static final int NUMBER_OF_BASE_TASK_ATTRIBUTES = 2;
+    private static final String ENCODER_DELIMITER = " | ";
+    private static final String ENCODER_DELIMIT_REGEX = " \\| ";
+    private static final String ENCODER_DELIMITER_CHAR = "|";
 
 
     private String name;
@@ -25,7 +25,7 @@ public abstract class Task {
     }
 
     protected Task(String[] encodedAttributes) throws ArrayIndexOutOfBoundsException {
-        this.name = decodeAttribute(encodedAttributes[NUMBASESERIALIZEDPARAMS]);
+        this.name = decodeAttribute(encodedAttributes[NUMBER_OF_BASE_TASK_ATTRIBUTES]);
         this.isComplete = encodedAttributes[1].equals("1");
     }
 
@@ -74,7 +74,7 @@ public abstract class Task {
      * @return the Task as an encoded String
      */
     protected String joinEncodedAttributes(List<String> strings) {
-        return String.join(SERIALIZEDELIMIT, strings);
+        return String.join(ENCODER_DELIMITER, strings);
     }
 
     /**
@@ -86,7 +86,7 @@ public abstract class Task {
      * @return the attributes of the decoded Task
      */
     protected static String[] splitAttributesFromEncodedTask(String encodedTask) {
-        return encodedTask.split(SERIALIZEDELIMITREGEX);
+        return encodedTask.split(ENCODER_DELIMIT_REGEX);
     }
 
     /**
@@ -110,7 +110,7 @@ public abstract class Task {
      * @return the encoded attribute
      */
     protected String encodeAttribute(String s) {
-        return s.replace(SERIALIZEDELIMITCHAR, "\\" + SERIALIZEDELIMITCHAR);
+        return s.replace(ENCODER_DELIMITER_CHAR, "\\" + ENCODER_DELIMITER_CHAR);
     }
 
     /**
@@ -120,7 +120,7 @@ public abstract class Task {
      * @return the attribute decoded
      */
     protected String decodeAttribute(String s) {
-        return s.replace("\\" + SERIALIZEDELIMITCHAR, SERIALIZEDELIMITCHAR);
+        return s.replace("\\" + ENCODER_DELIMITER_CHAR, ENCODER_DELIMITER_CHAR);
     }
 
     /**

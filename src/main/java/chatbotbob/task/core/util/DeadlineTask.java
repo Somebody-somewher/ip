@@ -26,7 +26,7 @@ public class DeadlineTask extends Task {
     private DeadlineTask(String[] encodedAttributes) throws DateTimeException {
         super(encodedAttributes);
         this.endDateTime = LocalDate.parse(
-                decodeAttribute(encodedAttributes[NUMBASESERIALIZEDPARAMS + 1]));
+                decodeAttribute(encodedAttributes[NUMBER_OF_BASE_TASK_ATTRIBUTES + 1]));
     }
 
     /**

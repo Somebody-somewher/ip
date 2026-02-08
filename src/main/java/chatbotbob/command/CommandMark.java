@@ -7,7 +7,7 @@ import chatbotbob.ui.UiInterface;
  * Represents a Command that Marks a Task
  */
 public class CommandMark extends CommandSelectTask {
-    private static final String CMDPHRASE = "mark";
+    private static final String CMD_PHRASE = "mark";
     /**
      * Creates a CommandMark with the Chatbot's Task List
      *
@@ -25,7 +25,7 @@ public class CommandMark extends CommandSelectTask {
      */
     @Override
     public String getCmdPhrase() {
-        return CMDPHRASE;
+        return CMD_PHRASE;
     }
 
 
@@ -35,6 +35,7 @@ public class CommandMark extends CommandSelectTask {
      *
      * @param arguments Arguments as supplied by user input
      * @return True if executed correctly, False otherwise
+     * @throws CommandInvalidArgumentException if any of the arguments provided are invalid
      */
     public boolean execute(String[] arguments, UiInterface ui) throws CommandInvalidArgumentException {
 

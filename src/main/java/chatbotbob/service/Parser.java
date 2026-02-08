@@ -37,12 +37,12 @@ public class Parser implements ParserInterface {
             commandMapping.put(c.getCmdPhrase(), c);
         }
 
-        ui.parseInput(this::processCommand);
+        ui.onInput(this::processCommand);
         this.ui = ui;
     }
 
     /**
-     * Queries for User Input, then checks if the input matches any known
+     * Checks if the input matches any known
      * Commands. If there is a match, the command is executed.
      *
      * @param userInputString the user input provided as a String
@@ -51,7 +51,6 @@ public class Parser implements ParserInterface {
     public void processCommand(String userInputString) {
         String[] userInputStringArr = userInputString.split(" ");
 
-        // Go through every single command to see if any command matches
         try {
             Command c = commandMapping.get(userInputStringArr[0]);
             if (!Objects.isNull(c)) {

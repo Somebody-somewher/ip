@@ -30,14 +30,12 @@ public class Storage implements StorageInterface {
     private static final List<Function<TaskListInterface, Command>> COMMAND_LIST = new ArrayList<>();
 
     /** Map of each Task Type Prefix, use it for hashmap lookup during loading */
-    private static final Map<String, Function<String, Task>> TASK_TYPE_MAP = new HashMap<>();
-
-    private TaskListInterface taskList;
+    private static final Map<String, Function<String, Task>> TASK_TYPE_MAPPING = new HashMap<>();
 
     static {
-        TASK_TYPE_MAP.put(TodoTask.getTypePrefix(), TodoTask::decodeTask);
-        TASK_TYPE_MAP.put(DeadlineTask.getTypePrefix(), DeadlineTask::decodeTask);
-        TASK_TYPE_MAP.put(EventTask.getTypePrefix(), EventTask::decodeTask);
+        TASK_TYPE_MAPPING.put(TodoTask.getTypePrefix(), TodoTask::decodeTask);
+        TASK_TYPE_MAPPING.put(DeadlineTask.getTypePrefix(), DeadlineTask::decodeTask);
+        TASK_TYPE_MAPPING.put(EventTask.getTypePrefix(), EventTask::decodeTask);
 
         COMMAND_LIST.add(CommandAddToDo::new);
         COMMAND_LIST.add(CommandAddDeadline::new);
@@ -70,11 +68,14 @@ public class Storage implements StorageInterface {
         try {
             File taskFile = new File(FILEPATH);
             Scanner s = new Scanner(taskFile); // create a Scanner using the File as the source
+
             while (s.hasNext()) {
                 String encodedTask = s.nextLine();
-                Task task = TASK_TYPE_MAP.get(Task.extractEncodedTypePrefix(encodedTask)).apply(encodedTask);
+                Task task = TASK_TYPE_MAPPING.get(Task.extractEncodedTypePrefix(encodedTask)).apply(encodedTask);
                 taskList.addTask(task);
             }
+
+            s.close();
         } catch (FileNotFoundException ignored) {
             taskList.clearTasks();
         }

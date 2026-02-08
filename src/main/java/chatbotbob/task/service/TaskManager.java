@@ -8,7 +8,7 @@ import chatbotbob.command.CommandDeleteTask;
 import chatbotbob.command.CommandFind;
 import chatbotbob.command.CommandList;
 import chatbotbob.command.CommandMark;
-import chatbotbob.command.CommandUnMark;
+import chatbotbob.command.CommandUnmark;
 
 /**
  * Represents an abstraction class that handles all Task related
@@ -42,7 +42,7 @@ public class TaskManager implements TaskManagerInterface {
         commands.add(new CommandList(taskList));
         commands.add(new CommandDeleteTask(taskList));
         commands.add(new CommandMark(taskList));
-        commands.add(new CommandUnMark(taskList));
+        commands.add(new CommandUnmark(taskList));
         commands.add(new CommandFind(taskList));
         commands.addAll(storage.getRelevantCommands(taskList));
 

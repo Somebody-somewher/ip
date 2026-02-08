@@ -12,7 +12,7 @@ import chatbotbob.ui.UiInterface;
  * Represents a Command that Adds an Event Task
  */
 public class CommandAddEvent extends CommandAddToDo {
-    private static final String CMDPHRASE = "event";
+    private static final String CMD_PHRASE = "event";
 
     /**
      * Creates a CommandAddEvent with the Chatbot's Task List
@@ -31,7 +31,7 @@ public class CommandAddEvent extends CommandAddToDo {
      */
     @Override
     public String getCmdPhrase() {
-        return CMDPHRASE;
+        return CMD_PHRASE;
     }
 
     /**
@@ -40,6 +40,7 @@ public class CommandAddEvent extends CommandAddToDo {
      *
      * @param arguments Arguments as supplied by user input
      * @return True if executed correctly, False otherwise
+     * @throws CommandInvalidArgumentException if any of the arguments provided are invalid
      */
     public boolean execute(String[] arguments, UiInterface ui) throws CommandInvalidArgumentException {
         int argumentsLength = arguments.length;

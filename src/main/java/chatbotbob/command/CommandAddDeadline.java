@@ -13,7 +13,7 @@ import chatbotbob.ui.UiInterface;
  * Represents a Command that Adds a Deadline Task
  */
 public class CommandAddDeadline extends CommandAddToDo {
-    private static final String CMDPHRASE = "deadline";
+    private static final String CMD_PHRASE = "deadline";
 
     /**
      * Creates a CommandAddDeadline with the Chatbot's Task List
@@ -32,7 +32,7 @@ public class CommandAddDeadline extends CommandAddToDo {
      */
     @Override
     public String getCmdPhrase() {
-        return CMDPHRASE;
+        return CMD_PHRASE;
     }
 
     /**
@@ -41,6 +41,7 @@ public class CommandAddDeadline extends CommandAddToDo {
      *
      * @param arguments Arguments as supplied by user input
      * @return True if executed correctly, False otherwise
+     * @throws CommandInvalidArgumentException if any of the arguments provided are invalid
      */
     public boolean execute(String[] arguments, UiInterface ui) throws CommandInvalidArgumentException {
         int argumentsLength = arguments.length;

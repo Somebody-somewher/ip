@@ -6,15 +6,15 @@ import chatbotbob.ui.UiInterface;
 /**
  * Represents a Command that Unmarks a Task
  */
-public class CommandUnMark extends CommandSelectTask {
-    private static final String CMDPHRASE = "unmark";
+public class CommandUnmark extends CommandSelectTask {
+    private static final String CMD_PHRASE = "unmark";
 
     /**
      * Creates a CommandMark with the Chatbot's Task List
      *
      * @param taskList The task lists
      */
-    public CommandUnMark(TaskListInterface taskList) {
+    public CommandUnmark(TaskListInterface taskList) {
         super(taskList);
     }
 
@@ -26,7 +26,7 @@ public class CommandUnMark extends CommandSelectTask {
      */
     @Override
     public String getCmdPhrase() {
-        return CMDPHRASE;
+        return CMD_PHRASE;
     }
 
 
@@ -36,6 +36,7 @@ public class CommandUnMark extends CommandSelectTask {
      *
      * @param arguments Arguments as supplied by user input
      * @return True if executed correctly, False otherwise
+     * @throws CommandInvalidArgumentException if any of the arguments provided are invalid
      */
     public boolean execute(String[] arguments, UiInterface ui) throws CommandInvalidArgumentException {
 
