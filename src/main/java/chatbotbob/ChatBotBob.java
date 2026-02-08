@@ -39,9 +39,10 @@ public class ChatBotBob {
         commands.addAll(taskManager.getCommands());
 
         this.parser = new Parser(commands, ui);
-        ui.printGreeting();
         this.ui = ui;
         this.onBye = onBye;
+
+        ui.printGreeting();
     }
 
 

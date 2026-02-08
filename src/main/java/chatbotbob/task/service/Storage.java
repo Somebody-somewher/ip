@@ -32,8 +32,6 @@ public class Storage implements StorageInterface {
     /** Map of each Task Type Prefix, use it for hashmap lookup during loading */
     private static final Map<String, Function<String, Task>> TASK_TYPE_MAPPING = new HashMap<>();
 
-    private TaskListInterface taskList;
-
     static {
         TASK_TYPE_MAPPING.put(TodoTask.getTypePrefix(), TodoTask::decodeTask);
         TASK_TYPE_MAPPING.put(DeadlineTask.getTypePrefix(), DeadlineTask::decodeTask);

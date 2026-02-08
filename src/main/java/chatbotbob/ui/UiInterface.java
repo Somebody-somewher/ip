@@ -32,5 +32,5 @@ public interface UiInterface {
      *
      * @param c the consumer to handle the input
      */
-    public void parseInput(Consumer<String> c);
+    public void onInput(Consumer<String> c);
 }

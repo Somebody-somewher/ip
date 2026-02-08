@@ -32,12 +32,12 @@ public class Parser implements ParserInterface {
             commandMapping.put(c.getCmdPhrase(), c);
         }
 
-        ui.parseInput(this::processCommand);
+        ui.onInput(this::processCommand);
         this.ui = ui;
     }
 
     /**
-     * Queries for User Input, then checks if the input matches any known
+     * Checks if the input matches any known
      * Commands. If there is a match, the command is executed.
      *
      * @param userInputString the user input provided as a String

@@ -36,6 +36,7 @@ public abstract class Command {
      *
      * @param arguments Arguments as supplied by user input
      * @return True if executed correctly, False otherwise
+     * @throws CommandInvalidArgumentException if any of the arguments provided are invalid
      */
     public abstract boolean execute(String[] arguments, UiInterface ui) throws CommandInvalidArgumentException;
 
@@ -46,6 +47,7 @@ public abstract class Command {
      *
      * @param input Array of words that was provided as user input
      * @return True if a match is found, False if not
+     * @throws CommandInvalidArgumentException if any of the arguments provided are invalid
      */
     public boolean executeOnMatch(String[] input, UiInterface ui) throws CommandInvalidArgumentException {
         if (matches(input)) {

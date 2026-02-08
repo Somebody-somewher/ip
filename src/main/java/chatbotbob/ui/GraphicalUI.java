@@ -52,7 +52,7 @@ public class GraphicalUI implements UiInterface {
      * @param c the consumer to handle the input
      */
     @Override
-    public void parseInput(Consumer<String> c) {
+    public void onInput(Consumer<String> c) {
         fxmlLoader.<MainWindow>getController().setParser(c);
     }
 
