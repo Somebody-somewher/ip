@@ -1,5 +1,8 @@
 package chatbotbob.task.core.util;
 
+import chatbotbob.task.service.TaskEncoder;
+import chatbotbob.task.service.TaskEncoderInterface;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,31 +10,32 @@ import java.util.List;
  * Represents an abstract Task that can be stored in the ChatBot.
  */
 public abstract class Task {
-    protected static final int NUMBER_OF_BASE_TASK_ATTRIBUTES = 2;
-    private static final String ENCODER_DELIMITER = " | ";
-    private static final String ENCODER_DELIMIT_REGEX = " \\| ";
-    private static final String ENCODER_DELIMITER_CHAR = "|";
-
+    protected static final int NUMBER_OF_BASE_TASK_ATTRIBUTES = 3;
 
     private String name;
     private boolean isComplete;
+    private ArrayList<String> tags;
+
     /**
      * Creates an Incomplete Task with the specified name
      *
      * @param name The name of the Task
      */
     public Task(String name) {
-        this(name, false);
+        this(name, false, new ArrayList<>());
     }
 
-    protected Task(String[] encodedAttributes) throws ArrayIndexOutOfBoundsException {
-        this.name = decodeAttribute(encodedAttributes[NUMBER_OF_BASE_TASK_ATTRIBUTES]);
-        this.isComplete = encodedAttributes[1].equals("1");
+    protected Task(String[] attributes) throws ArrayIndexOutOfBoundsException {
+        this.name = attributes[2];
+        this.isComplete = attributes[1].equals("1");
+        String[] tempArray = attributes[NUMBER_OF_BASE_TASK_ATTRIBUTES].split(",");
+        this.tags = new ArrayList<String>(List.of(tempArray));
     }
 
-    private Task(String name, boolean isComplete) {
+    private Task(String name, boolean isComplete, ArrayList<String> tags) {
         this.name = name;
         this.isComplete = isComplete;
+        this.tags = tags;
     }
 
     /**
@@ -49,6 +53,25 @@ public abstract class Task {
     }
 
     /**
+     * Add tags to the Task
+     *
+     * @param tagName the name of the Tag to add
+     */
+    public void addTag(String tagName) {
+        tags.add(tagName);
+    }
+
+    /**
+     * Delete tags to the Task
+     *
+     * @param tagName the name of the Tag to delete
+     */
+    public void deleteTag(String tagName) {
+        tags.remove(tagName);
+    }
+
+
+    /**
      * Returns the Task's name and its complete status
      *
      * @return the Task represented as a String
@@ -60,67 +83,24 @@ public abstract class Task {
     /**
      * Encodes the Task into a String to be written into a file
      *
+     * @param taskEncoder the encoder used for encoding the Task into a String
      * @return the Task as an encoded String
      */
-    public abstract String encodeTask();
+    public abstract String encodeTask(TaskEncoderInterface taskEncoder);
 
     /**
-     * Joins the encoded attributes of a Task together to form an Encoded String, ready
-     * to be written to a file.
-     * This function exists as a wrapper for String.join(), abstracting the behaviour of
-     * how the Encoding works away from the subclasses
-     *
-     * @param strings The List of attributes to encode together
-     * @return the Task as an encoded String
-     */
-    protected String joinEncodedAttributes(List<String> strings) {
-        return String.join(ENCODER_DELIMITER, strings);
-    }
-
-    /**
-     * Decodes an Encoded Task into different attributes
-     * This function exists as a wrapper for String.split(), abstracting the behaviour of
-     * how the Decoding works away from the subclasses
-     *
-     * @param encodedTask The encoded String that represents a Task
-     * @return the attributes of the decoded Task
-     */
-    protected static String[] splitAttributesFromEncodedTask(String encodedTask) {
-        return encodedTask.split(ENCODER_DELIMIT_REGEX);
-    }
-
-    /**
-     * Get the Base Encoded attributes of the superclass Task.
+     * Get the Base Attributes of the superclass Task.
      * This abstracts the behaviour of how the base attributes are prepared
      * (in the superclass) from the subclasses
      *
      * @return the attributes of the decoded Task
      */
-    protected ArrayList<String> getBaseEncodedAttributes() {
-        ArrayList<String> list = new ArrayList<String>();
-        list.add((isComplete ? "1" : "0"));
-        list.add(encodeAttribute(this.name));
-        return list;
-    }
-
-    /**
-     * Encodes a Single attribute to be written into a file
-     *
-     * @param s the encoded attribute as a String
-     * @return the encoded attribute
-     */
-    protected String encodeAttribute(String s) {
-        return s.replace(ENCODER_DELIMITER_CHAR, "\\" + ENCODER_DELIMITER_CHAR);
-    }
-
-    /**
-     * Decodes an Encoded Single attribute to be used for Task Creation
-     *
-     * @param s the attribute to be decoded as a String
-     * @return the attribute decoded
-     */
-    protected String decodeAttribute(String s) {
-        return s.replace("\\" + ENCODER_DELIMITER_CHAR, ENCODER_DELIMITER_CHAR);
+    protected ArrayList<String> getBaseAttributes() {
+        ArrayList<String> attributes = new ArrayList<String>();
+        attributes.add((isComplete ? "1" : "0"));
+        attributes.add(this.name);
+        attributes.add(this.tags.toString());
+        return attributes;
     }
 
     /**

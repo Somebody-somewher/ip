@@ -1,5 +1,7 @@
 package chatbotbob.task.core.util;
 
+import chatbotbob.task.service.TaskEncoderInterface;
+
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -18,15 +20,14 @@ public class DeadlineTask extends Task {
      * @param name The name of the Task
      * @param endDateTime The end DateTime of the Task
      */
-    public DeadlineTask(String name, String endDateTime) throws DateTimeException {
+    public DeadlineTask(String name, String endDateTime) throws IndexOutOfBoundsException, DateTimeException {
         super(name);
         this.endDateTime = LocalDate.parse(endDateTime);
     }
 
-    private DeadlineTask(String[] encodedAttributes) throws DateTimeException {
+    private DeadlineTask(String[] encodedAttributes) throws IndexOutOfBoundsException, DateTimeException {
         super(encodedAttributes);
-        this.endDateTime = LocalDate.parse(
-                decodeAttribute(encodedAttributes[NUMBER_OF_BASE_TASK_ATTRIBUTES + 1]));
+        this.endDateTime = LocalDate.parse(encodedAttributes[NUMBER_OF_BASE_TASK_ATTRIBUTES + 1]);
     }
 
     /**
@@ -46,11 +47,11 @@ public class DeadlineTask extends Task {
      * @return the Task as an encoded String
      */
     @Override
-    public String encodeTask() throws DateTimeException {
-        ArrayList<String> serializedParams = getBaseEncodedAttributes();
-        serializedParams.add(0, "D");
-        serializedParams.add(encodeAttribute(this.endDateTime.toString()));
-        return joinEncodedAttributes(serializedParams);
+    public String encodeTask(TaskEncoderInterface taskEncoder) {
+        ArrayList<String> attributes = getBaseAttributes();
+        attributes.add(0, "D");
+        attributes.add(this.endDateTime.toString());
+        return taskEncoder.encodeAttributesOfTask(attributes);
     }
 
     /**
@@ -59,8 +60,9 @@ public class DeadlineTask extends Task {
      * @param encodedTask the encoded Task
      * @return A DeadlineTask instance.
      */
-    public static DeadlineTask decodeTask(String encodedTask) {
-        String[] attributes = splitAttributesFromEncodedTask(encodedTask);
+    public static DeadlineTask decodeTask(String encodedTask, TaskEncoderInterface taskEncoder)
+            throws IndexOutOfBoundsException, DateTimeException {
+        String[] attributes = taskEncoder.decodeEncodedTaskIntoAttributes(encodedTask);
         return new DeadlineTask(attributes);
     }
 

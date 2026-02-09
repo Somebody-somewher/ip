@@ -3,11 +3,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.DateTimeException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import chatbotbob.command.Command;
@@ -30,9 +32,12 @@ public class Storage implements StorageInterface {
     private static final List<Function<TaskListInterface, Command>> COMMAND_LIST = new ArrayList<>();
 
     /** Map of each Task Type Prefix, use it for hashmap lookup during loading */
-    private static final Map<String, Function<String, Task>> TASK_TYPE_MAPPING = new HashMap<>();
+    private static final Map<String, BiFunction<String, TaskEncoderInterface, Task>> TASK_TYPE_MAPPING;
+
+    private TaskEncoderInterface encoder = new TaskEncoder();
 
     static {
+        TASK_TYPE_MAPPING = new HashMap<>();
         TASK_TYPE_MAPPING.put(TodoTask.getTypePrefix(), TodoTask::decodeTask);
         TASK_TYPE_MAPPING.put(DeadlineTask.getTypePrefix(), DeadlineTask::decodeTask);
         TASK_TYPE_MAPPING.put(EventTask.getTypePrefix(), EventTask::decodeTask);
@@ -51,7 +56,7 @@ public class Storage implements StorageInterface {
     public void writeToFile(TaskListInterface taskList) throws IOException {
         ArrayList<String> stringArray = new ArrayList<>();
 
-        taskList.forEach(t -> stringArray.add(t.encodeTask()));
+        taskList.forEach(t -> stringArray.add(t.encodeTask(encoder)));
 
         FileWriter fw = new FileWriter(FILEPATH);
         fw.write(String.join("\n", stringArray));
@@ -65,18 +70,29 @@ public class Storage implements StorageInterface {
      */
     @Override
     public void readFromFile(TaskListInterface taskList) {
+        String encodedTask = "";
         try {
             File taskFile = new File(FILEPATH);
             Scanner s = new Scanner(taskFile); // create a Scanner using the File as the source
 
             while (s.hasNext()) {
-                String encodedTask = s.nextLine();
-                Task task = TASK_TYPE_MAPPING.get(Task.extractEncodedTypePrefix(encodedTask)).apply(encodedTask);
+                encodedTask = s.nextLine();
+                Task task = TASK_TYPE_MAPPING.get(
+                        Task.extractEncodedTypePrefix(encodedTask)).apply(encodedTask, encoder);
                 taskList.addTask(task);
             }
 
             s.close();
-        } catch (FileNotFoundException ignored) {
+            return;
+        } catch (FileNotFoundException e) {
+            System.out.println("ERROR: Failed to Load Task from File, File does not exist!");
+            System.out.println(e.getMessage());
+        } catch (IndexOutOfBoundsException | DateTimeException | EventTask.InvalidDateOrderException e) {
+            System.out.println("ERROR: Failed to Load Task from File, One of the tasks is invalid");
+            System.out.println("Faulty Task: " + encodedTask);
+            System.out.println(e.getMessage());
+
+            System.out.println("Defaulting to an empty Task List");
             taskList.clearTasks();
         }
 

@@ -1,5 +1,7 @@
 package chatbotbob.task.core.util;
 
+import chatbotbob.task.service.TaskEncoderInterface;
+
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -22,13 +24,13 @@ public class EventTask extends Task {
      * @param endDateTime The end DateTime of the Task
      */
     public EventTask(String name, String startDateTime, String endDateTime)
-            throws DateTimeException, InvalidDateOrderException {
+            throws IndexOutOfBoundsException, DateTimeException, InvalidDateOrderException {
         super(name);
         this.startDateTime = LocalDate.parse(startDateTime);
         this.endDateTime = LocalDate.parse(endDateTime);
 
         if (this.endDateTime.isBefore(this.startDateTime)) {
-            throw new InvalidDateOrderException("The Start Date is after the End Date!");
+            throw new InvalidDateOrderException("The Start Date is after the End Date for Task: " + name);
         }
     }
 
@@ -40,8 +42,8 @@ public class EventTask extends Task {
      */
     private EventTask(String[] encodedAttributes) throws DateTimeException, InvalidDateOrderException {
         super(encodedAttributes);
-        this.startDateTime = LocalDate.parse(decodeAttribute(encodedAttributes[NUMBER_OF_BASE_TASK_ATTRIBUTES + 1]));
-        this.endDateTime = LocalDate.parse(decodeAttribute(encodedAttributes[NUMBER_OF_BASE_TASK_ATTRIBUTES + 2]));
+        this.startDateTime = LocalDate.parse(encodedAttributes[NUMBER_OF_BASE_TASK_ATTRIBUTES + 1]);
+        this.endDateTime = LocalDate.parse(encodedAttributes[NUMBER_OF_BASE_TASK_ATTRIBUTES + 2]);
 
         if (this.endDateTime.isBefore(this.startDateTime)) {
             throw new InvalidDateOrderException("The Start Date is after the End Date!");
@@ -66,12 +68,12 @@ public class EventTask extends Task {
      * @return the Task as an encoded String
      */
     @Override
-    public String encodeTask() {
-        ArrayList<String> encodedAttributes = getBaseEncodedAttributes();
-        encodedAttributes.add(0, "E");
-        encodedAttributes.add(encodeAttribute(this.startDateTime.toString()));
-        encodedAttributes.add(encodeAttribute(this.endDateTime.toString()));
-        return joinEncodedAttributes(encodedAttributes);
+    public String encodeTask(TaskEncoderInterface taskEncoder) {
+        ArrayList<String> attributes = getBaseAttributes();
+        attributes.add(0, "E");
+        attributes.add(this.startDateTime.toString());
+        attributes.add(this.endDateTime.toString());
+        return taskEncoder.encodeAttributesOfTask(attributes);
     }
 
     /**
@@ -80,8 +82,9 @@ public class EventTask extends Task {
      * @param encodedTask the encoded Task
      * @return An EventTask instance.
      */
-    public static EventTask decodeTask(String encodedTask) throws DateTimeException, InvalidDateOrderException {
-        String[] attributes = splitAttributesFromEncodedTask(encodedTask);
+    public static EventTask decodeTask(String encodedTask, TaskEncoderInterface taskEncoder)
+            throws IndexOutOfBoundsException, DateTimeException, InvalidDateOrderException {
+        String[] attributes = taskEncoder.decodeEncodedTaskIntoAttributes(encodedTask);
         return new EventTask(attributes);
     }
 
