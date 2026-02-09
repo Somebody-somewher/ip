@@ -4,8 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.DateTimeException;
 
-import chatbotbob.task.service.TaskEncoder;
 import org.junit.jupiter.api.Test;
+
+import chatbotbob.task.service.TaskEncoder;
 
 
 public class EventTaskTest {
