@@ -1,11 +1,10 @@
 package chatbotbob.task.core.util;
-
-import chatbotbob.task.service.TaskEncoderInterface;
-
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+
+import chatbotbob.task.service.TaskEncoderInterface;
 
 /**
  * Represents a EventTask that can be stored in the ChatBot.

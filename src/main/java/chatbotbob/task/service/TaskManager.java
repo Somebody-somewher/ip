@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import chatbotbob.command.Command;
+import chatbotbob.command.CommandAddTag;
+import chatbotbob.command.CommandDeleteTag;
 import chatbotbob.command.CommandDeleteTask;
 import chatbotbob.command.CommandFind;
 import chatbotbob.command.CommandList;
@@ -15,7 +17,6 @@ import chatbotbob.command.CommandUnmark;
  * functionality
  */
 public class TaskManager implements TaskManagerInterface {
-
     private StorageInterface storage;
     private TaskListInterface taskList;
 
@@ -42,6 +43,8 @@ public class TaskManager implements TaskManagerInterface {
         commands.add(new CommandList(taskList));
         commands.add(new CommandDeleteTask(taskList));
         commands.add(new CommandMark(taskList));
+        commands.add(new CommandAddTag(taskList));
+        commands.add(new CommandDeleteTag(taskList));
         commands.add(new CommandUnmark(taskList));
         commands.add(new CommandFind(taskList));
         commands.addAll(storage.getRelevantCommands(taskList));

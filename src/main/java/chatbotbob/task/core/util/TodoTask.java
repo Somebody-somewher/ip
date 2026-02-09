@@ -1,8 +1,7 @@
 package chatbotbob.task.core.util;
+import java.util.ArrayList;
 
 import chatbotbob.task.service.TaskEncoderInterface;
-
-import java.util.ArrayList;
 
 /**
  * Represents a TodoTask that can be stored in the ChatBot.

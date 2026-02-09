@@ -1,10 +1,9 @@
 package chatbotbob.task.core.util;
+import java.util.ArrayList;
+import java.util.Arrays;
 
-import chatbotbob.task.service.TaskEncoder;
 import chatbotbob.task.service.TaskEncoderInterface;
 
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Represents an abstract Task that can be stored in the ChatBot.
@@ -28,8 +27,15 @@ public abstract class Task {
     protected Task(String[] attributes) throws ArrayIndexOutOfBoundsException {
         this.name = attributes[2];
         this.isComplete = attributes[1].equals("1");
-        String[] tempArray = attributes[NUMBER_OF_BASE_TASK_ATTRIBUTES].split(",");
-        this.tags = new ArrayList<String>(List.of(tempArray));
+        String tagString = attributes[NUMBER_OF_BASE_TASK_ATTRIBUTES]
+                .replaceAll("^\\[|\\]$|[|\\s]", "");
+
+        if (!tagString.equals("")) {
+            this.tags = new ArrayList<String>(Arrays.asList(tagString.split(",")));
+        } else {
+            this.tags = new ArrayList<>();
+        }
+
     }
 
     private Task(String name, boolean isComplete, ArrayList<String> tags) {
@@ -65,11 +71,11 @@ public abstract class Task {
      * Delete tags to the Task
      *
      * @param tagName the name of the Tag to delete
+     * @return True if the tag exists, else False
      */
-    public void deleteTag(String tagName) {
-        tags.remove(tagName);
+    public boolean deleteTag(String tagName) {
+        return tags.remove(tagName);
     }
-
 
     /**
      * Returns the Task's name and its complete status
@@ -77,7 +83,11 @@ public abstract class Task {
      * @return the Task represented as a String
      */
     public String toString() {
-        return "[" + (isComplete ? "X" : " ") + "] " + this.name;
+        String string = "[" + (isComplete ? "X" : " ") + "] " + this.name + "\n";
+        if (!tags.isEmpty()) {
+            string = string + "Tags: " + this.tags.toString();
+        }
+        return string;
     }
 
     /**
