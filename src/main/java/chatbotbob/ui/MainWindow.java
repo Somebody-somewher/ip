@@ -1,4 +1,5 @@
 package chatbotbob.ui;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 import javafx.fxml.FXML;
@@ -38,6 +39,10 @@ public class MainWindow extends AnchorPane {
         this.commandParser = commandParser;
     }
 
+    public boolean isInitialized() {
+        return !Objects.isNull(commandParser);
+    }
+
     public void showText(String text) {
         dialogContainer.getChildren().add(DialogBox.getBotDialog(text, bobImage));
     }
@@ -52,9 +57,6 @@ public class MainWindow extends AnchorPane {
         // Check the images actually exist
         assert(userImage != null);
         assert(bobImage != null);
-
-        // Check if this Main Window was initialized properly to read data
-        assert(commandParser != null);
 
         String userInput = userInputField.getText();
         dialogContainer.getChildren().add(DialogBox.getUserDialog(userInput, userImage));

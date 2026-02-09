@@ -33,4 +33,6 @@ public interface UiInterface {
      * @param c the consumer to handle the input
      */
     public void onInput(Consumer<String> c);
+
+    public boolean isInitialized();
 }

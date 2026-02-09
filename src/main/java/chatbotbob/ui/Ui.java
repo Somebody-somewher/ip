@@ -63,4 +63,8 @@ public class Ui implements UiInterface {
     public void onInput(Consumer<String> c) {
         c.accept(reader.nextLine());
     }
+
+    public boolean isInitialized() {
+        return true;
+    }
 }

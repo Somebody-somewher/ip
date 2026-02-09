@@ -56,6 +56,11 @@ public class GraphicalUI implements UiInterface {
         fxmlLoader.<MainWindow>getController().setParser(c);
     }
 
+    @Override
+    public boolean isInitialized() {
+        return fxmlLoader.<MainWindow>getController().isInitialized();
+    }
+
     public Pane getMainWindow() {
         return mainWindow;
     }

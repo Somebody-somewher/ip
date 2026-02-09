@@ -17,6 +17,7 @@ public class Main extends Application {
             GraphicalUI ui = new GraphicalUI();
             Scene scene = new Scene(ui.getMainWindow());
             ChatBotBob bob = new ChatBotBob(ui, stage::close);
+            assert(ui.isInitialized());
 
             stage.setScene(scene);
             stage.show();
