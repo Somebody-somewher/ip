@@ -28,7 +28,6 @@ public class CommandMark extends CommandSelectTask {
         return CMD_PHRASE;
     }
 
-
     /**
      * Executes a specified functionality, then Returns
      * True if execution was successful. False otherwise
