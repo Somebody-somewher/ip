@@ -2,6 +2,9 @@ package chatbotbob.task.service;
 
 import java.util.List;
 
+/**
+ * Represents an Encoder that encodes Task Attributes into the Save File
+ */
 public interface TaskEncoderInterface {
 
     /**

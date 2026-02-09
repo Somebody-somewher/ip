@@ -4,6 +4,10 @@ import chatbotbob.task.core.util.Task;
 import chatbotbob.task.service.TaskListInterface;
 import chatbotbob.ui.UiInterface;
 
+
+/**
+ * Represents a Command that allows you to delete a Tag
+ */
 public class CommandDeleteTag extends CommandSelectTask {
     private static final String CMD_PHRASE = "delete-tag";
     private TaskListInterface taskList;
