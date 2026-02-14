@@ -50,7 +50,8 @@ public class CommandDeleteTask extends CommandSelectTask {
 
         ui.printText(new StringBuilder().append("As you command my liege! Say goodbye to: \n ")
                 .append(taskToDelete).append("\nYou now have ")
-                .append(taskList.size()).append(" tasks remaining").toString());
+                .append(taskList.size()).append(" tasks remaining").toString(),
+                UiInterface.ColourOptions.COMMAND_COLOUR_PINK);
 
 
         return true;

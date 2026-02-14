@@ -43,8 +43,8 @@ public class MainWindow extends AnchorPane {
         return !Objects.isNull(commandParser);
     }
 
-    public void showText(String text) {
-        dialogContainer.getChildren().add(DialogBox.getBotDialog(text, bobImage));
+    public void showText(String text, UiInterface.ColourOptions colour) {
+        dialogContainer.getChildren().add(DialogBox.getBotDialog(text, bobImage, colour));
     }
 
     /**
@@ -59,7 +59,8 @@ public class MainWindow extends AnchorPane {
         assert(bobImage != null);
 
         String userInput = userInputField.getText();
-        dialogContainer.getChildren().add(DialogBox.getUserDialog(userInput, userImage));
+        dialogContainer.getChildren().add(DialogBox.getUserDialog(userInput, userImage,
+                UiInterface.ColourOptions.COMMAND_COLOUR_DEFAULT));
         commandParser.accept(userInput);
         userInputField.clear();
     }

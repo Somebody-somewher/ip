@@ -8,6 +8,14 @@ import java.util.function.Consumer;
  */
 public interface UiInterface {
 
+    public enum ColourOptions {
+        ERROR_COLOUR,
+        COMMAND_COLOUR_DEFAULT,
+        COMMAND_COLOUR_BLUE,
+        COMMAND_COLOUR_YELLOW,
+        COMMAND_COLOUR_GREEN,
+        COMMAND_COLOUR_PINK
+    }
     /**
      * Prints a greeting that appears immediately upon turning on
      * the Chatbot
@@ -24,6 +32,8 @@ public interface UiInterface {
      *
      * @param text text to be echoed
      */
+    public void printText(String text, ColourOptions colour);
+
     public void printText(String text);
 
     /**

@@ -49,9 +49,15 @@ public class Ui implements UiInterface {
      * @param text text to be echoed
      */
     @Override
-    public void printText(String text) {
+    public void printText(String text, ColourOptions colour) {
         System.out.println(text);
     }
+
+    @Override
+    public void printText(String text) {
+        printText(text, ColourOptions.COMMAND_COLOUR_DEFAULT);
+    }
+
 
     /**
      * Retrieves (mostly command) input from user

@@ -32,7 +32,7 @@ public class GraphicalUI implements UiInterface {
 
     @Override
     public void printGreeting() {
-        fxmlLoader.<MainWindow>getController().showText(WELCOME_STRING);
+        fxmlLoader.<MainWindow>getController().showText(WELCOME_STRING, ColourOptions.COMMAND_COLOUR_DEFAULT);
     }
 
     @Override
@@ -41,8 +41,13 @@ public class GraphicalUI implements UiInterface {
     }
 
     @Override
+    public void printText(String text, ColourOptions colour) {
+        fxmlLoader.<MainWindow>getController().showText(text, colour);
+    }
+
+    @Override
     public void printText(String text) {
-        fxmlLoader.<MainWindow>getController().showText(text);
+        printText(text, ColourOptions.COMMAND_COLOUR_DEFAULT);
     }
 
     /**
