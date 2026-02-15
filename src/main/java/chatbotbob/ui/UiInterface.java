@@ -8,6 +8,10 @@ import java.util.function.Function;
  */
 public interface UiInterface {
 
+    /**
+     * Represents the different colour options
+     * for the textbox of the ChatBot
+     */
     public enum ColourOptions {
         ERROR_COLOUR,
         COMMAND_COLOUR_DEFAULT,
