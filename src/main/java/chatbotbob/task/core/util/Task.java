@@ -59,7 +59,7 @@ public abstract class Task {
     }
 
     /**
-     * Add tags to the Task
+     * Adds tags to the Task
      *
      * @param tagName the name of the Tag to add
      */
@@ -68,7 +68,7 @@ public abstract class Task {
     }
 
     /**
-     * Delete tags to the Task
+     * Deletes tags to the Task
      *
      * @param tagName the name of the Tag to delete
      * @return True if the tag exists, else False
@@ -99,7 +99,7 @@ public abstract class Task {
     public abstract String encodeTask(TaskEncoderInterface taskEncoder);
 
     /**
-     * Get the Base Attributes of the superclass Task.
+     * Gets the Base Attributes of the superclass Task.
      * This abstracts the behaviour of how the base attributes are prepared
      * (in the superclass) from the subclasses
      *

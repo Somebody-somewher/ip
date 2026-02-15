@@ -51,8 +51,37 @@ public class CommandAddEvent extends CommandAddToDo {
                     Invalid arguments! Usage: event <task-name> /from <datetime> /to <datetime>""");
         }
 
+        int[] indexes = findFromAndTo(arguments);
+
+        // Check if those indexes are valid
+        if (indexes[0] == -1 || indexes[1] == -1) {
+            throw new CommandInvalidArgumentException("""
+                    Invalid arguments! Usage: event <task-name> /from <datetime> /to <datetime>""");
+        }
+
+        // Extract the task name, end date and start date from the command
+        String taskName = String.join(" ", Arrays.copyOfRange(arguments, 1, indexes[0]));
+        String taskDurationStart = String.join(" ", Arrays.copyOfRange(arguments, indexes[0] + 1, indexes[1]));
+        String taskDurationEnd = String.join(" ", Arrays.copyOfRange(arguments, indexes[1] + 1, argumentsLength));
+
+
+        try {
+            Task taskToAdd = new EventTask(taskName, taskDurationStart, taskDurationEnd);
+            taskList.addTask(taskToAdd);
+            printAddedTask(taskToAdd, ui);
+            return true;
+        } catch (DateTimeException e) {
+            throw new CommandInvalidArgumentException("That ain't a date I understand :<, try YYYY-MM-DD");
+        } catch (EventTask.InvalidDateOrderException e3) {
+            throw new CommandInvalidArgumentException("Not Allowed! (>.<) : " + e3.getMessage());
+        }
+
+    }
+
+    private int[] findFromAndTo(String[] arguments) throws CommandInvalidArgumentException {
         int fromIndex = -1;
         int toIndex = -1;
+        int argumentsLength = arguments.length;
         for (int i = 1; i < argumentsLength - 1; i += 1) {
 
             // Find the position of /from
@@ -74,29 +103,7 @@ public class CommandAddEvent extends CommandAddToDo {
                 break;
             }
         }
-
-        // Check if those indexes are valid
-        if (fromIndex == -1 || toIndex == -1) {
-            throw new CommandInvalidArgumentException("""
-                    Invalid arguments! Usage: event <task-name> /from <datetime> /to <datetime>""");
-        }
-
-        // Extract the task name, end date and start date from the command
-        String taskName = String.join(" ", Arrays.copyOfRange(arguments, 1, fromIndex));
-        String taskDurationStart = String.join(" ", Arrays.copyOfRange(arguments, fromIndex + 1, toIndex));
-        String taskDurationEnd = String.join(" ", Arrays.copyOfRange(arguments, toIndex + 1, argumentsLength));
-
-
-        try {
-            Task taskToAdd = new EventTask(taskName, taskDurationStart, taskDurationEnd);
-            taskList.addTask(taskToAdd);
-            printAddedTask(taskToAdd, ui);
-            return true;
-        } catch (DateTimeException e) {
-            throw new CommandInvalidArgumentException("That ain't a date I understand :<, try YYYY-MM-DD");
-        } catch (EventTask.InvalidDateOrderException e3) {
-            throw new CommandInvalidArgumentException("Not Allowed! (>.<) : " + e3.getMessage());
-        }
-
+        int[] indexes = {fromIndex, toIndex};
+        return indexes;
     }
 }

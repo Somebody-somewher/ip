@@ -22,7 +22,6 @@ public class TaskEncoder implements TaskEncoderInterface {
     public String encodeAttributesOfTask(List<String> strings) {
         List<String> encodedAttributes = strings.stream().map(this::encodeSingleAttribute).toList();
         return String.join(ENCODER_DELIMITER, encodedAttributes);
-        //return String.join(ENCODER_DELIMITER, strings);
     }
 
     /**
