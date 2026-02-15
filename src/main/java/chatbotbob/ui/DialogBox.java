@@ -61,6 +61,9 @@ public class DialogBox extends HBox {
 
     public void setDialogStyle(UiInterface.ColourOptions colour) {
         switch(colour) {
+        case ERROR_COLOUR:
+            dialog.getStyleClass().add("error-label");
+            break;
         case COMMAND_COLOUR_GREEN:
             dialog.getStyleClass().add("green-label");
             break;
@@ -70,10 +73,16 @@ public class DialogBox extends HBox {
         case COMMAND_COLOUR_PINK:
             dialog.getStyleClass().add("pink-label");
             break;
-
         case COMMAND_COLOUR_DEFAULT:
+            // Do nothing
+            break;
         default:
-                // Do nothing
+            // Every case should be handled by this styling
+            assert(false);
         }
+    }
+
+    public void updateStyleAsError() {
+        dialog.getStyleClass().add("error-label");
     }
 }

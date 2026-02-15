@@ -10,6 +10,7 @@ public interface ParserInterface {
      * Commands. If there is a match, the command is executed.
      *
      * @param s User Input as a String
+     * @return True if the process successfully parses, False otherwise
      */
-    public void processCommand(String s);
+    public boolean processCommand(String s);
 }

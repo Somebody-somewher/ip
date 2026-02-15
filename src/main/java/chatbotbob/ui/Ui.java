@@ -2,6 +2,7 @@ package chatbotbob.ui;
 
 import java.util.Scanner;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * Represents an abstraction class that handles User Input
@@ -61,13 +62,13 @@ public class Ui implements UiInterface {
 
     /**
      * Retrieves (mostly command) input from user
-     * and sends the input to a Consumer for processing
+     * and sends the input to a Functor for processing
      *
-     * @param c the consumer to handle the input
+     * @param f the functor to handle the input, returns True if valid command
      */
     @Override
-    public void onInput(Consumer<String> c) {
-        c.accept(reader.nextLine());
+    public void onInput(Function<String, Boolean> f) {
+        f.apply(reader.nextLine());
     }
 
     public boolean isInitialized() {

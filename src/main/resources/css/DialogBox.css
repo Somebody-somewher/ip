@@ -41,3 +41,7 @@
 .pink-label {
     -fx-background-color: lightpink;
 }
+
+.error-label {
+    -fx-background-color: indianred;
+}

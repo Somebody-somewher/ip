@@ -42,20 +42,23 @@ public class Parser implements ParserInterface {
      * Commands. If there is a match, the command is executed.
      *
      * @param userInputString the user input provided as a String
+     * @return True if the process successfully parses, False otherwise
      */
     @Override
-    public void processCommand(String userInputString) {
+    public boolean processCommand(String userInputString) {
         String[] userInputStringArr = userInputString.split(" ");
 
         try {
             Command c = commandMapping.get(userInputStringArr[0]);
             if (!Objects.isNull(c)) {
                 c.executeOnMatch(userInputStringArr, ui);
-                return;
+                return true;
             }
         } catch (Command.CommandInvalidArgumentException e) {
-            ui.printText(e.getMessage());
+            ui.printText(e.getMessage(), UiInterface.ColourOptions.ERROR_COLOUR);
+            return false;
         }
         ui.printSeparator();
+        return false;
     }
 }

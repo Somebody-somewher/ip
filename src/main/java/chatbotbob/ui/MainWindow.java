@@ -1,6 +1,7 @@
 package chatbotbob.ui;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -24,7 +25,7 @@ public class MainWindow extends AnchorPane {
     @FXML
     private Button sendButton;
 
-    private Consumer<String> commandParser;
+    private Function<String, Boolean> commandParser;
 
     private Image userImage = new Image(this.getClass().getResourceAsStream("/images/DaUser.png"));
     private Image bobImage = new Image(this.getClass().getResourceAsStream("/images/DaBob.png"));
@@ -35,7 +36,7 @@ public class MainWindow extends AnchorPane {
     }
 
     /** Injects the Parser for Input */
-    public void setParser(Consumer<String> commandParser) {
+    public void setParser(Function<String, Boolean> commandParser) {
         this.commandParser = commandParser;
     }
 
@@ -59,9 +60,14 @@ public class MainWindow extends AnchorPane {
         assert(bobImage != null);
 
         String userInput = userInputField.getText();
-        dialogContainer.getChildren().add(DialogBox.getUserDialog(userInput, userImage,
-                UiInterface.ColourOptions.COMMAND_COLOUR_DEFAULT));
-        commandParser.accept(userInput);
+
+        DialogBox dialogBox = DialogBox.getUserDialog(userInput, userImage,
+                UiInterface.ColourOptions.COMMAND_COLOUR_DEFAULT);
+
+        dialogContainer.getChildren().add(dialogBox);
+        if (!commandParser.apply(userInput)) {
+            dialogBox.updateStyleAsError();
+        }
         userInputField.clear();
     }
 }
