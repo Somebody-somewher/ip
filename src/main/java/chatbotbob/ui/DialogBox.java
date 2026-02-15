@@ -23,7 +23,7 @@ public class DialogBox extends HBox {
     @FXML
     private ImageView displayPicture;
 
-    private DialogBox(String text, Image img) {
+    private DialogBox(String text, Image img, UiInterface.ColourOptions colour) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(MainWindow.class.getResource("/view/DialogBox.fxml"));
             fxmlLoader.setController(this);
@@ -34,6 +34,7 @@ public class DialogBox extends HBox {
         }
 
         dialog.setText(text);
+        this.setDialogStyle(colour);
         displayPicture.setImage(img);
     }
 
@@ -41,19 +42,47 @@ public class DialogBox extends HBox {
      * Flips the dialog box such that the ImageView is on the left and text on the right.
      */
     private void flip() {
+        dialog.getStyleClass().add("reply-label");
         ObservableList<Node> tmp = FXCollections.observableArrayList(this.getChildren());
         Collections.reverse(tmp);
         getChildren().setAll(tmp);
         setAlignment(Pos.TOP_RIGHT);
     }
 
-    public static DialogBox getUserDialog(String text, Image img) {
-        return new DialogBox(text, img);
+    public static DialogBox getUserDialog(String text, Image img, UiInterface.ColourOptions colour) {
+        return new DialogBox(text, img, colour);
     }
 
-    public static DialogBox getBotDialog(String text, Image img) {
-        var db = new DialogBox(text, img);
+    public static DialogBox getBotDialog(String text, Image img, UiInterface.ColourOptions colour) {
+        var db = new DialogBox(text, img, colour);
         db.flip();
         return db;
+    }
+
+    public void setDialogStyle(UiInterface.ColourOptions colour) {
+        switch(colour) {
+        case ERROR_COLOUR:
+            dialog.getStyleClass().add("error-label");
+            break;
+        case COMMAND_COLOUR_GREEN:
+            dialog.getStyleClass().add("green-label");
+            break;
+        case COMMAND_COLOUR_YELLOW:
+            dialog.getStyleClass().add("yellow-label");
+            break;
+        case COMMAND_COLOUR_PINK:
+            dialog.getStyleClass().add("pink-label");
+            break;
+        case COMMAND_COLOUR_DEFAULT:
+            // Do nothing
+            break;
+        default:
+            // Every case should be handled by this styling
+            assert(false);
+        }
+    }
+
+    public void updateStyleAsError() {
+        dialog.getStyleClass().add("error-label");
     }
 }

@@ -19,6 +19,8 @@ public class Main extends Application {
             ChatBotBob bob = new ChatBotBob(ui, stage::close);
             assert(ui.isInitialized());
 
+            stage.setMinHeight(440);
+            stage.setMinWidth(440);
             stage.setScene(scene);
             stage.show();
             stage.setOnCloseRequest(e -> ChatBotBob.cleanUp());

@@ -46,7 +46,7 @@ public class CommandAddTag extends CommandSelectTask {
 
         Task selectedTask = getSpecificTask(arguments[1]);
         selectedTask.addTag(arguments[2]);
-        ui.printText("Tagged: " + selectedTask.toString());
+        ui.printText("Tagged: " + selectedTask.toString(), UiInterface.ColourOptions.COMMAND_COLOUR_YELLOW);
         return true;
     }
 }

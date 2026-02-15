@@ -1,6 +1,6 @@
 package chatbotbob.ui;
 import java.io.IOException;
-import java.util.function.Consumer;
+import java.util.function.Function;
 
 import chatbotbob.Main;
 import javafx.fxml.FXMLLoader;
@@ -32,7 +32,7 @@ public class GraphicalUI implements UiInterface {
 
     @Override
     public void printGreeting() {
-        fxmlLoader.<MainWindow>getController().showText(WELCOME_STRING);
+        fxmlLoader.<MainWindow>getController().showText(WELCOME_STRING, ColourOptions.COMMAND_COLOUR_DEFAULT);
     }
 
     @Override
@@ -41,19 +41,24 @@ public class GraphicalUI implements UiInterface {
     }
 
     @Override
+    public void printText(String text, ColourOptions colour) {
+        fxmlLoader.<MainWindow>getController().showText(text, colour);
+    }
+
+    @Override
     public void printText(String text) {
-        fxmlLoader.<MainWindow>getController().showText(text);
+        printText(text, ColourOptions.COMMAND_COLOUR_DEFAULT);
     }
 
     /**
      * Retrieves (mostly command) input from user
-     * and sends the input to a Consumer for processing
+     * and sends the input to a Functor for processing
      *
-     * @param c the consumer to handle the input
+     * @param f the functor to handle the input
      */
     @Override
-    public void onInput(Consumer<String> c) {
-        fxmlLoader.<MainWindow>getController().setParser(c);
+    public void onInput(Function<String, Boolean> f) {
+        fxmlLoader.<MainWindow>getController().setParser(f);
     }
 
     @Override

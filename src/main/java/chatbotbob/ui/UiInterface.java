@@ -1,6 +1,6 @@
 package chatbotbob.ui;
 
-import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * Represents an abstraction interface that handles User Input
@@ -8,6 +8,18 @@ import java.util.function.Consumer;
  */
 public interface UiInterface {
 
+    /**
+     * Represents the different colour options
+     * for the textbox of the ChatBot
+     */
+    public enum ColourOptions {
+        ERROR_COLOUR,
+        COMMAND_COLOUR_DEFAULT,
+        COMMAND_COLOUR_BLUE,
+        COMMAND_COLOUR_YELLOW,
+        COMMAND_COLOUR_GREEN,
+        COMMAND_COLOUR_PINK
+    }
     /**
      * Prints a greeting that appears immediately upon turning on
      * the Chatbot
@@ -24,15 +36,17 @@ public interface UiInterface {
      *
      * @param text text to be echoed
      */
+    public void printText(String text, ColourOptions colour);
+
     public void printText(String text);
 
     /**
      * Retrieves (mostly command) input from user
-     * and sends the input to a Consumer for processing
+     * and sends the input to a Functor for processing
      *
-     * @param c the consumer to handle the input
+     * @param f the functor to handle the input, returns True if valid command
      */
-    public void onInput(Consumer<String> c);
+    public void onInput(Function<String, Boolean> f);
 
     public boolean isInitialized();
 }

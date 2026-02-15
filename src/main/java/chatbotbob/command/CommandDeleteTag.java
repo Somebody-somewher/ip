@@ -43,9 +43,11 @@ public class CommandDeleteTag extends CommandSelectTask {
         Task selectedTask = getSpecificTask(arguments[1]);
 
         if (selectedTask.deleteTag(tagName)) {
-            ui.printText("Tag Deleted!: " + selectedTask.toString());
+            ui.printText("Tag Deleted!: " + selectedTask.toString(),
+                    UiInterface.ColourOptions.COMMAND_COLOUR_YELLOW);
         } else {
-            ui.printText("Tag does not exist! :<\n" + selectedTask.toString());
+            ui.printText("Tag does not exist! :<\n" + selectedTask.toString(),
+                    UiInterface.ColourOptions.COMMAND_COLOUR_YELLOW);
         }
 
         return true;
