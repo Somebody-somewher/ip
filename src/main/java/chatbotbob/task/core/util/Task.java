@@ -83,9 +83,9 @@ public abstract class Task {
      * @return the Task represented as a String
      */
     public String toString() {
-        String string = "[" + (isComplete ? "X" : " ") + "] " + this.name + "\n";
+        String string = "[" + (isComplete ? "X" : " ") + "] " + this.name;
         if (!tags.isEmpty()) {
-            string = string + "Tags: " + this.tags.toString();
+            string = string + "\nTags: " + this.tags.toString();
         }
         return string;
     }

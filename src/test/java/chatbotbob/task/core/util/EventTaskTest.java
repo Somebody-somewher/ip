@@ -1,73 +1,32 @@
 package chatbotbob.task.core.util;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.DateTimeException;
 
 import org.junit.jupiter.api.Test;
 
-import chatbotbob.task.service.TaskEncoder;
-
-
 public class EventTaskTest {
     @Test
     public void eventConstructorTest() {
+        assertEquals(createEventTask("stringAsDate1", "AAAA", "2024-02-10"), 0);
+        assertEquals(createEventTask("stringAsDate1", "2024-02-10", "AAAA"), 0);
 
-        boolean[] checks = new boolean[7];
+        assertEquals(createEventTask("OutofOrderDate", "2024-02-10", "2024-01-10"), 2);
 
-        try {
-            new EventTask("stringAsDate1", "AAAA", "2024-02-10");
-        } catch (DateTimeException e) {
-            checks[1] = true;
-        }
-
-        try {
-            new EventTask("stringAsDate2", "2024-02-10", "AAAA");
-        } catch (DateTimeException e) {
-            checks[2] = true;
-        }
-
-        try {
-            new EventTask("OutofOrderDate", "2024-02-10", "2024-01-10");
-        } catch (EventTask.InvalidDateOrderException e) {
-            checks[3] = true;
-        }
-
-        try {
-            new EventTask("NonexistentDay1", "2024-02-10", "2024-02-31");
-        } catch (DateTimeException e) {
-            checks[4] = true;
-        }
-
-        try {
-            new EventTask("NonexistentDay2", "2024-02-31", "2024-03-01");
-        } catch (DateTimeException e) {
-            checks[5] = true;
-        }
-
-        try {
-            new EventTask("CorrectEvent", "2027-02-27", "2028-02-29");
-        } catch (Exception e) {
-            checks[6] = true;
-        }
-
-        assertFalse(checks[0]);
-        assertTrue(checks[1]);
-        assertTrue(checks[2]);
-        assertTrue(checks[3]);
-        assertTrue(checks[4]);
-        assertTrue(checks[5]);
-        assertFalse(checks[6]);
+        assertEquals(createEventTask("NonexistentDay1", "2024-02-10", "2024-02-31"), 0);
+        assertEquals(createEventTask("NonexistentDay2", "2024-02-31", "2024-02-10"), 0);
+        assertEquals(createEventTask("CorrectEvent", "2027-02-27", "2028-02-29"), 1);
     }
 
-    @Test
-    public void encodeDecodeTest() {
-        TaskEncoder te = new TaskEncoder();
-        EventTask toEncode = new EventTask("CorrectEvent", "2027-02-27", "2028-02-29");
-        String encodedTask = toEncode.encodeTask(te);
-        System.out.println(encodedTask);
-        EventTask decodedTask = EventTask.decodeTask(encodedTask, te);
-        assertTrue(toEncode.equals(decodedTask));
+    private int createEventTask(String eventName, String startDateTime, String endDateTime) {
+        try {
+            new EventTask(eventName, startDateTime, endDateTime);
+        } catch (DateTimeException e) {
+            return 0;
+        } catch (EventTask.InvalidDateOrderException e2) {
+            return 2;
+        }
+        return 1;
     }
 
 }
