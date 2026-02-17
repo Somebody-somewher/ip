@@ -13,7 +13,7 @@ import chatbotbob.ui.UiInterface;
 
 public class CommandMarkTest extends CommandTest {
     @Test
-    public void taskMarkTest() {
+    public void taskMarkTest() throws TaskListInterface.TaskDuplicateException {
         commandToTest = CommandMark::new;
         UiInterface ui = new TextUi();
         TaskListInterface tli = new TaskList();

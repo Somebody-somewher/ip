@@ -16,7 +16,7 @@ public class CommandDeleteTagTest extends CommandOutputTest {
     private String stringToCheckFor;
 
     @Test
-    public void taskDeleteTagTest() {
+    public void taskDeleteTagTest() throws TaskListInterface.TaskDuplicateException {
         commandToTest = CommandDeleteTag::new;
         UiInterface ui = new TextUi();
         UiInterface outputChecker = new OutputChecker(this::checkNextOutput);
@@ -50,7 +50,7 @@ public class CommandDeleteTagTest extends CommandOutputTest {
         assertFalse(processCommand("tag-delete 1 test", tli, ui));
     }
 
-    public void newTaskTest(TaskListInterface tli, UiInterface ui) {
+    public void newTaskTest(TaskListInterface tli, UiInterface ui) throws TaskListInterface.TaskDuplicateException {
         tli.forEach(c -> System.out.println(c.toString()));
 
         setStringToCheckFor("I don't have a task with that number, you're crazy :<");
@@ -77,7 +77,8 @@ public class CommandDeleteTagTest extends CommandOutputTest {
         tli.forEach(c -> System.out.println(c.toString()));
     }
 
-    public void additionalTaskTest(TaskListInterface tli, UiInterface ui) throws TaskListInterface.TaskDuplicateException {
+    public void additionalTaskTest(TaskListInterface tli, UiInterface ui)
+            throws TaskListInterface.TaskDuplicateException {
         tli.forEach(c -> System.out.println(c.toString()));
 
         tli.addTask(new TodoTask("Test2"));

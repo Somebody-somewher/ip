@@ -45,7 +45,7 @@ public class CommandList extends Command {
         if (arguments.length != 1) {
             throw new CommandInvalidArgumentException("Invalid arguments! Usage: list");
         } else if (taskListSize == 0) {
-            throw new CommandInvalidArgumentException("No tasks for you to do. Lucky you :p");
+            output.append("No tasks for you to do. Lucky you :p");
         } else {
             for (int i = 1; i < taskListSize; i += 1) {
                 output.append(i).append(". ").append(taskList.getTask(i)).append("\n");

@@ -1,16 +1,14 @@
 package chatbotbob.command;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import chatbotbob.ui.TextUi;
 import org.junit.jupiter.api.Test;
 
-import chatbotbob.task.core.util.EventTask;
 import chatbotbob.task.core.util.TodoTask;
 import chatbotbob.task.service.TaskList;
 import chatbotbob.task.service.TaskListInterface;
 import chatbotbob.ui.OutputChecker;
+import chatbotbob.ui.TextUi;
 import chatbotbob.ui.UiInterface;
 
 
