@@ -12,7 +12,7 @@ public class EventTaskTest {
         assertEquals(0, createEventTask("stringAsDate1", "2024-02-10", "AAAA"));
 
         assertEquals(2, createEventTask("OutofOrderDate", "2024-02-10", "2024-01-10"));
-        assertEquals(2, createEventTask("OutofOrderDate2", "2024-08-14 10:30:00", "2024-08-14 12:30:00"));
+        assertEquals(2, createEventTask("OutofOrderDate2", "2024-08-14", "2024-08-14"));
 
         assertEquals(0, createEventTask("NonexistentDay1", "2024-02-10", "2024-02-31"));
         assertEquals(0, createEventTask("NonexistentDay2", "2024-02-31", "2024-02-10"));
