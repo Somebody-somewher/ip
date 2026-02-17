@@ -14,7 +14,7 @@ import chatbotbob.ui.UiInterface;
 public class CommandFindTest extends CommandOutputTest {
 
     @Test
-    public void taskFindTest() {
+    public void taskFindTest() throws TaskListInterface.TaskDuplicateException {
         commandToTest = CommandFind::new;
         UiInterface ui = new OutputChecker(this::checkNextOutput);
 
@@ -42,7 +42,7 @@ public class CommandFindTest extends CommandOutputTest {
         assertTrue(processCommand("find 0", tli, ui));
     }
 
-    public void newTaskTest(TaskListInterface tli, UiInterface ui) {
+    public void newTaskTest(TaskListInterface tli, UiInterface ui) throws TaskListInterface.TaskDuplicateException {
         tli.forEach(c -> ui.printText(c.toString()));
 
         setStringToCheckFor("Let's see what matches...\n1. [T][ ] Test Wee");

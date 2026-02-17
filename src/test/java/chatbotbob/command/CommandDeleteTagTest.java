@@ -64,6 +64,10 @@ public class CommandDeleteTagTest extends CommandOutputTest {
         tli.getTask(1).addTag("#TAG2");
 
         tli.forEach(c -> System.out.println(c.toString()));
+
+        setStringToCheckFor("Usage: delete-tag <task_no> <tag_name>");
+        assertFalse(processCommand("tag-delete 1 #INVA LID", tli, ui));
+
         setStringToCheckFor("Tag Deleted!: [T][ ] Test\nTags: [#TAG2]");
         assertTrue(processCommand("tag-delete 1 #TAG1", tli, ui));
 
@@ -73,7 +77,7 @@ public class CommandDeleteTagTest extends CommandOutputTest {
         tli.forEach(c -> System.out.println(c.toString()));
     }
 
-    public void additionalTaskTest(TaskListInterface tli, UiInterface ui) {
+    public void additionalTaskTest(TaskListInterface tli, UiInterface ui) throws TaskListInterface.TaskDuplicateException {
         tli.forEach(c -> System.out.println(c.toString()));
 
         tli.addTask(new TodoTask("Test2"));

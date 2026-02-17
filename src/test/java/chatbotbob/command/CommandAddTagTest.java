@@ -18,7 +18,7 @@ public class CommandAddTagTest extends CommandOutputTest {
     private String stringToCheckFor;
 
     @Test
-    public void taskFindTest() {
+    public void taskFindTest() throws TaskListInterface.TaskDuplicateException {
         commandToTest = CommandAddTag::new;
         UiInterface ui = new TextUi();
         UiInterface outputChecker = new OutputChecker(this::checkNextOutput);
@@ -52,7 +52,7 @@ public class CommandAddTagTest extends CommandOutputTest {
         assertFalse(processCommand("tag 1 test", tli, ui));
     }
 
-    public void newTaskTest(TaskListInterface tli, UiInterface ui) {
+    public void newTaskTest(TaskListInterface tli, UiInterface ui) throws TaskListInterface.TaskDuplicateException {
         tli.forEach(c -> System.out.println(c.toString()));
 
         setStringToCheckFor("I don't have a task with that number, you're crazy :<");
@@ -74,7 +74,7 @@ public class CommandAddTagTest extends CommandOutputTest {
         tli.forEach(c -> System.out.println(c.toString()));
     }
 
-    public void additionalTaskTest(TaskListInterface tli, UiInterface ui) {
+    public void additionalTaskTest(TaskListInterface tli, UiInterface ui) throws TaskListInterface.TaskDuplicateException {
         tli.forEach(c -> System.out.println(c.toString()));
 
         tli.addTask(new TodoTask("Test2"));

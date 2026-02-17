@@ -13,7 +13,7 @@ import chatbotbob.ui.UiInterface;
 
 public class CommandUnmarkTest extends CommandTest {
     @Test
-    public void taskMarkTest() {
+    public void taskMarkTest() throws TaskListInterface.TaskDuplicateException {
         commandToTest = CommandUnmark::new;
         UiInterface ui = new TextUi();
         TaskListInterface tli = new TaskList();
@@ -43,7 +43,7 @@ public class CommandUnmarkTest extends CommandTest {
         assertFalse(processCommand("unmark 1", tli, ui));
     }
 
-    public void newTaskTest(TaskListInterface tli, UiInterface ui) {
+    public void newTaskTest(TaskListInterface tli, UiInterface ui) throws TaskListInterface.TaskDuplicateException {
         tli.forEach(c -> ui.printText(c.toString()));
 
         tli.addTask(new TodoTask("Test"));
@@ -65,7 +65,8 @@ public class CommandUnmarkTest extends CommandTest {
 
     }
 
-    public void additionalTaskTest(TaskListInterface tli, UiInterface ui) {
+    public void additionalTaskTest(TaskListInterface tli, UiInterface ui)
+            throws TaskListInterface.TaskDuplicateException {
         tli.addTask(new TodoTask("Test2"));
         tli.getTask(1).markComplete();
         tli.forEach(c -> ui.printText(c.toString()));

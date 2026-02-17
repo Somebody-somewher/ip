@@ -1,9 +1,7 @@
 package chatbotbob.service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.lang.reflect.Array;
+import java.util.*;
 
 import chatbotbob.command.Command;
 import chatbotbob.ui.UiInterface;
@@ -47,18 +45,18 @@ public class Parser implements ParserInterface {
     @Override
     public boolean processCommand(String userInputString) {
         String[] userInputStringArr = userInputString.split(" ");
+        ArrayList<String> userInputStringList = new ArrayList<>(Arrays.asList(userInputStringArr));
+        userInputStringList.removeAll(Collections.singletonList(""));
+
+        userInputStringArr = userInputStringList.toArray(new String[0]);
 
         try {
-            Command c = commandMapping.get(userInputStringArr[0]);
-            if (!Objects.isNull(c)) {
-                c.executeOnMatch(userInputStringArr, ui);
-                return true;
-            }
+            Command c = commandMapping.get(userInputStringList.get(0));
+            c.executeOnMatch(userInputStringArr, ui);
+            return true;
         } catch (Command.CommandInvalidArgumentException e) {
             ui.printText(e.getMessage(), UiInterface.ColourOptions.ERROR_COLOUR);
             return false;
         }
-        ui.printSeparator();
-        return false;
     }
 }

@@ -1,6 +1,6 @@
 package chatbotbob.task.core.util;
 import java.time.DateTimeException;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
@@ -11,8 +11,8 @@ import chatbotbob.task.service.TaskEncoderInterface;
  * This type task has both a start and end time.
  */
 public class EventTask extends Task {
-    private LocalDate startDateTime;
-    private LocalDate endDateTime;
+    private LocalDateTime startDateTime;
+    private LocalDateTime endDateTime;
 
     /**
      * Creates an Incomplete EventTask with the
@@ -25,11 +25,11 @@ public class EventTask extends Task {
     public EventTask(String name, String startDateTime, String endDateTime)
             throws IndexOutOfBoundsException, DateTimeException, InvalidDateOrderException {
         super(name);
-        this.startDateTime = LocalDate.parse(startDateTime);
-        this.endDateTime = LocalDate.parse(endDateTime);
+        this.startDateTime = LocalDateTime.parse(startDateTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        this.endDateTime = LocalDateTime.parse(endDateTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
 
-        if (this.endDateTime.isBefore(this.startDateTime)) {
-            throw new InvalidDateOrderException("The Start Date is after the End Date for Task: " + name);
+        if (this.endDateTime.isBefore(this.startDateTime) || this.endDateTime.equals(this.startDateTime)) {
+            throw new InvalidDateOrderException("The Start Date needs to be before the End Date for Task: " + name);
         }
     }
 
@@ -41,11 +41,11 @@ public class EventTask extends Task {
      */
     private EventTask(String[] encodedAttributes) throws DateTimeException, InvalidDateOrderException {
         super(encodedAttributes);
-        this.startDateTime = LocalDate.parse(encodedAttributes[NUMBER_OF_BASE_TASK_ATTRIBUTES + 1]);
-        this.endDateTime = LocalDate.parse(encodedAttributes[NUMBER_OF_BASE_TASK_ATTRIBUTES + 2]);
+        this.startDateTime = LocalDateTime.parse(encodedAttributes[NUMBER_OF_BASE_TASK_ATTRIBUTES + 1]);
+        this.endDateTime = LocalDateTime.parse(encodedAttributes[NUMBER_OF_BASE_TASK_ATTRIBUTES + 2]);
 
-        if (this.endDateTime.isBefore(this.startDateTime)) {
-            throw new InvalidDateOrderException("The Start Date is after the End Date!");
+        if (this.endDateTime.isBefore(this.startDateTime) || this.endDateTime.equals(this.startDateTime)) {
+            throw new InvalidDateOrderException("The Start Date needs to be before the End Date!");
         }
     }
 
@@ -57,8 +57,8 @@ public class EventTask extends Task {
     @Override
     public String toString() {
         return "[E]" + super.toString()
-                + " (from: " + startDateTime.format(DateTimeFormatter.ofPattern("MMM d yyyy"))
-                + " to: " + endDateTime.format(DateTimeFormatter.ofPattern("MMM d yyyy")) + ")";
+                + " (from: " + startDateTime.format(DateTimeFormatter.ofPattern("MMM d yyyy HH:mm"))
+                + " to: " + endDateTime.format(DateTimeFormatter.ofPattern("MMM d yyyy HH:mm")) + ")";
     }
 
     /**

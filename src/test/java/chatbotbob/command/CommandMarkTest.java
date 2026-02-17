@@ -42,7 +42,7 @@ public class CommandMarkTest extends CommandTest {
         assertFalse(processCommand("mark 1", tli, ui));
     }
 
-    public void newTaskTest(TaskListInterface tli, UiInterface ui) {
+    public void newTaskTest(TaskListInterface tli, UiInterface ui) throws TaskListInterface.TaskDuplicateException {
         tli.forEach(c -> ui.printText(c.toString()));
 
         tli.addTask(new TodoTask("Test"));
@@ -57,7 +57,9 @@ public class CommandMarkTest extends CommandTest {
         tli.forEach(c -> ui.printText(c.toString()));
     }
 
-    public void additionalTaskTest(TaskListInterface tli, UiInterface ui) {
+    public void additionalTaskTest(TaskListInterface tli, UiInterface ui)
+            throws TaskListInterface.TaskDuplicateException {
+
         tli.addTask(new TodoTask("Test2"));
         tli.forEach(c -> ui.printText(c.toString()));
         assertFalse(processCommand("mark 2", tli, ui));

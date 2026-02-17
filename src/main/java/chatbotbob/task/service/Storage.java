@@ -87,7 +87,8 @@ public class Storage implements StorageInterface {
         } catch (FileNotFoundException e) {
             System.out.println("ERROR: Failed to Load Task from File, File does not exist!");
             System.out.println(e.getMessage());
-        } catch (IndexOutOfBoundsException | DateTimeException | EventTask.InvalidDateOrderException e) {
+        } catch (IndexOutOfBoundsException | DateTimeException
+                 | EventTask.InvalidDateOrderException | TaskListInterface.TaskDuplicateException e) {
             System.out.println("ERROR: Failed to Load Task from File, One of the tasks is invalid");
             System.out.println("Faulty Task: " + encodedTask);
             System.out.println(e.getMessage());
@@ -95,7 +96,6 @@ public class Storage implements StorageInterface {
             System.out.println("Defaulting to an empty Task List");
             taskList.clearTasks();
         }
-
     }
 
     /**

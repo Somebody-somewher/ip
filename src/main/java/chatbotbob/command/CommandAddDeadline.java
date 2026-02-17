@@ -76,6 +76,8 @@ public class CommandAddDeadline extends CommandAddToDo {
             printAddedTask(taskToAdd, ui);
         } catch (DateTimeException e) {
             throw new CommandInvalidArgumentException("That ain't a date I understand :<, try YYYY-MM-DD");
+        } catch (TaskListInterface.TaskDuplicateException e) {
+            throw new CommandInvalidArgumentException(e.getMessage());
         }
 
         return true;

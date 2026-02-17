@@ -1,6 +1,6 @@
 package chatbotbob.task.core.util;
 import java.time.DateTimeException;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
@@ -11,7 +11,7 @@ import chatbotbob.task.service.TaskEncoderInterface;
  * This type task has both an end time.
  */
 public class DeadlineTask extends Task {
-    private LocalDate endDateTime;
+    private LocalDateTime endDateTime;
     /**
      * Creates an Incomplete DeadlineTask with the
      * specified name and endDateTime
@@ -21,12 +21,13 @@ public class DeadlineTask extends Task {
      */
     public DeadlineTask(String name, String endDateTime) throws IndexOutOfBoundsException, DateTimeException {
         super(name);
-        this.endDateTime = LocalDate.parse(endDateTime);
+        this.endDateTime = LocalDateTime.parse(endDateTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
 
     private DeadlineTask(String[] encodedAttributes) throws IndexOutOfBoundsException, DateTimeException {
         super(encodedAttributes);
-        this.endDateTime = LocalDate.parse(encodedAttributes[NUMBER_OF_BASE_TASK_ATTRIBUTES + 1]);
+        this.endDateTime = LocalDateTime.parse(encodedAttributes[NUMBER_OF_BASE_TASK_ATTRIBUTES + 1],
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
 
     /**
@@ -37,7 +38,7 @@ public class DeadlineTask extends Task {
     @Override
     public String toString() {
         return "[D]" + super.toString() + " (by: "
-                + endDateTime.format(DateTimeFormatter.ofPattern("MMM d yyyy")) + ")";
+                + endDateTime.format(DateTimeFormatter.ofPattern("MMM d yyyy HH:mm")) + ")";
     }
 
     /**

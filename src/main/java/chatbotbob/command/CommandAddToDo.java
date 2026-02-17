@@ -53,9 +53,15 @@ public class CommandAddToDo extends Command {
         }
 
         String taskName = String.join(" ", Arrays.copyOfRange(arguments, 1, arguments.length));
-        Task taskToAdd = new TodoTask(taskName);
-        taskList.addTask(taskToAdd);
-        printAddedTask(taskToAdd, ui);
+
+        try {
+            Task taskToAdd = new TodoTask(taskName);
+            taskList.addTask(taskToAdd);
+            printAddedTask(taskToAdd, ui);
+        } catch (TaskListInterface.TaskDuplicateException e) {
+            throw new CommandInvalidArgumentException(e.getMessage());
+        }
+
         return true;
     }
 

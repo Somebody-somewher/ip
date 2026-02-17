@@ -136,6 +136,9 @@ public abstract class Task {
         return this.name.equals(t.name) && (this.isComplete == t.isComplete);
     }
 
+    public boolean hasSameName(Task t) {
+        return this.name.equals(t.name);
+    }
 
     public boolean partialMatch(String s) {
         return name.contains(s);

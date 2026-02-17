@@ -33,8 +33,14 @@ public class TaskList implements TaskListInterface {
     }
 
     @Override
-    public void addTask(Task task) {
-        taskList.add(task);
+    public void addTask(Task newTask) throws TaskDuplicateException {
+        for (int i = 0; i < taskList.size(); i += 1) {
+            if (newTask.hasSameName(taskList.get(i))) {
+                throw new TaskDuplicateException("A Task with the same name already exists\n"
+                        + (i + 1) + ". " + taskList.get(i).toString());
+            }
+        }
+        taskList.add(newTask);
     }
 
     @Override

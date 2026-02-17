@@ -64,16 +64,17 @@ public class CommandAddEvent extends CommandAddToDo {
         String taskDurationStart = String.join(" ", Arrays.copyOfRange(arguments, indexes[0] + 1, indexes[1]));
         String taskDurationEnd = String.join(" ", Arrays.copyOfRange(arguments, indexes[1] + 1, argumentsLength));
 
-
         try {
             Task taskToAdd = new EventTask(taskName, taskDurationStart, taskDurationEnd);
             taskList.addTask(taskToAdd);
             printAddedTask(taskToAdd, ui);
             return true;
         } catch (DateTimeException e) {
-            throw new CommandInvalidArgumentException("That ain't a date I understand :<, try YYYY-MM-DD");
-        } catch (EventTask.InvalidDateOrderException e3) {
-            throw new CommandInvalidArgumentException("Not Allowed! (>.<) : " + e3.getMessage());
+            throw new CommandInvalidArgumentException("That ain't a date/time I understand :<, try YYYY-MM-DD HH:mm");
+        } catch (EventTask.InvalidDateOrderException e) {
+            throw new CommandInvalidArgumentException("Not Allowed! (>.<) : " + e.getMessage());
+        } catch (TaskListInterface.TaskDuplicateException e) {
+            throw new CommandInvalidArgumentException(e.getMessage());
         }
 
     }
@@ -86,7 +87,7 @@ public class CommandAddEvent extends CommandAddToDo {
 
             // Find the position of /from
             if (arguments[i].equals("/from")) {
-                if (i == 1) {
+                if (i == 1 || fromIndex != -1) {
                     throw new CommandInvalidArgumentException("""
                             Invalid arguments! Usage: event <task-name> /from <datetime> /to <datetime>""");
                 }
