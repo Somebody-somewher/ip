@@ -1,38 +1,24 @@
 package chatbotbob.ui;
 
-import java.util.Scanner;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
- * Represents an abstraction class that handles User Input
- * and Visual Output
+ * Represents an abstraction class mainly for testing JUnit Tests
  */
-public class Ui implements UiInterface {
-    private static final String SEGMENT_SEPARATOR = """
-            – – – – – – – – – – – – – – – – – –""";
+public class OutputChecker implements UiInterface {
 
-    private static final String WELCOME_STRING = SEGMENT_SEPARATOR + """
-             \nWazzup! I'm Bob. ChatBot Bob :D
-             What can I do for you?
-             """ + SEGMENT_SEPARATOR;
-
-    private Scanner reader;
-
-    /**
-     * Creates an instance of a UI object
-     */
-    public Ui() {
-        // Read user input
-        reader = new Scanner(System.in);
+    private Consumer<String> outputComparer;
+    public OutputChecker(Consumer<String> consumer) {
+        outputComparer = consumer;
     }
-
     /**
      * Prints a greeting that appears immediately upon turning on
      * the Chatbot
      */
     @Override
     public void printGreeting() {
-        System.out.println(WELCOME_STRING);
+        return;
     }
 
     /**
@@ -40,7 +26,7 @@ public class Ui implements UiInterface {
      */
     @Override
     public void printSeparator() {
-        System.out.println(SEGMENT_SEPARATOR);
+        return;
     }
 
     /**
@@ -51,6 +37,7 @@ public class Ui implements UiInterface {
     @Override
     public void printText(String text, ColourOptions colour) {
         System.out.println(text);
+        outputComparer.accept(text);
     }
 
     @Override
@@ -67,7 +54,7 @@ public class Ui implements UiInterface {
      */
     @Override
     public void onInput(Function<String, Boolean> f) {
-        f.apply(reader.nextLine());
+        return;
     }
 
     public boolean isInitialized() {

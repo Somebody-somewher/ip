@@ -8,14 +8,15 @@ import org.junit.jupiter.api.Test;
 public class EventTaskTest {
     @Test
     public void eventConstructorTest() {
-        assertEquals(createEventTask("stringAsDate1", "AAAA", "2024-02-10"), 0);
-        assertEquals(createEventTask("stringAsDate1", "2024-02-10", "AAAA"), 0);
+        assertEquals(0, createEventTask("stringAsDate1", "AAAA", "2024-02-10"));
+        assertEquals(0, createEventTask("stringAsDate1", "2024-02-10", "AAAA"));
 
-        assertEquals(createEventTask("OutofOrderDate", "2024-02-10", "2024-01-10"), 2);
+        assertEquals(2, createEventTask("OutofOrderDate", "2024-02-10", "2024-01-10"));
+        assertEquals(2, createEventTask("OutofOrderDate2", "2024-08-14 10:30:00", "2024-08-14 12:30:00"));
 
-        assertEquals(createEventTask("NonexistentDay1", "2024-02-10", "2024-02-31"), 0);
-        assertEquals(createEventTask("NonexistentDay2", "2024-02-31", "2024-02-10"), 0);
-        assertEquals(createEventTask("CorrectEvent", "2027-02-27", "2028-02-29"), 1);
+        assertEquals(0, createEventTask("NonexistentDay1", "2024-02-10", "2024-02-31"));
+        assertEquals(0, createEventTask("NonexistentDay2", "2024-02-31", "2024-02-10"));
+        assertEquals(1, createEventTask("CorrectEvent", "2027-02-27", "2028-02-29"));
     }
 
     private int createEventTask(String eventName, String startDateTime, String endDateTime) {

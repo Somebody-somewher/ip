@@ -2,6 +2,7 @@ package chatbotbob.command;
 
 import java.util.Arrays;
 
+import chatbotbob.task.core.util.Task;
 import chatbotbob.task.service.TaskListInterface;
 import chatbotbob.ui.UiInterface;
 
@@ -43,24 +44,34 @@ public class CommandFind extends Command {
      * @throws CommandInvalidArgumentException if any of the arguments provided are invalid
      */
     public boolean execute(String[] arguments, UiInterface ui) throws CommandInvalidArgumentException {
+        int taskListSize = taskList.size();
 
         if (arguments.length < 2) {
             throw new CommandInvalidArgumentException("Invalid arguments! Usage: find <partial-task-name>");
         }
 
-
         String nameToCheck = String.join(" ", Arrays.copyOfRange(arguments, 1, arguments.length));
 
         StringBuilder sb = new StringBuilder();
-        sb.append("Let's see what matches...\n");
+        Task task;
 
-        taskList.forEach(task -> {
+        for (int i = 1; i < taskListSize; i += 1) {
+            task = taskList.getTask(i);
             if (task.partialMatch(nameToCheck)) {
-                sb.append(task.toString()).append("\n");
+                sb.append(i).append(". ").append(task.toString()).append("\n");
             }
-        });
+        }
 
-        ui.printText(sb.toString());
+        if (taskListSize != 0 && taskList.getTask(taskListSize).partialMatch(nameToCheck)) {
+            sb.append(taskListSize).append(". ").append(taskList.getTask(taskListSize));
+        }
+
+        if (!sb.isEmpty()) {
+            ui.printText("Let's see what matches...\n" + sb.toString());
+        } else {
+            ui.printText("No Match Found!");
+        }
+
         return true;
     }
 

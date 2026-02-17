@@ -1,6 +1,8 @@
 package chatbotbob.task.core.util;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import chatbotbob.task.service.TaskEncoderInterface;
 
@@ -13,7 +15,7 @@ public abstract class Task {
 
     private String name;
     private boolean isComplete;
-    private ArrayList<String> tags;
+    private Set<String> tags;
 
     /**
      * Creates an Incomplete Task with the specified name
@@ -21,7 +23,7 @@ public abstract class Task {
      * @param name The name of the Task
      */
     public Task(String name) {
-        this(name, false, new ArrayList<>());
+        this(name, false, new HashSet<>());
     }
 
     protected Task(String[] attributes) throws ArrayIndexOutOfBoundsException {
@@ -31,14 +33,14 @@ public abstract class Task {
                 .replaceAll("^\\[|\\]$|[|\\s]", "");
 
         if (!tagString.equals("")) {
-            this.tags = new ArrayList<String>(Arrays.asList(tagString.split(",")));
+            this.tags = new HashSet<>(Arrays.asList(tagString.split(",")));
         } else {
-            this.tags = new ArrayList<>();
+            this.tags = new HashSet<>();
         }
 
     }
 
-    private Task(String name, boolean isComplete, ArrayList<String> tags) {
+    private Task(String name, boolean isComplete, HashSet<String> tags) {
         this.name = name;
         this.isComplete = isComplete;
         this.tags = tags;

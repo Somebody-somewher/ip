@@ -35,13 +35,13 @@ public class CommandAddTag extends CommandSelectTask {
     public boolean execute(String[] arguments, UiInterface ui) throws CommandInvalidArgumentException {
 
         if (arguments.length != 3) {
-            throw new CommandInvalidArgumentException("Usage: tag <task_no> <tag_name>");
+            throw new CommandInvalidArgumentException("Usage: tag <task_no> <one_word_tag_name>");
         }
 
         String tagName = arguments[2];
 
         if (tagName.matches(".*[, |].*")) {
-            throw new CommandInvalidArgumentException("Invalid Tag Name! Don't include punctuation! :<");
+            throw new CommandInvalidArgumentException("Invalid Tag Name! Punctuation scares me! :<");
         }
 
         Task selectedTask = getSpecificTask(arguments[1]);
