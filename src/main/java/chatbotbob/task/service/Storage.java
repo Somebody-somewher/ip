@@ -3,6 +3,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.DateTimeException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,6 +28,7 @@ import chatbotbob.task.core.util.TodoTask;
  * are saved and loaded to file
  */
 public class Storage implements StorageInterface {
+    private static final String DATAFOLDERPATH = "./data";
     private static final String FILEPATH = "./data/tasks.txt";
 
     /** List of command constructors that are relevant to the Task Types available to this parser */
@@ -57,6 +60,8 @@ public class Storage implements StorageInterface {
         ArrayList<String> stringArray = new ArrayList<>();
 
         taskList.forEach(t -> stringArray.add(t.encodeTask(encoder)));
+
+        Files.createDirectories(Paths.get(DATAFOLDERPATH));
 
         FileWriter fw = new FileWriter(FILEPATH);
         fw.write(String.join("\n", stringArray));

@@ -57,7 +57,8 @@ public class ChatBotBob {
             isFinished = true;
             return true;
         } catch (IOException e) {
-            ui.printText(e.getMessage());
+            ui.printText("Your data is unsavable :<. Maybe this error will help\n" + e.getMessage(),
+                    UiInterface.ColourOptions.ERROR_COLOUR);
             return false;
         }
     }

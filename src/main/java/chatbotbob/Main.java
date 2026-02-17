@@ -1,6 +1,5 @@
 package chatbotbob;
 import java.io.IOException;
-import java.util.Objects;
 
 import chatbotbob.ui.GraphicalUI;
 import javafx.application.Application;
