@@ -14,7 +14,7 @@ import chatbotbob.ui.UiInterface;
 
 public class CommandDeleteTaskTest extends CommandTest {
     @Test
-    public void taskMarkTest() {
+    public void taskMarkTest() throws TaskListInterface.TaskDuplicateException {
         commandToTest = CommandDeleteTask::new;
 
         UiInterface ui = new TextUi();

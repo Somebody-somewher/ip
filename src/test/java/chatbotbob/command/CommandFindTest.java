@@ -53,7 +53,7 @@ public class CommandFindTest extends CommandOutputTest {
         assertTrue(processCommand("find Test We", tli, ui));
 
         setStringToCheckFor("Let's see what matches...\n1. [T][ ] Test Wee");
-        tli.addTask(new EventTask("Dee Tent", "2020-03-04", "2020-05-06"));
+        tli.addTask(new EventTask("Dee Tent", "2020-03-04 22:00", "2020-05-06 22:00"));
 
 
         setStringToCheckFor("No Match Found!");
@@ -61,7 +61,7 @@ public class CommandFindTest extends CommandOutputTest {
         assertTrue(processCommand("find Test Bee", tli, ui));
 
         setStringToCheckFor("Let's see what matches...\n1. [T][ ] Test Wee\n"
-                + "2. [E][ ] Dee Tent (from: Mar 4 2020 to: May 6 2020)");
+                + "2. [E][ ] Dee Tent (from: Mar 4 2020 22:00 to: May 6 2020 22:00)");
         assertTrue(processCommand("find Te", tli, ui));
         assertTrue(processCommand("find ee", tli, ui));
 
@@ -75,7 +75,8 @@ public class CommandFindTest extends CommandOutputTest {
         tli.forEach(c -> System.out.println(c.toString()));
 
         tli.popTask(1);
-        setStringToCheckFor("Let's see what matches...\n1. [E][ ] Dee Tent (from: Mar 4 2020 to: May 6 2020)");
+        setStringToCheckFor("Let's see what matches...\n"
+                + "1. [E][ ] Dee Tent (from: Mar 4 2020 22:00 to: May 6 2020 22:00)");
 
         assertTrue(processCommand("find Te", tli, ui));
         assertTrue(processCommand("find ee", tli, ui));

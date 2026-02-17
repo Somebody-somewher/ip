@@ -1,11 +1,9 @@
 package chatbotbob.command;
+import java.util.NoSuchElementException;
 
 import chatbotbob.task.core.util.Task;
 import chatbotbob.task.service.TaskListInterface;
 import chatbotbob.ui.UiInterface;
-
-import java.util.NoSuchElementException;
-
 
 /**
  * Represents a Command that allows you to delete a Tag

@@ -12,9 +12,10 @@ public class TaskEncoderTest {
     public void encodeDecodeTest() {
         TaskEncoder taskEncoder = new TaskEncoder();
 
-        EventTask eventTask = new EventTask(" | Valid | , Event | ", "2020-03-04", "2020-04-05");
+        EventTask eventTask = new EventTask(" | Valid | , Event | ", "2020-03-04 22:00",
+                "2020-04-05 22:00");
         eventTask.addTag(" | ");
-        DeadlineTask deadlineTask = new DeadlineTask("| Valid ,!.?Deadline |", "2020-03-04");
+        DeadlineTask deadlineTask = new DeadlineTask("| Valid ,!.?Deadline |", "2020-03-04 22:00");
         deadlineTask.addTag("232323");
         TodoTask todoTask = new TodoTask("| | |");
         todoTask.addTag("[HIIIII ]");

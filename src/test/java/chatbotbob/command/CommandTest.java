@@ -1,9 +1,8 @@
 package chatbotbob.command;
+import java.util.function.Function;
 
 import chatbotbob.task.service.TaskListInterface;
 import chatbotbob.ui.UiInterface;
-
-import java.util.function.Function;
 
 public abstract class CommandTest {
     protected Function<TaskListInterface, Command> commandToTest;

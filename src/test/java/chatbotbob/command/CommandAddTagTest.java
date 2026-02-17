@@ -72,7 +72,8 @@ public class CommandAddTagTest extends CommandOutputTest {
         tli.forEach(c -> System.out.println(c.toString()));
     }
 
-    public void additionalTaskTest(TaskListInterface tli, UiInterface ui) throws TaskListInterface.TaskDuplicateException {
+    public void additionalTaskTest(TaskListInterface tli, UiInterface ui)
+            throws TaskListInterface.TaskDuplicateException {
         tli.forEach(c -> System.out.println(c.toString()));
 
         tli.addTask(new TodoTask("Test2"));

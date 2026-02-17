@@ -26,8 +26,7 @@ public class DeadlineTask extends Task {
 
     private DeadlineTask(String[] encodedAttributes) throws IndexOutOfBoundsException, DateTimeException {
         super(encodedAttributes);
-        this.endDateTime = LocalDateTime.parse(encodedAttributes[NUMBER_OF_BASE_TASK_ATTRIBUTES + 1],
-                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        this.endDateTime = LocalDateTime.parse(encodedAttributes[NUMBER_OF_BASE_TASK_ATTRIBUTES + 1]);
     }
 
     /**
