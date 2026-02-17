@@ -60,8 +60,13 @@ public class MainWindow extends AnchorPane {
 
         String userInput = userInputField.getText();
 
+        if (userInput.isBlank()) {
+            return;
+        }
+
         DialogBox dialogBox = DialogBox.getUserDialog(userInput, userImage,
                 UiInterface.ColourOptions.COMMAND_COLOUR_DEFAULT);
+        // ChatBot Response will be handled by Commands
 
         dialogContainer.getChildren().add(dialogBox);
         if (!commandParser.apply(userInput)) {

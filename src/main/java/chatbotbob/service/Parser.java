@@ -60,7 +60,9 @@ public class Parser implements ParserInterface {
             return true;
         } catch (Command.CommandInvalidArgumentException e) {
             ui.printText(e.getMessage(), UiInterface.ColourOptions.ERROR_COLOUR);
-            return false;
+        } catch (NullPointerException e) {
+            ui.printText("I don't understand that command :<", UiInterface.ColourOptions.ERROR_COLOUR);
         }
+        return false;
     }
 }

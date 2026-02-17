@@ -83,7 +83,6 @@ public class Storage implements StorageInterface {
             }
 
             s.close();
-            return;
         } catch (FileNotFoundException e) {
             System.out.println("ERROR: Failed to Load Task from File, File does not exist!");
             System.out.println(e.getMessage());
