@@ -4,7 +4,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
- * Represents an abstraction class mainly for testing JUnit Tests
+ * Represents an abstraction UI class mainly for testing JUnit Tests
  */
 public class OutputChecker implements UiInterface {
 
@@ -33,6 +33,7 @@ public class OutputChecker implements UiInterface {
      * Echoes out any text provided
      *
      * @param text text to be echoed
+     * @param colour the colour of the textbox
      */
     @Override
     public void printText(String text, ColourOptions colour) {
@@ -57,6 +58,11 @@ public class OutputChecker implements UiInterface {
         return;
     }
 
+    /**
+     * Checks if UI components have been properly initialized yet
+     *
+     * @return True if UI has been initialized and ready to use
+     */
     public boolean isInitialized() {
         return true;
     }

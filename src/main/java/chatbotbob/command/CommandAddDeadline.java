@@ -51,20 +51,7 @@ public class CommandAddDeadline extends CommandAddToDo {
             throw new CommandInvalidArgumentException("Invalid arguments! Usage: deadline <task-name> /by <datetime>");
         }
 
-        int byIndex = -1;
-
-        // Find the position of /by
-        for (int i = 1; i < argumentsLength - 1; i += 1) {
-            if (arguments[i].equals("/by")) {
-                byIndex = i;
-                break;
-            }
-        }
-
-        // Check if those index found is valid
-        if (byIndex == -1 || byIndex == 1) {
-            throw new CommandInvalidArgumentException("Invalid arguments! Usage: deadline <task-name> /by <datetime>");
-        }
+        int byIndex = findIndexOfBye(arguments);
 
         // Extract the task name and deadline from the command
         String taskName = String.join(" ", Arrays.copyOfRange(arguments, 1, byIndex));
@@ -79,7 +66,25 @@ public class CommandAddDeadline extends CommandAddToDo {
         } catch (TaskListInterface.TaskDuplicateException e) {
             throw new CommandInvalidArgumentException(e.getMessage());
         }
-
         return true;
+    }
+
+    private int findIndexOfBye(String[] arguments) throws CommandInvalidArgumentException {
+        int byIndex = -1;
+
+        // Find the position of /by
+        for (int i = 1; i < arguments.length - 1; i += 1) {
+            if (arguments[i].equals("/by")) {
+                byIndex = i;
+                break;
+            }
+        }
+
+        // Check if those index found is valid
+        if (byIndex == -1 || byIndex == 1) {
+            throw new CommandInvalidArgumentException("Invalid arguments! Usage: deadline <task-name> /by <datetime>");
+        }
+
+        return byIndex;
     }
 }

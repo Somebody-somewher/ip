@@ -35,6 +35,7 @@ public interface UiInterface {
      * Echoes out any text provided
      *
      * @param text text to be echoed
+     * @param colour the colour of the textbox
      */
     public void printText(String text, ColourOptions colour);
 

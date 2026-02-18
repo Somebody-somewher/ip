@@ -51,7 +51,7 @@ public class ChatBotBob {
      *
      * @return True if Task Saving and clean up successful. False otherwise
      */
-    public static boolean cleanUp() {
+    public boolean cleanUp() {
         try {
             taskManager.saveTasks();
             isFinished = true;
@@ -63,14 +63,14 @@ public class ChatBotBob {
         }
     }
 
-    public static boolean isBotDone() {
+    public boolean isBotDone() {
         return isFinished;
     }
     /**
      * Represents a chatbotbob.command.Command that Ends ChatBot input
      * @author James Chin
      */
-    private static class CommandBye extends Command {
+    private class CommandBye extends Command {
         private static final String GOODBYE_STRING = "Buh-Bye!";
         private static final String CMDPHRASE = "bye";
 

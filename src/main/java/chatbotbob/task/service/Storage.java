@@ -39,6 +39,8 @@ public class Storage implements StorageInterface {
 
     private TaskEncoderInterface encoder = new TaskEncoder();
 
+    // The following method of using the static block to handle this task type mapping
+    // was suggested by Google Gemini, makes the code neater!
     static {
         TASK_TYPE_MAPPING = new HashMap<>();
         TASK_TYPE_MAPPING.put(TodoTask.getTypePrefix(), TodoTask::decodeTask);

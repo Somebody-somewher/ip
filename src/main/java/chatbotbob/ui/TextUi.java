@@ -47,6 +47,7 @@ public class TextUi implements UiInterface {
      * Echoes out any text provided
      *
      * @param text text to be echoed
+     * @param colour the colour of the textbox
      */
     @Override
     public void printText(String text, ColourOptions colour) {
@@ -70,6 +71,11 @@ public class TextUi implements UiInterface {
         f.apply(reader.nextLine());
     }
 
+    /**
+     * Checks if UI components have been properly initialized yet
+     *
+     * @return True if UI has been initialized and ready to use
+     */
     public boolean isInitialized() {
         return true;
     }

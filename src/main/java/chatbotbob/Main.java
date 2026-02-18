@@ -26,7 +26,13 @@ public class Main extends Application {
             stage.setTitle("ChatBotBob!");
             stage.getIcons().add(new Image(this.getClass().getResourceAsStream("/images/DaBob.png")));
             stage.show();
-            stage.setOnCloseRequest(e -> ChatBotBob.cleanUp());
+
+            // While searching for a way to run code upon the Window closing
+            // Google Gemini suggested the below method, which works well
+            // Would likely not have discovered this that quickly
+            // through the way I conventionally search
+            stage.setOnCloseRequest(e -> bob.cleanUp());
+
         } catch (IOException e) {
             e.printStackTrace();
         }

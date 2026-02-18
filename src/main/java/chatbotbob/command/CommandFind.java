@@ -74,5 +74,4 @@ public class CommandFind extends Command {
 
         return true;
     }
-
 }

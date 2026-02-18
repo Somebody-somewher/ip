@@ -31,6 +31,9 @@ public class TaskManager implements TaskManagerInterface {
     /**
      * Creates a TaskManager with a provided Storage and TaskList
      * For debugging
+     *
+     * @param storage storage class that handles task saving/loading
+     * @param taskList the taskList that handles tasks locally
      */
     public TaskManager(StorageInterface storage, TaskListInterface taskList) {
         this.storage = storage;

@@ -23,6 +23,13 @@ public class DialogBox extends HBox {
     @FXML
     private ImageView displayPicture;
 
+    /**
+     * Represents a DialogBox constructor to create an instance of a DialogBox via factory method
+     *
+     * @param text DialogText to print out
+     * @param img Image to display on the DialogBox to indicate who's talking
+     * @param colour the colour of the DialogBox
+     */
     private DialogBox(String text, Image img, UiInterface.ColourOptions colour) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(MainWindow.class.getResource("/view/DialogBox.fxml"));
@@ -49,16 +56,37 @@ public class DialogBox extends HBox {
         setAlignment(Pos.TOP_RIGHT);
     }
 
+    /**
+     * Represents a static factory constructor to create a Dialog User Box
+     *
+     * @param text DialogText to print out
+     * @param img Image to display on the DialogBox to indicate who's talking
+     * @param colour the colour of the DialogBox
+     * @return a DialogBox for User text
+     */
     public static DialogBox getUserDialog(String text, Image img, UiInterface.ColourOptions colour) {
         return new DialogBox(text, img, colour);
     }
 
+    /**
+     * Represents a static factory constructor to create a Bot User Box
+     *
+     * @param text DialogText to print out
+     * @param img Image to display on the DialogBox to indicate who's talking
+     * @param colour the colour of the DialogBox
+     * @return a DialogBox for Bot response
+     */
     public static DialogBox getBotDialog(String text, Image img, UiInterface.ColourOptions colour) {
         var db = new DialogBox(text, img, colour);
         db.flip();
         return db;
     }
 
+    /**
+     * Sets the colour of the textbox
+     *
+     * @param colour Uses UiInterface.ColourOptions to decide how to colour the textbox
+     */
     public void setDialogStyle(UiInterface.ColourOptions colour) {
         switch(colour) {
         case ERROR_COLOUR:
@@ -82,6 +110,9 @@ public class DialogBox extends HBox {
         }
     }
 
+    /**
+     * Sets the colour of the textbox to be the error colour
+     */
     public void updateStyleAsError() {
         dialog.getStyleClass().add("error-label");
     }

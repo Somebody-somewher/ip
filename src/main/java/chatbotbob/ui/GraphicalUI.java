@@ -35,11 +35,20 @@ public class GraphicalUI implements UiInterface {
         fxmlLoader.<MainWindow>getController().showText(WELCOME_STRING, ColourOptions.COMMAND_COLOUR_DEFAULT);
     }
 
+    /**
+     * Prints a separator, to be used after every command. Unused for GUI
+     */
     @Override
     public void printSeparator() {
 
     }
 
+    /**
+     * Echoes out any text provided
+     *
+     * @param text text to be echoed
+     * @param colour the colour of the textbox
+     */
     @Override
     public void printText(String text, ColourOptions colour) {
         fxmlLoader.<MainWindow>getController().showText(text, colour);
@@ -61,6 +70,11 @@ public class GraphicalUI implements UiInterface {
         fxmlLoader.<MainWindow>getController().setParser(f);
     }
 
+    /**
+     * Checks if UI components have been properly initialized yet
+     *
+     * @return True if UI has been initialized and ready to use
+     */
     @Override
     public boolean isInitialized() {
         return fxmlLoader.<MainWindow>getController().isInitialized();

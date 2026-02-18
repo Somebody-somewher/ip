@@ -53,12 +53,6 @@ public class CommandAddEvent extends CommandAddToDo {
 
         int[] indexes = findFromAndTo(arguments);
 
-        // Check if those indexes are valid
-        if (indexes[0] == -1 || indexes[1] == -1) {
-            throw new CommandInvalidArgumentException("""
-                    Invalid arguments! Usage: event <task-name> /from <datetime> /to <datetime>""");
-        }
-
         // Extract the task name, end date and start date from the command
         String taskName = String.join(" ", Arrays.copyOfRange(arguments, 1, indexes[0]));
         String taskDurationStart = String.join(" ", Arrays.copyOfRange(arguments, indexes[0] + 1, indexes[1]));
@@ -76,7 +70,6 @@ public class CommandAddEvent extends CommandAddToDo {
         } catch (TaskListInterface.TaskDuplicateException e) {
             throw new CommandInvalidArgumentException(e.getMessage());
         }
-
     }
 
     private int[] findFromAndTo(String[] arguments) throws CommandInvalidArgumentException {
@@ -92,10 +85,7 @@ public class CommandAddEvent extends CommandAddToDo {
                             Invalid arguments! Usage: event <task-name> /from <datetime> /to <datetime>""");
                 }
                 fromIndex = i;
-            }
-
-            // Find the position of /to
-            if (arguments[i].equals("/to")) {
+            } else if (arguments[i].equals("/to")) {
                 if (fromIndex == -1 || fromIndex == i - 1) {
                     throw new CommandInvalidArgumentException("""
                             Invalid arguments! Usage: event <task-name> /from <datetime> /to <datetime>""");
@@ -105,6 +95,13 @@ public class CommandAddEvent extends CommandAddToDo {
             }
         }
         int[] indexes = {fromIndex, toIndex};
+
+        // Check if those indexes are valid
+        if (indexes[0] == -1 || indexes[1] == -1) {
+            throw new CommandInvalidArgumentException("""
+                    Invalid arguments! Usage: event <task-name> /from <datetime> /to <datetime>""");
+        }
+
         return indexes;
     }
 }
