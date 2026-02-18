@@ -8,6 +8,8 @@ import chatbotbob.service.ParserInterface;
 import chatbotbob.task.service.TaskManager;
 import chatbotbob.task.service.TaskManagerInterface;
 import chatbotbob.ui.UiInterface;
+import javafx.animation.PauseTransition;
+import javafx.util.Duration;
 
 /**
  * Represents a Chatbot that the User interacts with
@@ -100,7 +102,14 @@ public class ChatBotBob {
                 ui.printText(GOODBYE_STRING);
 
                 if (cleanUp()) {
-                    onBye.run();
+                    // Special Thanks to Lim-ZY from the CS2103T Forums
+                    // Is there a way to close the GUI window when user types bye #153
+                    // The below PauseTransition code is from there
+                    PauseTransition pause = new PauseTransition(Duration.seconds(1));
+                    pause.setOnFinished(e -> {
+                        onBye.run();
+                    });
+                    pause.play();
                 }
             }
             return true;
