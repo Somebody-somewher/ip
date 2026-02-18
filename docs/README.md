@@ -1,6 +1,6 @@
 # ChatBotBob User Guide
 
-![Image of ChatBotBob's UI](/docs/Ui.png)
+![Image of ChatBotBob's UI](./Ui.png)
 
 ChatBotBob is a **desktop application that helps you manage tasks that you need to do**,
 packaged in a nice minimalist UI :D
