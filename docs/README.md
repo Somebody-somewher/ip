@@ -7,7 +7,7 @@ packaged in a nice minimalist UI :D
 
 Modified from https://github.com/NUS-CS2103-AY2526-S2/ip as part of the CS2103T iP Submission
 
-Feature List
+## Feature List
 * [Adding Tasks `todo | deadline | event`](#adding-tasks)
 * [Listing Tasks `list`](#listing-tasks)
 * [Finding Tasks `find`](#finding-tasks)
@@ -44,7 +44,7 @@ Format: `list`
 
 ## Finding Tasks
 ### Description:
-Search for a specific task via its name
+Search for a specific task via its name (case-insensitive).
 
 Format `find <partial-task-name>`
 
