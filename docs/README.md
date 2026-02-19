@@ -103,7 +103,7 @@ If you would like to delete a tag...
 
 Format: `tag-delete <task-index> <tag-name>`
 
-> Note: Task names should only be one word and certain punctuation, 
+> Note: Tag names should only be one word and certain punctuation, 
 > such as `|` and `,` characters, are not allowed
 
 ### Example:

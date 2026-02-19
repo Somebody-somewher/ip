@@ -49,7 +49,7 @@ public class CommandAddToDo extends Command {
      */
     public boolean execute(String[] arguments, UiInterface ui) throws CommandInvalidArgumentException {
         if (arguments.length < 2) {
-            throw new CommandInvalidArgumentException("Invalid arguments! Usage: todo");
+            throw new CommandInvalidArgumentException("Invalid arguments! Usage: todo <task-name>");
         }
 
         String taskName = String.join(" ", Arrays.copyOfRange(arguments, 1, arguments.length));
