@@ -3,7 +3,6 @@ import java.time.DateTimeException;
 import java.util.Arrays;
 
 import chatbotbob.task.core.util.DeadlineTask;
-import chatbotbob.task.core.util.Task;
 import chatbotbob.task.service.TaskListInterface;
 import chatbotbob.ui.UiInterface;
 
@@ -51,25 +50,17 @@ public class CommandAddDeadline extends CommandAddToDo {
             throw new CommandInvalidArgumentException("Invalid arguments! Usage: deadline <task-name> /by <datetime>");
         }
 
-        int byIndex = findIndexOfBye(arguments);
+        int byIndex = findIndexOfBy(arguments);
 
         // Extract the task name and deadline from the command
         String taskName = String.join(" ", Arrays.copyOfRange(arguments, 1, byIndex));
         String taskDeadline = String.join(" ", Arrays.copyOfRange(arguments, byIndex + 1, argumentsLength));
 
-        try {
-            Task taskToAdd = new DeadlineTask(taskName, taskDeadline);
-            taskList.addTask(taskToAdd);
-            printAddedTask(taskToAdd, ui);
-        } catch (DateTimeException e) {
-            throw new CommandInvalidArgumentException("That ain't a date I understand :<, try YYYY-MM-DD HH:mm");
-        } catch (TaskListInterface.TaskDuplicateException e) {
-            throw new CommandInvalidArgumentException(e.getMessage());
-        }
+        printAddedTask(attemptDeadlineCreation(taskName, taskDeadline), ui);
         return true;
     }
 
-    private int findIndexOfBye(String[] arguments) throws CommandInvalidArgumentException {
+    private int findIndexOfBy(String[] arguments) throws CommandInvalidArgumentException {
         int byIndex = -1;
 
         // Find the position of /by
@@ -86,5 +77,18 @@ public class CommandAddDeadline extends CommandAddToDo {
         }
 
         return byIndex;
+    }
+
+    private DeadlineTask attemptDeadlineCreation(String taskName, String taskDeadline)
+            throws CommandInvalidArgumentException {
+        try {
+            DeadlineTask taskToAdd = new DeadlineTask(taskName, taskDeadline);
+            taskList.addTask(taskToAdd);
+            return taskToAdd;
+        } catch (DateTimeException e) {
+            throw new CommandInvalidArgumentException("That ain't a date I understand :<, try YYYY-MM-DD HH:mm");
+        } catch (TaskListInterface.TaskDuplicateException e) {
+            throw new CommandInvalidArgumentException(e.getMessage());
+        }
     }
 }

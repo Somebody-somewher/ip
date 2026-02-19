@@ -39,7 +39,6 @@ public class CommandAddTag extends CommandSelectTask {
         }
 
         String tagName = arguments[2];
-
         if (tagName.matches(".*[, |].*")) {
             throw new CommandInvalidArgumentException("Invalid Tag Name! Punctuation scares me! :<");
         }
@@ -47,6 +46,7 @@ public class CommandAddTag extends CommandSelectTask {
         Task selectedTask = getSpecificTask(arguments[1]);
         selectedTask.addTag(arguments[2]);
         ui.printText("Tagged: " + selectedTask.toString(), UiInterface.ColourOptions.COMMAND_COLOUR_YELLOW);
+
         return true;
     }
 }

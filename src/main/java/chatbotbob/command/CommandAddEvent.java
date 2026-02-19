@@ -3,7 +3,6 @@ import java.time.DateTimeException;
 import java.util.Arrays;
 
 import chatbotbob.task.core.util.EventTask;
-import chatbotbob.task.core.util.Task;
 import chatbotbob.task.service.TaskListInterface;
 import chatbotbob.ui.UiInterface;
 
@@ -58,43 +57,24 @@ public class CommandAddEvent extends CommandAddToDo {
         String taskDurationStart = String.join(" ", Arrays.copyOfRange(arguments, indexes[0] + 1, indexes[1]));
         String taskDurationEnd = String.join(" ", Arrays.copyOfRange(arguments, indexes[1] + 1, argumentsLength));
 
-        try {
-            Task taskToAdd = new EventTask(taskName, taskDurationStart, taskDurationEnd);
-            taskList.addTask(taskToAdd);
-            printAddedTask(taskToAdd, ui);
-            return true;
-        } catch (DateTimeException e) {
-            throw new CommandInvalidArgumentException("That ain't a date/time I understand :<, try YYYY-MM-DD HH:mm");
-        } catch (EventTask.InvalidDateOrderException e) {
-            throw new CommandInvalidArgumentException("Not Allowed! (>.<) : " + e.getMessage());
-        } catch (TaskListInterface.TaskDuplicateException e) {
-            throw new CommandInvalidArgumentException(e.getMessage());
-        }
+        printAddedTask(attemptEventCreation(taskName, taskDurationStart, taskDurationEnd), ui);
+        return true;
     }
 
     private int[] findFromAndTo(String[] arguments) throws CommandInvalidArgumentException {
         int fromIndex = -1;
         int toIndex = -1;
         int argumentsLength = arguments.length;
-        for (int i = 1; i < argumentsLength - 1; i += 1) {
 
-            // Find the position of /from
-            if (arguments[i].equals("/from")) {
-                if (i == 1 || fromIndex != -1) {
-                    throw new CommandInvalidArgumentException("""
-                            Invalid arguments! Usage: event <task-name> /from <datetime> /to <datetime>""");
-                }
-                fromIndex = i;
-            } else if (arguments[i].equals("/to")) {
-                if (fromIndex == -1 || fromIndex == i - 1) {
-                    throw new CommandInvalidArgumentException("""
-                            Invalid arguments! Usage: event <task-name> /from <datetime> /to <datetime>""");
-                }
-                toIndex = i;
+        // array to hold the fromIndex (first slot of array)
+        // and toIndex (second slot of the array)
+        int[] indexes = {fromIndex, toIndex};
+
+        for (int i = 1; i < argumentsLength - 1; i += 1) {
+            if (checkAndSetFromAndToIndex(indexes, arguments, i)) {
                 break;
             }
         }
-        int[] indexes = {fromIndex, toIndex};
 
         // Check if those indexes are valid
         if (indexes[0] == -1 || indexes[1] == -1) {
@@ -103,5 +83,42 @@ public class CommandAddEvent extends CommandAddToDo {
         }
 
         return indexes;
+    }
+
+    private boolean checkAndSetFromAndToIndex(int[] indexes, String[] arguments, int currArgumentIndex)
+            throws CommandInvalidArgumentException {
+
+        // Find the position of /from
+        if (arguments[currArgumentIndex].equals("/from")) {
+            if (currArgumentIndex == 1 || indexes[0] != -1) {
+                throw new CommandInvalidArgumentException("""
+                            Invalid arguments! Usage: event <task-name> /from <datetime> /to <datetime>""");
+            }
+            indexes[0] = currArgumentIndex;
+        } else if (arguments[currArgumentIndex].equals("/to")) {
+            if (indexes[0] == -1 || indexes[0] == currArgumentIndex - 1) {
+                throw new CommandInvalidArgumentException("""
+                            Invalid arguments! Usage: event <task-name> /from <datetime> /to <datetime>""");
+            }
+            indexes[1] = currArgumentIndex;
+            return true;
+        }
+
+        return false;
+    }
+
+    private EventTask attemptEventCreation(String taskName, String taskDurationStart, String taskDurationEnd)
+            throws CommandInvalidArgumentException {
+        try {
+            EventTask taskToAdd = new EventTask(taskName, taskDurationStart, taskDurationEnd);
+            taskList.addTask(taskToAdd);
+            return taskToAdd;
+        } catch (DateTimeException e) {
+            throw new CommandInvalidArgumentException("That ain't a date/time I understand :<, try YYYY-MM-DD HH:mm");
+        } catch (EventTask.InvalidDateOrderException e) {
+            throw new CommandInvalidArgumentException("Not Allowed! (>.<) : " + e.getMessage());
+        } catch (TaskListInterface.TaskDuplicateException e) {
+            throw new CommandInvalidArgumentException(e.getMessage());
+        }
     }
 }
