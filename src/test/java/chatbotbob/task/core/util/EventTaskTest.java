@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 public class EventTaskTest {
     @Test
-    public void eventConstructorTest() {
+    public void eventTask_invalidParameters_exceptionThrown() {
         assertEquals(0, createEventTask("stringAsDate1",
                 "AAAA", "2024-02-10 22:00"));
         assertEquals(0, createEventTask("stringAsDate1",
@@ -17,11 +17,10 @@ public class EventTaskTest {
                 "2024-02-10 22:00", "2024-01-10 22:00"));
         assertEquals(2, createEventTask("OutofOrderDate2",
                 "2024-08-14 22:00", "2024-08-14 22:00"));
+    }
 
-        //assertEquals(1, createEventTask("NonexistentDay1",
-        //        "2024-02-10 22:00", "2024-02-24 22:70"));
-        //assertEquals(0, createEventTask("NonexistentDay2",
-        //        "2024-02-24 22:70", "2024-02-10 22:00"));
+    @Test
+    public void eventTask_validParameters_success() {
         assertEquals(1, createEventTask("CorrectEvent",
                 "2027-02-27 22:00", "2028-02-29 22:00"));
     }

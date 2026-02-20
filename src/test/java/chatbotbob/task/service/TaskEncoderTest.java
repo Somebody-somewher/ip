@@ -9,7 +9,7 @@ import chatbotbob.task.core.util.TodoTask;
 
 public class TaskEncoderTest {
     @Test
-    public void encodeDecodeTest() {
+    public void decodeEncodedTaskIntoAttributes_specialCharacterInput_successfulDecode() {
         TaskEncoder taskEncoder = new TaskEncoder();
 
         EventTask eventTask = new EventTask(" | Valid | , Event | ", "2020-03-04 22:00",

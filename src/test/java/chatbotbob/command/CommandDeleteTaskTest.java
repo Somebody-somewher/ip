@@ -4,63 +4,50 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import chatbotbob.task.core.util.TodoTask;
 import chatbotbob.task.service.TaskList;
 import chatbotbob.task.service.TaskListInterface;
 import chatbotbob.ui.TextUi;
 import chatbotbob.ui.UiInterface;
 
-
-
 public class CommandDeleteTaskTest extends CommandTest {
     @Test
-    public void taskMarkTest() throws TaskListInterface.TaskDuplicateException {
-        commandToTest = CommandDeleteTask::new;
-
-        UiInterface ui = new TextUi();
+    public void execute_nonExistentTask_exceptionThrown() {
         TaskListInterface tli = new TaskList();
+        UiInterface ui = new TextUi();
+        setCommandToTest(new CommandDeleteTask(tli));
 
-        // Trying to delete a non-existent task in an empty list
-        emptyTaskListTest(tli, ui);
-
-        // Deleting a newly added task
-        newTaskTest(tli, ui);
-
-        // Deleting additional tasks
-        additionalTaskTest(tli, ui);
+        assertFalse(processCommand("delete", ui));
+        assertFalse(processCommand("delete abcx", ui));
+        assertFalse(processCommand("delete 0", ui));
+        assertFalse(processCommand("delete -1", ui));
+        assertFalse(processCommand("delete 1", ui));
     }
 
-    public void emptyTaskListTest(TaskListInterface tli, UiInterface ui) {
+    @Test
+    public void execute_invalidParameters_exceptionThrown() {
+        TaskListInterface tli = new TaskList();
+        UiInterface ui = new TextUi();
+        setCommandToTest(new CommandDeleteTask(tli));
+
+        assertTrue(addTask(tli, "TEST"));
+        assertFalse(processCommand("delete 0", ui));
+        assertFalse(processCommand("delete -1", ui));
+        assertFalse(processCommand("delete 1 abdcscs", ui));
         tli.forEach(c -> ui.printText(c.toString()));
 
-        assertFalse(processCommand("delete", tli, ui));
-        assertFalse(processCommand("delete abcx", tli, ui));
-        assertFalse(processCommand("delete 0", tli, ui));
-        assertFalse(processCommand("delete -1", tli, ui));
-        assertFalse(processCommand("delete 1", tli, ui));
-    }
-
-    public void newTaskTest(TaskListInterface tli, UiInterface ui) throws TaskListInterface.TaskDuplicateException {
-        tli.forEach(c -> ui.printText(c.toString()));
-
-        tli.addTask(new TodoTask("Test"));
-        assertFalse(processCommand("delete 0", tli, ui));
-        assertFalse(processCommand("delete -1", tli, ui));
-        assertFalse(processCommand("delete 1 abdcscs", tli, ui));
-        assertTrue(processCommand("delete 1", tli, ui));
-        tli.forEach(c -> ui.printText(c.toString()));
+        assertTrue(processCommand("delete 1", ui));
 
         // Trying Double Delete a Task Test
-        assertFalse(processCommand("delete 1", tli, ui));
+        assertFalse(processCommand("delete 1", ui));
     }
 
-    public void additionalTaskTest(TaskListInterface tli, UiInterface ui)
-            throws TaskListInterface.TaskDuplicateException {
-        tli.addTask(new TodoTask("Test2"));
-        tli.forEach(c -> ui.printText(c.toString()));
-        assertFalse(processCommand("delete 2", tli, ui));
-        tli.addTask(new TodoTask("Test3"));
-        assertTrue(processCommand("delete 2", tli, ui));
-        tli.forEach(c -> ui.printText(c.toString()));
+    @Test
+    public void execute_validDelete_success() {
+        TaskListInterface tli = new TaskList();
+        UiInterface ui = new TextUi();
+        setCommandToTest(new CommandDeleteTask(tli));
+
+        assertTrue(addTask(tli, "TEST"));
+        assertTrue(processCommand("delete 1", ui));
     }
 }

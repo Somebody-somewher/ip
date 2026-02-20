@@ -1,23 +1,36 @@
 package chatbotbob.command;
-import java.util.function.Function;
 
+import chatbotbob.task.core.util.TodoTask;
 import chatbotbob.task.service.TaskListInterface;
 import chatbotbob.ui.UiInterface;
 
 public abstract class CommandTest {
-    protected Function<TaskListInterface, Command> commandToTest;
+    private Command commandToTest;
 
-    public boolean processCommand(String userInputString, TaskListInterface tli, UiInterface ui) {
+    protected void setCommandToTest(Command c) {
+        commandToTest = c;
+    }
+
+    public boolean processCommand(String userInputString, UiInterface ui) {
         String[] userInputStringArr = userInputString.split(" ");
 
         try {
-            Command c = commandToTest.apply(tli);
-            c.executeOnMatch(userInputStringArr, ui);
+            commandToTest.executeOnMatch(userInputStringArr, ui);
             return true;
         } catch (Command.CommandInvalidArgumentException e) {
             ui.printText(e.getMessage(), UiInterface.ColourOptions.ERROR_COLOUR);
             return false;
         }
+    }
+
+    protected boolean addTask(TaskListInterface tli, String taskName) {
+        try {
+            tli.addTask(new TodoTask(taskName));
+            return true;
+        } catch (TaskListInterface.TaskDuplicateException e) {
+            return false;
+        }
+
     }
 }
 

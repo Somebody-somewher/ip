@@ -4,104 +4,99 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import chatbotbob.task.core.util.TodoTask;
 import chatbotbob.task.service.TaskList;
 import chatbotbob.task.service.TaskListInterface;
 import chatbotbob.ui.OutputChecker;
-import chatbotbob.ui.TextUi;
 import chatbotbob.ui.UiInterface;
 
-
 public class CommandAddTagTest extends CommandOutputTest {
-    private String stringToCheckFor;
 
     @Test
-    public void taskFindTest() throws TaskListInterface.TaskDuplicateException {
-        commandToTest = CommandAddTag::new;
-        UiInterface ui = new TextUi();
-        UiInterface outputChecker = new OutputChecker(this::checkNextOutput);
-
+    public void execute_nonExistentTask_exceptionThrown() {
         TaskListInterface tli = new TaskList();
+        UiInterface ui = new OutputChecker(this::assertEqualsPrintedUiText);
+        setCommandToTest(new CommandAddTag(tli));
 
-        // Trying to mark a non-existent task in an empty list
-        emptyTaskListTest(tli, ui);
-
-        // Marking a newly added task
-        newTaskTest(tli, outputChecker);
-
-        additionalTaskTest(tli, outputChecker);
-
-        // Trying to mark a deleted task
-        deleteTaskTest(tli, outputChecker);
-
-    }
-
-    public void emptyTaskListTest(TaskListInterface tli, UiInterface ui) {
-        tli.forEach(c -> ui.printText(c.toString()));
-        // Expecting output "Usage: tag <task_no> <tag_name>"
-        assertFalse(processCommand("tag", tli, ui));
+        setStringToCompareWithUiOutput("Usage: tag <task_no> <one_word_tag_name>");
+        assertFalse(processCommand("tag", ui));
 
         // Expecting output "That's not even a task number! :<"
-        assertFalse(processCommand("tag test test", tli, ui));
+        setStringToCompareWithUiOutput("That's not even a task number! :<");
+        assertFalse(processCommand("tag test test", ui));
 
-        // Expecting output "I don't have a task with that number, you're crazy :<"
-        assertFalse(processCommand("tag 0 test", tli, ui));
-        assertFalse(processCommand("tag -1 test", tli, ui));
-        assertFalse(processCommand("tag 1 test", tli, ui));
+        setStringToCompareWithUiOutput("I don't have a task with that number, you're crazy :<");
+        assertFalse(processCommand("tag 0 test", ui));
+        assertFalse(processCommand("tag -1 test", ui));
+        assertFalse(processCommand("tag 1 test", ui));
+
+        assertTrue(addTask(tli, "TEST"));
+        assertFalse(processCommand("tag 0 #INVALID", ui));
+        assertFalse(processCommand("tag 2 #INVALID", ui));
     }
 
-    public void newTaskTest(TaskListInterface tli, UiInterface ui) throws TaskListInterface.TaskDuplicateException {
-        tli.forEach(c -> System.out.println(c.toString()));
+    @Test
+    public void execute_invalidTagName_exceptionThrown() {
+        TaskListInterface tli = new TaskList();
+        UiInterface ui = new OutputChecker(this::assertEqualsPrintedUiText);
+        setCommandToTest(new CommandAddTag(tli));
 
-        setStringToCheckFor("I don't have a task with that number, you're crazy :<");
-        tli.addTask(new TodoTask("Test"));
-        assertFalse(processCommand("tag 0 #INVALID", tli, ui));
-        assertFalse(processCommand("tag 2 #INVALID", tli, ui));
+        assertTrue(addTask(tli, "TEST"));
+        setStringToCompareWithUiOutput("Usage: tag <task_no> <one_word_tag_name>");
+        assertFalse(processCommand("tag 1 #INVAL ID", ui));
 
-        setStringToCheckFor("Usage: tag <task_no> <one_word_tag_name>");
-        assertFalse(processCommand("tag 1 #INVAL ID", tli, ui));
-
-        setStringToCheckFor("Invalid Tag Name! Punctuation scares me! :<");
-        assertFalse(processCommand("tag 1 #IN|VALID", tli, ui));
-        assertFalse(processCommand("tag 1 #IN,VALID", tli, ui));
-
-        setStringToCheckFor("Tagged: [T][ ] Test\nTags: [#TAG1]");
-        assertTrue(processCommand("tag 1 #TAG1", tli, ui));
-        assertTrue(processCommand("tag 1 #TAG1", tli, ui));
+        setStringToCompareWithUiOutput("Invalid Tag Name! Punctuation scares me! :<");
+        assertFalse(processCommand("tag 1 #IN|VALID", ui));
+        assertFalse(processCommand("tag 1 #IN,VALID", ui));
 
         tli.forEach(c -> System.out.println(c.toString()));
     }
 
-    public void additionalTaskTest(TaskListInterface tli, UiInterface ui)
-            throws TaskListInterface.TaskDuplicateException {
-        tli.forEach(c -> System.out.println(c.toString()));
+    @Test
+    public void execute_validTagName_success() {
+        TaskListInterface tli = new TaskList();
+        UiInterface ui = new OutputChecker(this::assertEqualsPrintedUiText);
+        setCommandToTest(new CommandAddTag(tli));
 
-        tli.addTask(new TodoTask("Test2"));
-        setStringToCheckFor("Tagged: [T][ ] Test2\nTags: [#TAG2]");
-        assertTrue(processCommand("tag 2 #TAG2", tli, ui));
+        assertTrue(addTask(tli, "Test"));
 
-        setStringToCheckFor("[T][ ] Test\nTags: [#TAG1][T][ ] Test2\nTags: [#TAG2]");
+        setStringToCompareWithUiOutput("Tagged: [T][ ] Test\nTags: [#TAG1]");
+        assertTrue(processCommand("tag 1 #TAG1", ui));
+
+        // Duplicate TAG handled by HashSet
+        assertTrue(processCommand("tag 1 #TAG1", ui));
+    }
+
+    @Test
+    public void execute_multipleTags_success() {
+        TaskListInterface tli = new TaskList();
+        UiInterface ui = new OutputChecker(this::assertEqualsPrintedUiText);
+        setCommandToTest(new CommandAddTag(tli));
+
+        assertTrue(addTask(tli, "Test"));
+        assertTrue(addTask(tli, "Test2"));
+
+
+        setStringToCompareWithUiOutput("Tagged: [T][ ] Test2\nTags: [#TAG2]");
+        assertTrue(processCommand("tag 2 #TAG2", ui));
+
+        setStringToCompareWithUiOutput("[T][ ] Test[T][ ] Test2\nTags: [#TAG2]");
         StringBuilder sb = new StringBuilder();
         tli.forEach(c -> sb.append(c.toString()));
         ui.printText(sb.toString());
         sb.setLength(0);
-
-        setStringToCheckFor("Tagged: [T][ ] Test\nTags: [#TAG3, #TAG1]");
-        assertTrue(processCommand("tag 1 #TAG3", tli, ui));
-
-        setStringToCheckFor("[T][ ] Test\nTags: [#TAG3, #TAG1][T][ ] Test2\nTags: [#TAG2]");
-        tli.forEach(c -> sb.append(c.toString()));
-        ui.printText(sb.toString());
     }
 
-    public void deleteTaskTest(TaskListInterface tli, UiInterface ui) {
-        tli.forEach(c -> System.out.println(c.toString()));
+    @Test
+    public void execute_tagAfterDelete_exceptionThrown() {
+        TaskListInterface tli = new TaskList();
+        UiInterface ui = new OutputChecker(this::assertEqualsPrintedUiText);
+        setCommandToTest(new CommandAddTag(tli));
 
-        tli.popTask(2);
-        setStringToCheckFor("I don't have a task with that number, you're crazy :<");
-        assertFalse(processCommand("tag 2 #INVALID", tli, ui));
+        assertTrue(addTask(tli, "Test2"));
+        tli.popTask(1);
 
-        tli.forEach(c -> System.out.println(c.toString()));
+        setStringToCompareWithUiOutput("I don't have a task with that number, you're crazy :<");
+        assertFalse(processCommand("tag 1 #INVALID", ui));
     }
 
 }

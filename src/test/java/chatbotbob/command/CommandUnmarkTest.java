@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import chatbotbob.task.core.util.TodoTask;
 import chatbotbob.task.service.TaskList;
 import chatbotbob.task.service.TaskListInterface;
 import chatbotbob.ui.TextUi;
@@ -13,70 +12,59 @@ import chatbotbob.ui.UiInterface;
 
 public class CommandUnmarkTest extends CommandTest {
     @Test
-    public void taskMarkTest() throws TaskListInterface.TaskDuplicateException {
-        commandToTest = CommandUnmark::new;
-        UiInterface ui = new TextUi();
+    public void execute_nonExistentTask_exceptionThrown() {
         TaskListInterface tli = new TaskList();
+        UiInterface ui = new TextUi();
+        setCommandToTest(new CommandUnmark(tli));
 
-        // Trying to mark a non-existent task in an empty list
-        emptyTaskListTest(tli, ui);
-
-        // Marking a newly added task
-        newTaskTest(tli, ui);
-
-        // Trying to mark a deleted task
-        tli.popTask(1);
-        assertFalse(processCommand("unmark 1", tli, ui));
-
-        // Marking additional tasks
-        additionalTaskTest(tli, ui);
+        assertFalse(processCommand("unmark", ui));
+        assertFalse(processCommand("unmark abcx", ui));
+        assertFalse(processCommand("unmark 0", ui));
+        assertFalse(processCommand("unmark -1", ui));
+        assertFalse(processCommand("unmark 1", ui));
     }
 
+    @Test
+    public void execute_invalidParameters_exceptionThrown() {
+        TaskListInterface tli = new TaskList();
+        UiInterface ui = new TextUi();
+        setCommandToTest(new CommandUnmark(tli));
 
-    public void emptyTaskListTest(TaskListInterface tli, UiInterface ui) {
-        tli.forEach(c -> ui.printText(c.toString()));
-
-        assertFalse(processCommand("unmark", tli, ui));
-        assertFalse(processCommand("unmark abcx", tli, ui));
-        assertFalse(processCommand("unmark 0", tli, ui));
-        assertFalse(processCommand("unmark -1", tli, ui));
-        assertFalse(processCommand("unmark 1", tli, ui));
+        assertTrue(addTask(tli, "TEST"));
+        assertFalse(processCommand("unmark 0", ui));
+        assertFalse(processCommand("unmark -1", ui));
+        assertFalse(processCommand("unmark 1 abdcscs", ui));
     }
 
-    public void newTaskTest(TaskListInterface tli, UiInterface ui) throws TaskListInterface.TaskDuplicateException {
-        tli.forEach(c -> ui.printText(c.toString()));
+    @Test
+    public void execute_validUnmark_success() {
+        TaskListInterface tli = new TaskList();
+        UiInterface ui = new TextUi();
+        setCommandToTest(new CommandUnmark(tli));
 
-        tli.addTask(new TodoTask("Test"));
-        assertFalse(processCommand("unmark 0", tli, ui));
-        assertFalse(processCommand("unmark -1", tli, ui));
-        assertFalse(processCommand("unmark 1 abdcscs", tli, ui));
-        assertTrue(processCommand("unmark 1", tli, ui));
-        tli.forEach(c -> ui.printText(c.toString()));
+        assertTrue(addTask(tli, "TEST"));
+
+        assertTrue(processCommand("unmark 1", ui));
 
         // Double Unmark Task Test
-        assertTrue(processCommand("unmark 1", tli, ui));
+        assertTrue(processCommand("unmark 1", ui));
         tli.forEach(c -> ui.printText(c.toString()));
 
         // Proper unmark of a marked Task
         tli.getTask(1).markComplete();
         tli.forEach(c -> ui.printText(c.toString()));
-        assertTrue(processCommand("unmark 1", tli, ui));
+        assertTrue(processCommand("unmark 1", ui));
         tli.forEach(c -> ui.printText(c.toString()));
 
-    }
-
-    public void additionalTaskTest(TaskListInterface tli, UiInterface ui)
-            throws TaskListInterface.TaskDuplicateException {
-        tli.addTask(new TodoTask("Test2"));
+        assertTrue(addTask(tli, "TEST2"));
         tli.getTask(1).markComplete();
         tli.forEach(c -> ui.printText(c.toString()));
-        assertFalse(processCommand("unmark 2", tli, ui));
-        assertTrue(processCommand("unmark 1", tli, ui));
+        assertTrue(processCommand("unmark 1", ui));
         tli.forEach(c -> ui.printText(c.toString()));
 
-        tli.addTask(new TodoTask("Test3"));
+        assertTrue(addTask(tli, "TEST3"));
         tli.getTask(2).markComplete();
-        assertTrue(processCommand("unmark 2", tli, ui));
+        assertTrue(processCommand("unmark 2", ui));
         tli.forEach(c -> ui.printText(c.toString()));
     }
 }

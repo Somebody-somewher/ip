@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import chatbotbob.task.core.util.TodoTask;
 import chatbotbob.task.service.TaskList;
 import chatbotbob.task.service.TaskListInterface;
 import chatbotbob.ui.OutputChecker;
@@ -12,87 +11,84 @@ import chatbotbob.ui.TextUi;
 import chatbotbob.ui.UiInterface;
 
 public class CommandDeleteTagTest extends CommandOutputTest {
-    private String stringToCheckFor;
 
     @Test
-    public void taskDeleteTagTest() throws TaskListInterface.TaskDuplicateException {
-        commandToTest = CommandDeleteTag::new;
-        UiInterface ui = new TextUi();
-        UiInterface outputChecker = new OutputChecker(this::checkNextOutput);
-
+    public void execute_nonExistentTask_exceptionThrown() {
         TaskListInterface tli = new TaskList();
+        UiInterface ui = new TextUi();
+        setCommandToTest(new CommandDeleteTag(tli));
 
-        // Trying to mark a non-existent task in an empty list
-        emptyTaskListTest(tli, ui);
-
-        // Marking a newly added task
-        newTaskTest(tli, outputChecker);
-
-        additionalTaskTest(tli, ui);
-
-        // Trying to mark a deleted task
-        deleteTaskTest(tli, ui);
-
-    }
-
-    public void emptyTaskListTest(TaskListInterface tli, UiInterface ui) {
-        tli.forEach(c -> ui.printText(c.toString()));
         // Expecting output "Usage: delete-tag <task_no> <tag_name>"
-        assertFalse(processCommand("tag-delete", tli, ui));
+        setStringToCompareWithUiOutput("Usage: tag <task_no> <one_word_tag_name>");
+        assertFalse(processCommand("tag-delete", ui));
 
         // Expecting output "That's not even a task number! :<"
-        assertFalse(processCommand("tag-delete test test", tli, ui));
+        assertFalse(processCommand("tag-delete test test", ui));
 
         // Expecting output "I don't have a task with that number, you're crazy :<"
-        assertFalse(processCommand("tag-delete 0 test", tli, ui));
-        assertFalse(processCommand("tag-delete -1 test", tli, ui));
-        assertFalse(processCommand("tag-delete 1 test", tli, ui));
+        assertFalse(processCommand("tag-delete 0 test", ui));
+        assertFalse(processCommand("tag-delete -1 test", ui));
+        assertFalse(processCommand("tag-delete 1 test", ui));
+
+        assertTrue(addTask(tli, "Test"));
+        assertFalse(processCommand("tag-delete 0 #INVALID", ui));
+        assertFalse(processCommand("tag-delete 2 #INVALID", ui));
     }
 
-    public void newTaskTest(TaskListInterface tli, UiInterface ui) throws TaskListInterface.TaskDuplicateException {
-        tli.forEach(c -> System.out.println(c.toString()));
+    @Test
+    public void execute_nonExistentTag_exceptionThrown() {
+        TaskListInterface tli = new TaskList();
+        UiInterface ui = new OutputChecker(this::assertEqualsPrintedUiText);
+        setCommandToTest(new CommandDeleteTag(tli));
 
-        setStringToCheckFor("I don't have a task with that number, you're crazy :<");
-        tli.addTask(new TodoTask("Test"));
-        assertFalse(processCommand("tag-delete 0 #INVALID", tli, ui));
-        assertFalse(processCommand("tag-delete 2 #INVALID", tli, ui));
+        assertTrue(addTask(tli, "Test"));
 
-        setStringToCheckFor("Tag does not exist! :<\n[T][ ] Test");
-        assertFalse(processCommand("tag-delete 1 #INVALID", tli, ui));
+        setStringToCompareWithUiOutput("Tag does not exist! :<\n[T][ ] Test");
+        assertFalse(processCommand("tag-delete 1 #INVALID", ui));
         tli.getTask(1).addTag("#TAG1");
         tli.getTask(1).addTag("#TAG2");
 
         tli.forEach(c -> System.out.println(c.toString()));
 
-        setStringToCheckFor("Usage: delete-tag <task_no> <tag_name>");
-        assertFalse(processCommand("tag-delete 1 #INVA LID", tli, ui));
+        setStringToCompareWithUiOutput("Usage: delete-tag <task_no> <tag_name>");
+        assertFalse(processCommand("tag-delete 1 #INVA LID", ui));
 
-        setStringToCheckFor("Tag Deleted!: [T][ ] Test\nTags: [#TAG2]");
-        assertTrue(processCommand("tag-delete 1 #TAG1", tli, ui));
+        setStringToCompareWithUiOutput("Tag Deleted!: [T][ ] Test\nTags: [#TAG2]");
+        assertTrue(processCommand("tag-delete 1 #TAG1", ui));
 
-        setStringToCheckFor("Tag does not exist! :<\n[T][ ] Test\nTags: [#TAG2]");
-        assertFalse(processCommand("tag-delete 1 #TAG1", tli, ui));
+        setStringToCompareWithUiOutput("Tag does not exist! :<\n[T][ ] Test\nTags: [#TAG2]");
+        assertFalse(processCommand("tag-delete 1 #TAG1", ui));
 
         tli.forEach(c -> System.out.println(c.toString()));
     }
 
-    public void additionalTaskTest(TaskListInterface tli, UiInterface ui)
-            throws TaskListInterface.TaskDuplicateException {
-        tli.forEach(c -> System.out.println(c.toString()));
+    @Test
+    public void execute_validDeleteTag_success() {
+        TaskListInterface tli = new TaskList();
+        UiInterface ui = new OutputChecker(this::assertEqualsPrintedUiText);
+        setCommandToTest(new CommandDeleteTag(tli));
 
-        tli.addTask(new TodoTask("Test2"));
-        // Expecting output "Tag does not exist! :<\n[T][ ] Test2"
-        assertFalse(processCommand("tag-delete 2 #INVALID", tli, ui));
-        tli.getTask(2).addTag("#TAG3");
+        assertTrue(addTask(tli, "Test"));
+        tli.getTask(1).addTag("#TAG1");
+        tli.getTask(1).addTag("#TAG2");
+
+        setStringToCompareWithUiOutput("Tag Deleted!: [T][ ] Test\nTags: [#TAG1]");
+        assertTrue(processCommand("tag-delete 1 #TAG2", ui));
     }
 
-    public void deleteTaskTest(TaskListInterface tli, UiInterface ui) {
-        tli.forEach(c -> System.out.println(c.toString()));
+    @Test
+    public void execute_deleteTagAfterTaskDeleted_exceptionThrown() {
+        TaskListInterface tli = new TaskList();
+        UiInterface ui = new OutputChecker(this::assertEqualsPrintedUiText);
+        setCommandToTest(new CommandDeleteTag(tli));
 
-        tli.popTask(2);
+        assertTrue(addTask(tli, "Test"));
+        tli.getTask(1).addTag("#TAG1");
 
-        // Expecting output "I don't have a task with that number, you're crazy :<"
-        assertFalse(processCommand("tag-delete 2 #TAG3", tli, ui));
+        tli.popTask(1);
+
+        setStringToCompareWithUiOutput("I don't have a task with that number, you're crazy :<");
+        assertFalse(processCommand("tag-delete 1 #TAG1", ui));
 
         tli.forEach(c -> System.out.println(c.toString()));
     }

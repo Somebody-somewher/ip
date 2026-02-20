@@ -4,8 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import chatbotbob.task.core.util.EventTask;
-import chatbotbob.task.core.util.TodoTask;
 import chatbotbob.task.service.TaskList;
 import chatbotbob.task.service.TaskListInterface;
 import chatbotbob.ui.OutputChecker;
@@ -14,75 +12,69 @@ import chatbotbob.ui.UiInterface;
 public class CommandFindTest extends CommandOutputTest {
 
     @Test
-    public void taskFindTest() throws TaskListInterface.TaskDuplicateException {
-        commandToTest = CommandFind::new;
-        UiInterface ui = new OutputChecker(this::checkNextOutput);
-
+    public void execute_nonExistentTask_exceptionThrown() {
         TaskListInterface tli = new TaskList();
+        UiInterface ui = new OutputChecker(this::assertEqualsPrintedUiText);
+        setCommandToTest(new CommandFind(tli));
 
-        // Trying to mark a non-existent task in an empty list
-        emptyTaskListTest(tli, ui);
+        setStringToCompareWithUiOutput("Invalid arguments! Usage: find <partial-task-name>");
+        assertFalse(processCommand("find", ui));
 
-        // Marking a newly added task
-        newTaskTest(tli, ui);
-
-        // Trying to mark a deleted task
-        deleteTaskTest(tli, ui);
-
+        setStringToCompareWithUiOutput("No Match Found!");
+        assertTrue(processCommand("find abcx", ui));
+        assertTrue(processCommand("find 0", ui));
     }
 
-    public void emptyTaskListTest(TaskListInterface tli, UiInterface ui) {
-        tli.forEach(c -> ui.printText(c.toString()));
+    @Test
+    public void execute_validFind_success() {
+        TaskListInterface tli = new TaskList();
+        UiInterface ui = new OutputChecker(this::assertEqualsPrintedUiText);
+        setCommandToTest(new CommandFind(tli));
 
-        setStringToCheckFor("Invalid arguments! Usage: find <partial-task-name>");
-        assertFalse(processCommand("find", tli, ui));
+        setStringToCompareWithUiOutput("Let's see what matches...\n1. [T][ ] Test Wee");
 
-        setStringToCheckFor("No Match Found!");
-        assertTrue(processCommand("find abcx", tli, ui));
-        assertTrue(processCommand("find 0", tli, ui));
-    }
+        assertTrue(addTask(tli, "Test Wee"));
+        assertTrue(processCommand("find Te", ui));
+        assertTrue(processCommand("find ee", ui));
+        assertTrue(processCommand("find Test We", ui));
 
-    public void newTaskTest(TaskListInterface tli, UiInterface ui) throws TaskListInterface.TaskDuplicateException {
-        tli.forEach(c -> ui.printText(c.toString()));
+        setStringToCompareWithUiOutput("Let's see what matches...\n1. [T][ ] Test Wee");
+        assertTrue(addTask(tli, "Dee Tent"));
 
-        setStringToCheckFor("Let's see what matches...\n1. [T][ ] Test Wee");
+        setStringToCompareWithUiOutput("No Match Found!");
+        assertTrue(processCommand("find 1", ui));
+        assertTrue(processCommand("find Test Bee", ui));
 
-        tli.addTask(new TodoTask("Test Wee"));
-        assertTrue(processCommand("find Te", tli, ui));
-        assertTrue(processCommand("find ee", tli, ui));
-        assertTrue(processCommand("find Test We", tli, ui));
+        setStringToCompareWithUiOutput("Let's see what matches...\n1. [T][ ] Test Wee\n"
+                + "2. [T][ ] Dee Tent");
+        assertTrue(processCommand("find Te", ui));
+        assertTrue(processCommand("find ee", ui));
 
-        setStringToCheckFor("Let's see what matches...\n1. [T][ ] Test Wee");
-        tli.addTask(new EventTask("Dee Tent", "2020-03-04 22:00", "2020-05-06 22:00"));
-
-
-        setStringToCheckFor("No Match Found!");
-        assertTrue(processCommand("find 1", tli, ui));
-        assertTrue(processCommand("find Test Bee", tli, ui));
-
-        setStringToCheckFor("Let's see what matches...\n1. [T][ ] Test Wee\n"
-                + "2. [E][ ] Dee Tent (from: Mar 4 2020 22:00 to: May 6 2020 22:00)");
-        assertTrue(processCommand("find Te", tli, ui));
-        assertTrue(processCommand("find ee", tli, ui));
-
-        setStringToCheckFor("Let's see what matches...\n1. [T][ ] Test Wee\n");
-        assertTrue(processCommand("find Test We", tli, ui));
+        setStringToCompareWithUiOutput("Let's see what matches...\n1. [T][ ] Test Wee\n");
+        assertTrue(processCommand("find Test We", ui));
 
         tli.forEach(c -> System.out.println(c.toString()));
     }
 
-    public void deleteTaskTest(TaskListInterface tli, UiInterface ui) {
+    @Test
+    public void execute_findAfterDelete_success() {
+        TaskListInterface tli = new TaskList();
+        UiInterface ui = new OutputChecker(this::assertEqualsPrintedUiText);
+        setCommandToTest(new CommandFind(tli));
+
         tli.forEach(c -> System.out.println(c.toString()));
+        assertTrue(addTask(tli, "Test Wee"));
+        assertTrue(addTask(tli, "Dee Tent"));
 
         tli.popTask(1);
-        setStringToCheckFor("Let's see what matches...\n"
-                + "1. [E][ ] Dee Tent (from: Mar 4 2020 22:00 to: May 6 2020 22:00)");
+        setStringToCompareWithUiOutput("Let's see what matches...\n"
+                + "1. [T][ ] Dee Tent");
 
-        assertTrue(processCommand("find Te", tli, ui));
-        assertTrue(processCommand("find ee", tli, ui));
+        assertTrue(processCommand("find Te", ui));
+        assertTrue(processCommand("find ee", ui));
 
-        setStringToCheckFor("No Match Found!");
-        assertTrue(processCommand("find Test We", tli, ui));
+        setStringToCompareWithUiOutput("No Match Found!");
+        assertTrue(processCommand("find Test We", ui));
 
         tli.forEach(c -> System.out.println(c.toString()));
     }

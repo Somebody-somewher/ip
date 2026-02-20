@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import chatbotbob.task.core.util.TodoTask;
 import chatbotbob.task.service.TaskList;
 import chatbotbob.task.service.TaskListInterface;
 import chatbotbob.ui.TextUi;
@@ -13,61 +12,51 @@ import chatbotbob.ui.UiInterface;
 
 public class CommandMarkTest extends CommandTest {
     @Test
-    public void taskMarkTest() throws TaskListInterface.TaskDuplicateException {
-        commandToTest = CommandMark::new;
-        UiInterface ui = new TextUi();
+    public void execute_nonExistentTask_exceptionThrown() {
         TaskListInterface tli = new TaskList();
+        UiInterface ui = new TextUi();
+        setCommandToTest(new CommandMark(tli));
 
-        // Trying to mark a non-existent task in an empty list
-        emptyTaskListTest(tli, ui);
-
-        // Marking a newly added task
-        newTaskTest(tli, ui);
-
-        // Trying to mark a deleted task
-        tli.popTask(1);
-        assertFalse(processCommand("mark 1", tli, ui));
-
-        // Marking additional tasks
-        additionalTaskTest(tli, ui);
+        assertFalse(processCommand("mark", ui));
+        assertFalse(processCommand("mark abcx", ui));
+        assertFalse(processCommand("mark 0", ui));
+        assertFalse(processCommand("mark -1", ui));
+        assertFalse(processCommand("mark 1", ui));
     }
 
-    public void emptyTaskListTest(TaskListInterface tli, UiInterface ui) {
+    @Test
+    public void execute_invalidParameters_exceptionThrown() {
+        TaskListInterface tli = new TaskList();
+        UiInterface ui = new TextUi();
+        setCommandToTest(new CommandMark(tli));
+
         tli.forEach(c -> ui.printText(c.toString()));
 
-        assertFalse(processCommand("mark", tli, ui));
-        assertFalse(processCommand("mark abcx", tli, ui));
-        assertFalse(processCommand("mark 0", tli, ui));
-        assertFalse(processCommand("mark -1", tli, ui));
-        assertFalse(processCommand("mark 1", tli, ui));
+        assertTrue(addTask(tli, "TEST"));
+        assertFalse(processCommand("mark 0", ui));
+        assertFalse(processCommand("mark -1", ui));
+        assertFalse(processCommand("mark 1 abdcscs", ui));
+        tli.forEach(c -> ui.printText(c.toString()));
     }
 
-    public void newTaskTest(TaskListInterface tli, UiInterface ui) throws TaskListInterface.TaskDuplicateException {
-        tli.forEach(c -> ui.printText(c.toString()));
+    @Test
+    public void execute_validMarking_success() {
+        TaskListInterface tli = new TaskList();
+        UiInterface ui = new TextUi();
+        setCommandToTest(new CommandMark(tli));
 
-        tli.addTask(new TodoTask("Test"));
-        assertFalse(processCommand("mark 0", tli, ui));
-        assertFalse(processCommand("mark -1", tli, ui));
-        assertFalse(processCommand("mark 1 abdcscs", tli, ui));
-        assertTrue(processCommand("mark 1", tli, ui));
-        tli.forEach(c -> ui.printText(c.toString()));
+        assertTrue(addTask(tli, "TEST"));
+        assertTrue(processCommand("mark 1", ui));
 
         // Double Complete Task Test
-        assertTrue(processCommand("mark 1", tli, ui));
+        assertTrue(processCommand("mark 1", ui));
+        tli.forEach(c -> ui.printText(c.toString()));
+
+        assertTrue(addTask(tli, "TEST2"));
+        tli.forEach(c -> ui.printText(c.toString()));
+        assertTrue(processCommand("mark 2", ui));
+        assertTrue(processCommand("mark 1", ui));
         tli.forEach(c -> ui.printText(c.toString()));
     }
 
-    public void additionalTaskTest(TaskListInterface tli, UiInterface ui)
-            throws TaskListInterface.TaskDuplicateException {
-
-        tli.addTask(new TodoTask("Test2"));
-        tli.forEach(c -> ui.printText(c.toString()));
-        assertFalse(processCommand("mark 2", tli, ui));
-        assertTrue(processCommand("mark 1", tli, ui));
-        tli.forEach(c -> ui.printText(c.toString()));
-
-        tli.addTask(new TodoTask("Test3"));
-        assertTrue(processCommand("mark 2", tli, ui));
-        tli.forEach(c -> ui.printText(c.toString()));
-    }
 }
