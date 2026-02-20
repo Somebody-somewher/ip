@@ -48,7 +48,6 @@ public class CommandAddToDo extends Command {
      * @throws CommandInvalidArgumentException if any of the arguments provided are invalid
      */
     public boolean execute(String[] arguments, UiInterface ui) throws CommandInvalidArgumentException {
-
         if (arguments.length < 2) {
             throw new CommandInvalidArgumentException("Invalid arguments! Usage: todo <task-name>");
         }

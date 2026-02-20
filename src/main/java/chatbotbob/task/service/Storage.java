@@ -80,8 +80,9 @@ public class Storage implements StorageInterface {
         String encodedTask = "";
         try {
             File taskFile = new File(FILEPATH);
-            Scanner s = new Scanner(taskFile); // create a Scanner using the File as the source
+            Scanner s = new Scanner(taskFile);
 
+            // Read save file line by line and create Task based off prefix
             while (s.hasNext()) {
                 encodedTask = s.nextLine();
                 Task task = TASK_TYPE_MAPPING.get(
@@ -93,6 +94,7 @@ public class Storage implements StorageInterface {
         } catch (FileNotFoundException e) {
             System.out.println("ERROR: Failed to Load Task from File, File does not exist!");
             System.out.println(e.getMessage());
+            System.out.println("Defaulting to an empty Task List");
         } catch (IndexOutOfBoundsException | DateTimeException
                  | EventTask.InvalidDateOrderException | TaskListInterface.TaskDuplicateException e) {
             System.out.println("ERROR: Failed to Load Task from File, One of the tasks is invalid");

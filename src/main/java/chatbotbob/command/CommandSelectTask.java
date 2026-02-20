@@ -19,7 +19,6 @@ public abstract class CommandSelectTask extends Command {
     }
 
     protected Task getSpecificTask(String stringIndex) throws CommandInvalidArgumentException {
-
         try {
             int taskIndex = Integer.parseInt(stringIndex);
             return taskList.getTask(taskIndex);

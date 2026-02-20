@@ -44,7 +44,6 @@ public class CommandFind extends Command {
      * @throws CommandInvalidArgumentException if any of the arguments provided are invalid
      */
     public boolean execute(String[] arguments, UiInterface ui) throws CommandInvalidArgumentException {
-        int taskListSize = taskList.size();
 
         if (arguments.length < 2) {
             throw new CommandInvalidArgumentException("Invalid arguments! Usage: find <partial-task-name>");
@@ -52,26 +51,31 @@ public class CommandFind extends Command {
 
         String nameToCheck = String.join(" ", Arrays.copyOfRange(arguments, 1, arguments.length));
 
-        StringBuilder sb = new StringBuilder();
-        Task task;
+        StringBuilder outputString = new StringBuilder();
+        findTasksThroughName(nameToCheck, outputString);
 
-        for (int i = 1; i < taskListSize; i += 1) {
-            task = taskList.getTask(i);
-            if (task.partialMatch(nameToCheck)) {
-                sb.append(i).append(". ").append(task.toString()).append("\n");
-            }
-        }
-
-        if (taskListSize != 0 && taskList.getTask(taskListSize).partialMatch(nameToCheck)) {
-            sb.append(taskListSize).append(". ").append(taskList.getTask(taskListSize));
-        }
-
-        if (!sb.isEmpty()) {
-            ui.printText("Let's see what matches...\n" + sb.toString());
+        if (!outputString.isEmpty()) {
+            ui.printText("Let's see what matches...\n" + outputString.toString());
         } else {
             ui.printText("No Match Found!");
         }
 
         return true;
+    }
+
+    private void findTasksThroughName(String nameToCheck, StringBuilder outputString) {
+        int taskListSize = taskList.size();
+        Task task;
+
+        for (int i = 1; i < taskListSize; i += 1) {
+            task = taskList.getTask(i);
+            if (task.partialMatch(nameToCheck)) {
+                outputString.append(i).append(". ").append(task.toString()).append("\n");
+            }
+        }
+
+        if (taskListSize != 0 && taskList.getTask(taskListSize).partialMatch(nameToCheck)) {
+            outputString.append(taskListSize).append(". ").append(taskList.getTask(taskListSize));
+        }
     }
 }

@@ -33,7 +33,6 @@ public class CommandAddTag extends CommandSelectTask {
 
     @Override
     public boolean execute(String[] arguments, UiInterface ui) throws CommandInvalidArgumentException {
-
         if (arguments.length != 3) {
             throw new CommandInvalidArgumentException("Usage: tag <task_no> <one_word_tag_name>");
         }

@@ -1,6 +1,5 @@
 package chatbotbob.command;
 import java.time.DateTimeException;
-import java.util.Arrays;
 
 import chatbotbob.task.core.util.EventTask;
 import chatbotbob.task.service.TaskListInterface;
@@ -53,11 +52,9 @@ public class CommandAddEvent extends CommandAddToDo {
         int[] indexes = findFromAndTo(arguments);
 
         // Extract the task name, end date and start date from the command
-        String taskName = String.join(" ", Arrays.copyOfRange(arguments, 1, indexes[0]));
-        String taskDurationStart = String.join(" ", Arrays.copyOfRange(arguments, indexes[0] + 1, indexes[1]));
-        String taskDurationEnd = String.join(" ", Arrays.copyOfRange(arguments, indexes[1] + 1, argumentsLength));
+        String[] taskParams = extractEventTaskParameters(arguments, indexes[0], indexes[1], argumentsLength);
 
-        printAddedTask(attemptEventCreation(taskName, taskDurationStart, taskDurationEnd), ui);
+        printAddedTask(attemptEventCreation(taskParams[0], taskParams[1], taskParams[2]), ui);
         return true;
     }
 
@@ -109,6 +106,7 @@ public class CommandAddEvent extends CommandAddToDo {
 
     private EventTask attemptEventCreation(String taskName, String taskDurationStart, String taskDurationEnd)
             throws CommandInvalidArgumentException {
+
         try {
             EventTask taskToAdd = new EventTask(taskName, taskDurationStart, taskDurationEnd);
             taskList.addTask(taskToAdd);
@@ -121,4 +119,17 @@ public class CommandAddEvent extends CommandAddToDo {
             throw new CommandInvalidArgumentException(e.getMessage());
         }
     }
+
+    private String[] extractEventTaskParameters(String[] arguments, int fromIndex,
+                                                int toIndex, int argumentsLength) {
+
+        String taskName = extractCommandParameterByIndex(arguments, 1, fromIndex);
+        String taskDurationStart = extractCommandParameterByIndex(arguments, fromIndex + 1, toIndex);
+        String taskDurationEnd = extractCommandParameterByIndex(arguments, toIndex + 1, argumentsLength);
+
+        String[] params = {taskName, taskDurationStart, taskDurationEnd};
+        return params;
+    }
+
+
 }

@@ -1,6 +1,8 @@
 package chatbotbob.command;
+import java.util.Arrays;
 
 import chatbotbob.ui.UiInterface;
+
 
 /**
  * Represents a Command that can be executed by the ChatBot.
@@ -55,6 +57,10 @@ public abstract class Command {
         }
 
         return false;
+    }
+
+    protected String extractCommandParameterByIndex(String[] arguments, int startIndex, int endIndex) {
+        return String.join(" ", Arrays.copyOfRange(arguments, startIndex, endIndex));
     }
 
     /**

@@ -1,6 +1,5 @@
 package chatbotbob.command;
 import java.time.DateTimeException;
-import java.util.Arrays;
 
 import chatbotbob.task.core.util.DeadlineTask;
 import chatbotbob.task.service.TaskListInterface;
@@ -53,8 +52,8 @@ public class CommandAddDeadline extends CommandAddToDo {
         int byIndex = findIndexOfBy(arguments);
 
         // Extract the task name and deadline from the command
-        String taskName = String.join(" ", Arrays.copyOfRange(arguments, 1, byIndex));
-        String taskDeadline = String.join(" ", Arrays.copyOfRange(arguments, byIndex + 1, argumentsLength));
+        String taskName = extractCommandParameterByIndex(arguments, 1, byIndex);
+        String taskDeadline = extractCommandParameterByIndex(arguments, byIndex + 1, argumentsLength);
 
         printAddedTask(attemptDeadlineCreation(taskName, taskDeadline), ui);
         return true;
